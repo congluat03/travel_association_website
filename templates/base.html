@@ -1,0 +1,18 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ title }}</title>
+
+    <!-- Liên kết đến file CSS đã biên dịch từ Tailwind -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  </head>
+  <body class="bg-gray-100 text-gray-800">
+    <!-- Thêm lớp Tailwind để áp dụng theme -->
+
+    <!-- Nội dung chính sẽ được thêm vào từ các template con -->
+    {% block content %} {% endblock %}
+  </body>
+</html>
