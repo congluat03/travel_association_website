@@ -1,21 +1,19 @@
 {
   "name": "theme",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "tailwind-init": "npx tailwindcss init",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tailwindcss build input.css -o ../static/css/output.css"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "type": "commonjs",
   "devDependencies": {
     "autoprefixer": "^10.4.21",
-    "cross-env": "^7.0.3",
     "postcss": "^8.5.3",
-    "postcss-cli": "^11.0.1",
-    "rimraf": "^6.0.1",
     "tailwindcss": "^3.4.17"
   }
 }

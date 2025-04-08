@@ -2,4 +2,4 @@ from django.shortcuts import render
 
 # Create your views here.
 def home(request):
-    return render(request, 'core/home.html', {'title': 'Trang chủ'})
+    return render(request, 'base.html', {'title': 'Trang chủ'})
