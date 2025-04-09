@@ -118,6 +118,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 # TAILWIND_APP_NAME = 'theme'
+
+LOGIN_URL = '/login/'  # Chỉ định trang đăng nhập tùy chỉnh
 NPM_BIN_PATH = "C:/Program Files/nodejs/npm.cmd"
 
 

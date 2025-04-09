@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Quản trị - Green Travel{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/output.css' %}" />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: sans-serif;
+        background-color: #f7fafc;
+        color: #2d3748;
+        display: flex;
+        min-height: 100vh;
+      }
+
+      aside {
+        width: 200px;
+        background-color: #2f855a;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      aside .logo {
+        padding: 20px;
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        border-bottom: 1px solid #276749;
+      }
+
+      aside nav {
+        padding: 20px 10px;
+        flex-grow: 1;
+      }
+
+      aside nav a {
+        display: block;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        font-size: 16px;
+        color: white;
+        text-decoration: none;
+        background-color: transparent;
+        transition: background 0.3s;
+      }
+
+      aside nav a:hover {
+        background-color: #276749;
+      }
+
+      .main-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      header {
+        background-color: #2f855a;
+        color: white;
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      main {
+        flex: 1;
+        padding: 30px;
+        background-color: #f0f4f8;
+      }
+
+      .dashboard-box {
+        background-color: white;
+        padding: 30px;
+        border-radius: 16px;
+        max-width: 800px;
+        margin: auto;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+      }
+
+      .dashboard-box h2 {
+        font-size: 28px;
+        margin-bottom: 15px;
+        color: #22543d;
+      }
+
+      .dashboard-box p {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #4a5568;
+      }
+
+      .dashboard-box span {
+        font-weight: bold;
+        color: #2f855a;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <aside>
+      <div class="logo">🌿 Green<br />Travel</div>
+      <nav>
+        <a href="{% url 'admin_dashboard' %}">📊 Tổng quan</a>
+        <a href="{% url 'manage_members' %}">👥 Hội viên</a>
+        <a href="{% url 'manage_news' %}">📰 Tin tức</a>
+        <a href="{% url 'manage_tourism' %}">🌍 Cẩm nang</a>
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <div class="main-content">
+      <!-- Header -->
+      <header>
+        <h1>Trang quản lý Green Travel</h1>
+        <div style="display: flex; align-items: center; gap: 20px">
+          <span>Chào mừng, Quản trị viên</span>
+          <a href="" style="color: white; text-decoration: underline"
+            >Đăng xuất</a
+          >
+        </div>
+      </header>
+
+      <!-- Nội dung -->
+      <main>{% block content %} {% endblock %}</main>
+    </div>
+  </body>
+</html>

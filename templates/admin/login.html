@@ -1,0 +1,151 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng nhập quản trị</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background: linear-gradient(to top right, #d1fae5, #ffffff, #bbf7d0);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-radius: 20px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        width: 100%;
+        max-width: 400px;
+      }
+
+      .card img {
+        display: block;
+        margin: 0 auto 20px auto;
+        height: 50px;
+      }
+
+      .card h2 {
+        text-align: center;
+        color: #14532d;
+        margin-bottom: 30px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+        color: #166534;
+      }
+
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #a7f3d0;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        transition: border 0.3s;
+      }
+
+      input[type="text"]:focus,
+      input[type="password"]:focus {
+        border-color: #22c55e;
+        outline: none;
+      }
+
+      .error {
+        color: red;
+        font-size: 14px;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      .btn {
+        width: 100%;
+        background: linear-gradient(to right, #22c55e, #4ade80);
+        border: none;
+        color: white;
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+
+      .btn:hover {
+        background: linear-gradient(to right, #16a34a, #22c55e);
+      }
+
+      .footer {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      .footer a {
+        color: #166534;
+        font-size: 14px;
+        text-decoration: none;
+      }
+
+      .footer a:hover {
+        color: #14532d;
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <form method="post">
+        {% csrf_token %}
+
+        <img src="{% static 'images/logo.svg' %}" alt="Logo" />
+
+        <h2>Đăng nhập quản trị</h2>
+
+        <label for="username">Tên đăng nhập</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          placeholder="Nhập tên đăng nhập"
+          required
+        />
+
+        <label for="password">Mật khẩu</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Nhập mật khẩu"
+          required
+        />
+
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <button type="submit" class="btn">Đăng nhập</button>
+
+        <div class="footer">
+          <a href="#">Quên mật khẩu?</a>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

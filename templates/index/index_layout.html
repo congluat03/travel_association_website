@@ -20,23 +20,57 @@
           />
           <h1 class="text-2xl font-bold">Green Travel</h1>
         </div>
-        <nav class="space-x-6">
-          <a href="#" class="hover:text-green-200 transition duration-300"
-            >Home</a
-          >
-          <a href="#" class="hover:text-green-200 transition duration-300"
-            >Destinations</a
-          >
-          <a href="#" class="hover:text-green-200 transition duration-300"
-            >Tours</a
-          >
-          <a href="#" class="hover:text-green-200 transition duration-300"
-            >About Us</a
-          >
-          <a href="#" class="hover:text-green-200 transition duration-300"
-            >Contact</a
-          >
-        </nav>
+
+        <!-- Navigation + Login -->
+        <div class="flex items-center space-x-6">
+          <nav class="space-x-6">
+            <a href="#" class="hover:text-green-200 transition duration-300"
+              >Home</a
+            >
+            <a href="#" class="hover:text-green-200 transition duration-300"
+              >Destinations</a
+            >
+            <a href="#" class="hover:text-green-200 transition duration-300"
+              >Tours</a
+            >
+            <a href="#" class="hover:text-green-200 transition duration-300"
+              >About Us</a
+            >
+            <a href="#" class="hover:text-green-200 transition duration-300"
+              >Contact</a
+            >
+          </nav>
+
+          <!-- Auth Buttons -->
+          {% if user.is_authenticated %}
+          <div class="flex items-center space-x-3">
+            <span class="text-green-200">Xin chào, {{ user.username }}</span>
+            <a
+              href="{% url 'logout' %}"
+              class="bg-green-600 px-3 py-1 rounded hover:bg-green-700 transition"
+            >
+              Đăng xuất
+            </a>
+          </div>
+          {% else %}
+          <div class="space-x-3">
+            <a
+              href="{% url 'custom_login' %}"
+              class="bg-green-600 px-3 py-1 rounded hover:bg-green-700 transition"
+            >
+              Đăng nhập
+            </a>
+            {% comment %}
+            <a
+              href="{% url 'register' %}"
+              class="border border-white px-3 py-1 rounded hover:bg-green-700 transition"
+            >
+              Đăng ký
+            </a>
+            {% endcomment %}
+          </div>
+          {% endif %}
+        </div>
       </div>
     </header>
 
