@@ -7,10 +7,12 @@ from apps.core import views  # Import views
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
-    path('login/', views.custom_login, name='custom_login'),
+    path('login/', views.custom_login, name='login'),
     path('register/', views.register_view, name='register'),
     path('admin/', views.admin_dashboard, name='admin_dashboard'),
     path('admin/members/', views.manage_members, name='manage_members'),
+    path('admin/members/add_members', views.manage_members, name='add_members'),
+    
     path('admin/news/', views.manage_news, name='manage_news'),
     path('admin/tourism/', views.manage_tourism, name='manage_tourism'),
 

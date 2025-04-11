@@ -124,6 +124,10 @@ NPM_BIN_PATH = "C:/Program Files/nodejs/npm.cmd"
 
 
 STATIC_URL = '/static/'
+import os
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
