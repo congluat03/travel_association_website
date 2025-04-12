@@ -3,17 +3,20 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from apps.core import views  # Import views
-
+from apps.core import views as viewsCore
 urlpatterns = [
     # path('admin/', admin.site.urls),
-    path('login/', views.custom_login, name='custom_login'),
-    path('register/', views.register_view, name='register'),
-    path('admin/', views.admin_dashboard, name='admin_dashboard'),
-    path('admin/members/', views.manage_members, name='manage_members'),
-    path('admin/news/', views.manage_news, name='manage_news'),
-    path('admin/tourism/', views.manage_tourism, name='manage_tourism'),
+    path('login/', viewsCore.custom_login, name='login'),
+    path('register/', viewsCore.register_view, name='register'),
+    path('admin/', viewsCore.admin_dashboard, name='admin_dashboard'),
 
+    path('admin/members/', include(('apps.members.urls', 'members'), namespace='admin_members')),
+    path('admin/news/', include(('apps.news.urls', 'news'), namespace='admin_news')),
+    path('admin/support/', include(('apps.support.urls', 'support'), namespace='admin_support')),
+    path('admin/tourism/', include('apps.tourism.urls', namespace='tourism')),
+    
+    path('admin/tourism/', viewsCore.manage_tourism, name='manage_tourism'),
+    path('admin/members/add_members', viewsCore.manage_members, name='add_members'),
 
     path('', include('apps.core.urls')),
     path('members/', include('apps.members.urls')),
