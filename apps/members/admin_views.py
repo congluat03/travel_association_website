@@ -1,8 +1,13 @@
 from rest_framework.decorators import api_view
+from django.shortcuts import render, redirect
 from rest_framework.response import Response
 from rest_framework import status
 from .models import TaiKhoan, DoanhNghiep, NganhNghe, HiepHoi, DangKyHoiVien
 from .serializers import TaiKhoanSerializer, DoanhNghiepSerializer, NganhNgheSerializer, HiepHoiSerializer, DangKyHoiVienSerializer
+
+# @login_required
+def manage_members(request):
+    return render(request, 'admin/members.html')
 
 # Hàm dùng chung
 def list_create_view(model, serializer_class, request):
@@ -86,3 +91,9 @@ def dangky_list(request):
 @api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
 def dangky_detail(request, pk):
     return retrieve_update_delete_view(DangKyHoiVien, DangKyHoiVienSerializer, request, pk)
+
+
+
+
+
+

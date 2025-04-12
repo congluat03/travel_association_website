@@ -4,137 +4,131 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}Quản trị - Green Travel{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/output.css' %}" />
+    <title>Quản trị - Green Travel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-
       body {
-        font-family: sans-serif;
-        background-color: #f7fafc;
-        color: #2d3748;
-        display: flex;
-        min-height: 100vh;
-      }
-
-      aside {
-        width: 200px;
-        background-color: #2f855a;
-        color: white;
-        display: flex;
-        flex-direction: column;
-        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-      }
-
-      aside .logo {
-        padding: 20px;
-        font-size: 20px;
-        font-weight: bold;
-        text-align: center;
-        border-bottom: 1px solid #276749;
-      }
-
-      aside nav {
-        padding: 20px 10px;
-        flex-grow: 1;
-      }
-
-      aside nav a {
-        display: block;
-        padding: 10px;
-        margin-bottom: 10px;
-        border-radius: 8px;
-        font-size: 16px;
-        color: white;
-        text-decoration: none;
-        background-color: transparent;
-        transition: background 0.3s;
-      }
-
-      aside nav a:hover {
-        background-color: #276749;
-      }
-
-      .main-content {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-      }
-
-      header {
-        background-color: #2f855a;
-        color: white;
-        padding: 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      }
-
-      main {
-        flex: 1;
-        padding: 30px;
-        background-color: #f0f4f8;
-      }
-
-      .dashboard-box {
-        background-color: white;
-        padding: 30px;
-        border-radius: 16px;
-        max-width: 800px;
-        margin: auto;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-      }
-
-      .dashboard-box h2 {
-        font-size: 28px;
-        margin-bottom: 15px;
-        color: #22543d;
-      }
-
-      .dashboard-box p {
-        font-size: 16px;
-        line-height: 1.6;
-        color: #4a5568;
-      }
-
-      .dashboard-box span {
-        font-weight: bold;
-        color: #2f855a;
+        font-family: "Inter", sans-serif;
       }
     </style>
   </head>
-  <body>
+  <body class="bg-gray-100 flex min-h-screen">
     <!-- Sidebar -->
-    <aside>
-      <div class="logo">🌿 Green<br />Travel</div>
-      <nav>
-        <a href="{% url 'admin_dashboard' %}">📊 Tổng quan</a>
-        <a href="{% url 'manage_members' %}">👥 Hội viên</a>
-        <a href="{% url 'manage_news' %}">📰 Tin tức</a>
-        <a href="{% url 'manage_tourism' %}">🌍 Cẩm nang</a>
+    <aside class="w-64 bg-green-500 text-white flex flex-col shadow-lg">
+      <div class="px-4 py-5 border-b border-green-600">
+        <h1 class="text-xl font-bold">🌿 Green Travel</h1>
+      </div>
+      <nav class="flex-grow p-4 space-y-2 text-sm">
+        <a
+          href="{% url 'admin_dashboard' %}"
+          class="block px-3 py-2 rounded hover:bg-green-600 transition"
+          >📊 Trang chủ</a
+        >
+        <a
+          href="{% url 'admin_core:manage_members' %}"
+          class="block px-3 py-2 rounded hover:bg-green-600 transition"
+          >👥 Danh sách thành viên</a
+        >
+        <a
+          href="{% url 'admin_core:manage_news' %}"
+          class="block px-3 py-2 rounded hover:bg-green-600 transition"
+          >📰 Danh sách doanh nghiệp</a
+        >
+        <a
+          href="{% url 'admin_core:manage_news' %}"
+          class="block px-3 py-2 rounded hover:bg-green-600 transition"
+          >🏭 Ngành nghề (Industry)</a
+        >
+        <a
+          href="{% url 'admin_core:manage_tourism' %}"
+          class="block px-3 py-2 rounded bg-green-600 font-semibold"
+          >🌍 Địa điểm du lịch</a
+        >
+        <a
+          href="{% url 'admin_core:manage_news' %}"
+          class="block px-3 py-2 rounded bg-green-600 font-semibold"
+          >📰 Tin tức (News)</a
+        >
+        <a
+          href="{% url 'admin_core:manage_support' %}"
+          class="block px-3 py-2 rounded bg-green-600 font-semibold"
+          >📚 Tài liệu (Documents)</a
+        >
       </nav>
     </aside>
 
     <!-- Main content -->
-    <div class="main-content">
+    <div class="flex-1 flex flex-col bg-gray-100">
       <!-- Header -->
-      <header>
-        <h1>Trang quản lý Green Travel</h1>
-        <div style="display: flex; align-items: center; gap: 20px">
-          <span>Chào mừng, Quản trị viên</span>
-          <a href="" style="color: white; text-decoration: underline"
-            >Đăng xuất</a
-          >
+      <header
+        class="bg-green-500 text-white p-4 flex justify-end items-center shadow-md relative"
+      >
+        <div class="flex items-center gap-6">
+          <!-- Notification Icon -->
+          <button class="relative text-white hover:text-gray-200">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 
+                       6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 
+                       6 8.388 6 11v3.159c0 .538-.214 1.055-.595 
+                       1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+              />
+            </svg>
+            <span
+              class="absolute -top-1 -right-1 text-xs bg-red-500 text-white rounded-full px-1"
+              >3</span
+            >
+          </button>
+
+          <!-- Avatar & Dropdown -->
+          <div class="relative group">
+            <div class="flex items-center gap-2 cursor-pointer">
+              <img
+                src="{% static 'images/user-avatar.png' %}"
+                alt="avatar"
+                class="w-8 h-8 rounded-full object-cover border-2 border-white shadow"
+              />
+              <span class="hidden md:inline font-medium">Admin</span>
+            </div>
+            <!-- Dropdown Menu -->
+            <div
+              class="absolute right-0 mt-2 w-40 bg-white text-gray-800 rounded shadow-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition duration-200 z-50"
+            >
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100"
+                >Hồ sơ cá nhân</a
+              >
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100"
+                >Đổi mật khẩu</a
+              >
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100 border-t"
+                >Đăng xuất</a
+              >
+            </div>
+          </div>
         </div>
       </header>
 
-      <!-- Nội dung -->
-      <main>{% block content %} {% endblock %}</main>
+      <!-- Main Content Area -->
+      <main class="flex-1 p-8">
+        <div class="bg-white rounded-xl shadow-md p-6 max-w-7xl mx-auto h-full">
+          {% block content %}
+          <!-- Nội dung từng trang sẽ chèn ở đây -->
+          {% endblock %}
+        </div>
+      </main>
     </div>
   </body>
 </html>

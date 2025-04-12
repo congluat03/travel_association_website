@@ -1,8 +1,10 @@
 from django.urls import path
-from . import admin_views  # ✅ import đúng file
+from . import admin_views, views # ✅ import đúng file
 
 app_name = 'members'
 urlpatterns = [
+   
+    path('members/add_members', admin_views.tai_khoan_list, name='add_members'),
     path('taikhoan/', admin_views.tai_khoan_list, name='tai-khoan-list'),
     path('taikhoan/<int:pk>/', admin_views.tai_khoan_detail, name='tai-khoan-detail'),
     # Doanh nghiệp

@@ -1,73 +1,72 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>{% block title %}Green Travel{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/output.css' %}" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script
+      src="https://kit.fontawesome.com/a076d05399.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
-  <body class="bg-green-50 font-sans">
+
+  <body class="bg-green-50 font-sans text-gray-800 leading-relaxed">
     <!-- Header -->
-    <header class="bg-green-800 text-white sticky top-0 z-50 shadow-lg">
-      <div class="container mx-auto flex justify-between items-center py-4">
-        <div class="flex items-center space-x-3">
+    <header class="bg-green-500 text-white sticky top-0 z-50 shadow-md">
+      <div
+        class="max-w-7xl mx-auto flex justify-between items-center px-4 py-4"
+      >
+        <!-- Logo -->
+        <div class="flex items-center gap-3">
           <img
             src="{% static 'images/logo.png' %}"
-            alt="Green Travel Logo"
+            alt="Logo"
             class="h-10 w-10"
           />
-          <h1 class="text-2xl font-bold">Green Travel</h1>
+          <h1 class="text-2xl font-bold tracking-wide">Green Travel</h1>
         </div>
 
-        <!-- Navigation + Login -->
-        <div class="flex items-center space-x-6">
-          <nav class="space-x-6">
+        <!-- Navigation & Auth -->
+        <div class="flex items-center gap-6">
+          <nav class="hidden md:flex gap-6">
             <a href="#" class="hover:text-green-200 transition duration-300"
-              >Home</a
+              >Trang chủ</a
             >
             <a href="#" class="hover:text-green-200 transition duration-300"
-              >Destinations</a
+              >Điểm đến</a
             >
             <a href="#" class="hover:text-green-200 transition duration-300"
-              >Tours</a
+              >Chuyến đi</a
             >
             <a href="#" class="hover:text-green-200 transition duration-300"
-              >About Us</a
+              >Giới thiệu</a
             >
             <a href="#" class="hover:text-green-200 transition duration-300"
-              >Contact</a
+              >Liên hệ</a
             >
           </nav>
 
-          <!-- Auth Buttons -->
           {% if user.is_authenticated %}
-          <div class="flex items-center space-x-3">
-            <span class="text-green-200">Xin chào, {{ user.username }}</span>
+          <div class="flex items-center gap-3">
+            <span class="text-green-200 text-sm"
+              >Xin chào, {{ user.username }}</span
+            >
             <a
               href="{% url 'logout' %}"
-              class="bg-green-600 px-3 py-1 rounded hover:bg-green-700 transition"
+              class="bg-green-600 hover:bg-green-700 px-3 py-1 rounded transition duration-300"
+              >Đăng xuất</a
             >
-              Đăng xuất
-            </a>
           </div>
           {% else %}
-          <div class="space-x-3">
+          <div class="flex gap-3">
             <a
               href="{% url 'login' %}"
-              class="bg-green-600 px-3 py-1 rounded hover:bg-green-700 transition"
+              class="bg-green-600 hover:bg-green-700 px-3 py-1 rounded transition duration-300"
+              >Đăng nhập</a
             >
-              Đăng nhập
-            </a>
-            {% comment %}
-            <a
-              href="{% url 'register' %}"
-              class="border border-white px-3 py-1 rounded hover:bg-green-700 transition"
-            >
-              Đăng ký
-            </a>
-            {% endcomment %}
+            <!-- <a href="{% url 'register' %}" class="border border-white px-3 py-1 rounded hover:bg-green-700 transition duration-300">Đăng ký</a> -->
           </div>
           {% endif %}
         </div>
@@ -77,25 +76,28 @@
     <!-- Main Content -->
     <main class="min-h-screen">
       {% block content %}
-      <!-- Nội dung mặc định nếu không có template con -->
+      <!-- Hero Section -->
       <section
-        class="relative bg-cover bg-center h-96"
-        style="background-image: url('{% static 'images/hero-bg.jpg' %}')"
+        class="relative bg-cover bg-center h-[32rem]"
+        style="
+          background-image: url('{% static 'images/istockphoto-1372488167-612x612.jpg' %}');
+        "
       >
         <div
           class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center"
         >
-          <div class="text-center text-white">
-            <h2 class="text-4xl md:text-5xl font-bold mb-4">
-              Explore the World Sustainably
+          <div class="text-center text-white px-6">
+            <h2 class="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-lg">
+              Khám phá thế giới một cách bền vững
             </h2>
-            <p class="text-lg md:text-xl mb-6">
-              Discover eco-friendly travel destinations with Green Travel.
+            <p class="text-lg md:text-xl mb-6 max-w-2xl mx-auto">
+              Cùng Green Travel du hành đến những địa điểm thân thiện với môi
+              trường.
             </p>
             <a
               href="#"
-              class="bg-green-600 text-white px-6 py-3 rounded-full hover:bg-green-700 transition duration-300"
-              >Start Your Journey</a
+              class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full text-lg font-semibold transition duration-300"
+              >Bắt đầu hành trình</a
             >
           </div>
         </div>
@@ -104,86 +106,61 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-green-900 text-white py-8">
-      <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- About Section -->
+    <footer class="bg-green-900 text-white py-10">
+      <div
+        class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 px-4"
+      >
+        <!-- About -->
         <div>
-          <h3 class="text-xl font-semibold mb-4">About Green Travel</h3>
-          <p class="text-green-200">
-            We are committed to promoting sustainable tourism, helping travelers
-            explore the world while preserving nature for future generations.
+          <h3 class="text-xl font-semibold mb-4">Về Green Travel</h3>
+          <p class="text-green-200 leading-relaxed">
+            Chúng tôi cam kết phát triển du lịch bền vững, giúp du khách khám
+            phá thế giới mà vẫn bảo tồn thiên nhiên cho thế hệ tương lai.
           </p>
         </div>
+
         <!-- Quick Links -->
         <div>
-          <h3 class="text-xl font-semibold mb-4">Quick Links</h3>
-          <ul class="space-y-2">
+          <h3 class="text-xl font-semibold mb-4">Liên kết nhanh</h3>
+          <ul class="space-y-2 text-green-200">
             <li>
-              <a
-                href="#"
-                class="text-green-200 hover:text-white transition duration-300"
-                >Home</a
+              <a href="#" class="hover:text-white transition duration-300"
+                >Trang chủ</a
               >
             </li>
             <li>
-              <a
-                href="#"
-                class="text-green-200 hover:text-white transition duration-300"
-                >Destinations</a
+              <a href="#" class="hover:text-white transition duration-300"
+                >Điểm đến</a
               >
             </li>
             <li>
-              <a
-                href="#"
-                class="text-green-200 hover:text-white transition duration-300"
-                >Tours</a
+              <a href="#" class="hover:text-white transition duration-300"
+                >Chuyến đi</a
               >
             </li>
             <li>
-              <a
-                href="#"
-                class="text-green-200 hover:text-white transition duration-300"
-                >Contact</a
+              <a href="#" class="hover:text-white transition duration-300"
+                >Liên hệ</a
               >
             </li>
           </ul>
         </div>
-        <!-- Contact Info -->
+
+        <!-- Contact -->
         <div>
-          <h3 class="text-xl font-semibold mb-4">Contact Us</h3>
+          <h3 class="text-xl font-semibold mb-4">Liên hệ</h3>
           <p class="text-green-200">Email: info@greentravel.com</p>
-          <p class="text-green-200">Phone: +1 (555) 123-4567</p>
-          <div class="mt-4 flex space-x-4">
-            <a
-              href="#"
-              class="text-green-200 hover:text-white transition duration-300"
-            >
-              <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                <path
-                  d="M24 4.56v14.88A4.56 4.56 0 0 1 19.44 24H4.56A4.56 4.56 0 0 1 0 19.44V4.56A4.56 4.56 0 0 1 4.56 0h14.88A4.56 4.56 0 0 1 24 4.56zM8.53 19.44h6.94v-7.5h-2.08l-.14-1.92h2.22V8.28c0-2.1 1.28-3.24 3.15-3.24.9 0 1.67.06 1.9.09v2.2h-1.3c-1.02 0-1.22.48-1.22 1.2v1.58h2.44l-.32 1.92h-2.12v7.5z"
-                />
-              </svg>
-            </a>
-            <a
-              href="#"
-              class="text-green-200 hover:text-white transition duration-300"
-            >
-              <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                <path
-                  d="M23.95 4.57a9.6 9.6 0 0 1-2.77.76 4.84 4.84 0 0 0 2.12-2.67 9.67 9.67 0 0 1-3.07 1.17 4.83 4.83 0 0 0-8.23 4.4A13.7 13.7 0 0 1 1.64 3.16a4.83 4.83 0 0 0 1.5 6.44 4.8 4.8 0 0 1-2.19-.6v.06a4.83 4.83 0 0 0 3.87 4.73 4.83 4.83 0 0 1-2.18.08 4.83 4.83 0 0 0 4.5 3.35A9.68 9.68 0 0 1 0 19.54a13.67 13.67 0 0 0 7.42 2.17c8.9 0 13.77-7.37 13.77-13.77 0-.21 0-.42-.02-.63A9.84 9.84 0 0 0 24 4.57z"
-                />
-              </svg>
-            </a>
-            <a
-              href="#"
-              class="text-green-200 hover:text-white transition duration-300"
-            >
-              <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                <path
-                  d="M12 2.04c-5.52 0-9.96 4.44-9.96 9.96 0 4.44 3.6 8.16 8.16 9.48v-6.72H7.92v-2.76h2.28V9.96c0-2.28 1.38-3.48 3.36-3.48.96 0 1.8.12 2.04.18v2.4h-1.38c-1.08 0-1.32.54-1.32 1.32v1.68h2.64l-.36 2.76h-2.28v6.72c4.56-1.32 8.16-5.04 8.16-9.48 0-5.52-4.44-9.96-9.96-9.96z"
-                />
-              </svg>
-            </a>
+          <p class="text-green-200">SĐT: +1 (555) 123-4567</p>
+          <div class="flex space-x-4 mt-4">
+            <a href="#" class="hover:text-white text-green-200 transition"
+              ><i class="fab fa-facebook-f text-xl"></i
+            ></a>
+            <a href="#" class="hover:text-white text-green-200 transition"
+              ><i class="fab fa-twitter text-xl"></i
+            ></a>
+            <a href="#" class="hover:text-white text-green-200 transition"
+              ><i class="fab fa-instagram text-xl"></i
+            ></a>
           </div>
         </div>
       </div>

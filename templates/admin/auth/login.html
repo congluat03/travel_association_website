@@ -1,0 +1,120 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng nhập - Du lịch xanh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <style>
+    .bg{
+      background: linear-gradient(to top right, #d1fae5, #ffffff, #bbf7d0);
+    }
+  </style>
+  <body class="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12 bg">
+    <div class="bg-white shadow-xl rounded-3xl w-full max-w-6xl h-[600px] grid grid-cols-1 md:grid-cols-2 overflow-hidden border border-gray-200">
+      
+      <!-- Left: Du lịch xanh content -->
+      <div class="hidden md:flex flex-col justify-center items-start p-10 bg-cover bg-center bg-no-repeat text-white" style="background-image: url('{% static "images/pietro-de-grandi-T7K4aEPoGGk-unsplash.jpg" %}');" >
+    
+      </div>
+
+      <!-- Right: Login Form -->
+      <div class="p-8 sm:p-10 flex flex-col justify-center bg-white ">
+        <h2 class="text-2xl sm:text-3xl font-semibold text-gray-800 text-center mb-2">Chào mừng trở lại!</h2>
+        <p class="text-sm text-gray-500 mb-6 text-center">Đăng nhập để bắt đầu hành trình xanh của bạn.</p>
+
+        <form method="post" class="w-full space-y-5">
+          {% csrf_token %}
+
+          <!-- Username -->
+          <div>
+            <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Tên đăng nhập</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="vidu@gmail.com"
+              required
+              class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white shadow-sm transition"
+            />
+          </div>
+
+                <!-- Password -->
+        <div class="relative">
+          <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Mật khẩu</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="••••••••"
+            required
+            class="w-full px-4 py-3 pr-11 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white shadow-sm transition"
+          />
+          <button type="button" id="togglePassword" class="absolute inset-y-0 right-3 top-5 mr-1 flex items-center text-gray-400 hover:text-teal-500">
+            <!-- Heroicon Eye -->
+            <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+            </svg>
+            <!-- Heroicon Eye Off -->
+            <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.978 9.978 0 012.302-3.592M15 12a3 3 0 00-3-3m0 0a3 3 0 013 3m-3-3l-6.293-6.293M3 3l18 18"/>
+            </svg>
+          </button>
+        </div>
+
+          
+
+          <!-- Error message -->
+          {% if error %}
+          <p class="text-red-500 text-sm text-center -mt-3">{{ error }}</p>
+          {% endif %}
+
+          <!-- Submit -->
+          <button
+            type="submit"
+            class="w-full bg-green-500 hover:bg-green-600 text-white py-2.5 rounded-lg font-medium transition-all duration-200 shadow hover:-translate-y-0.5"
+          >
+            Đăng nhập
+          </button>
+
+          <!-- Forgot password -->
+          <div class="text-right">
+            <a href="#" class="text-sm  text-green-500 hover:text-green-600 hover:underline">Quên mật khẩu?</a>
+          </div>
+        </form>
+
+        <!-- Sign up -->
+        <div class="mt-6 text-center">
+          <p class="text-sm text-gray-500">
+            Chưa có tài khoản?
+            <a href="{% url 'register' %}" class=" text-green-500 hover:text-green-600 hover:underline">Đăng ký miễn phí</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+  const togglePassword = document.getElementById("togglePassword");
+  const passwordInput = document.getElementById("password");
+  const eyeOpen = document.getElementById("eyeOpen");
+  const eyeClosed = document.getElementById("eyeClosed");
+
+  togglePassword.addEventListener("click", () => {
+    const type = passwordInput.type === "password" ? "text" : "password";
+    passwordInput.type = type;
+
+    eyeOpen.classList.toggle("hidden");
+    eyeClosed.classList.toggle("hidden");
+  });
+</script>
+  </body>
+</html>

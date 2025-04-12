@@ -1,6 +1,7 @@
 module.exports = {
   content: [
-    "../templates/**/*.html", // Quét tất cả file HTML trong thư mục templates
+    './templates/**/*.html',
+    './**/*.html',            // hoặc đường dẫn cụ thể tới các file HTML/EJS
   ],
   theme: {
     extend: {},
