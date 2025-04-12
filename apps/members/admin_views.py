@@ -6,8 +6,8 @@ from .models import TaiKhoan, DoanhNghiep, NganhNghe, HiepHoi, DangKyHoiVien
 from .serializers import TaiKhoanSerializer, DoanhNghiepSerializer, NganhNgheSerializer, HiepHoiSerializer, DangKyHoiVienSerializer
 
 # @login_required
-def manage_members(request):
-    return render(request, 'admin/members.html')
+def all_members(request):
+    return render(request, 'admin/members/add_members.html')
 
 # Hàm dùng chung
 def list_create_view(model, serializer_class, request):
