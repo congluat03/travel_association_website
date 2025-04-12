@@ -26,7 +26,7 @@ class TinTuc(models.Model):
     TIN_NOI_BAT = models.BooleanField(default=False)
     URL_HINH = models.URLField(blank=True, null=True)
     SO_LUOT_XEM = models.IntegerField(default=0)
-    TAGS = models.ManyToManyField('TheTag', through='CoTheTag', related_name='tintucs')
+    MA_TAG = models.ManyToManyField('TheTag', through='CoTheTag', related_name='tintucs')
 
     def __str__(self):
         return self.TIEU_DE
@@ -36,6 +36,7 @@ class TinTuc(models.Model):
 
 
 class CoTheTag(models.Model):
+    MA_COTHETAP = models.AutoField(primary_key=True)  # Đánh dấu là khóa chính và tự động tăng
     MA_TIN = models.ForeignKey(
         TinTuc, on_delete=models.CASCADE, db_column='MA_TIN'
     )
@@ -44,13 +45,11 @@ class CoTheTag(models.Model):
     )
 
     class Meta:
-        unique_together = ('MA_TIN', 'MA_TAG')
+        unique_together = ('MA_TIN', 'MA_TAG')  # Đảm bảo sự kết hợp MA_TIN và MA_TAG là duy nhất
         db_table = 'cothetag'
 
     def __str__(self):
         return f"{self.MA_TIN} - {self.MA_TAG}"
-
-
 class TrackingXemTin(models.Model):
     ID_TRACKING = models.AutoField(primary_key=True)
     MA_TK = models.ForeignKey(
@@ -60,6 +59,7 @@ class TrackingXemTin(models.Model):
         'TinTuc', on_delete=models.CASCADE, db_column='MA_TIN'
     )
     THOI_GIAN_XEM = models.DateTimeField()
+    TONG_THOI_GIAN_XEM = models.CharField(max_length=50, null=True, blank=True)  # varchar
 
     def __str__(self):
         return f"Tracking #{self.ID_TRACKING} - {self.MA_TK} - {self.MA_TIN}"

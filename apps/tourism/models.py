@@ -21,7 +21,7 @@ class DiaDiemDuLich(models.Model):
 
 class DacSan(models.Model):
     MA_DS = models.AutoField(primary_key=True)
-    MA_DD = models.ForeignKey(DiaDiemDuLich, on_delete=models.CASCADE)
+    MA_DD = models.ForeignKey(DiaDiemDuLich, on_delete=models.CASCADE, db_column='MA_DD')
     TEN_DAC_SAN = models.CharField(max_length=255)
     MO_TA_DS = models.TextField()
     HINH_DS = models.URLField(blank=True, null=True)
@@ -40,13 +40,22 @@ class TourDuLich(models.Model):
     class Meta:
         db_table = 'tourdulich'
 
+from django.db import models
+
 class ThuocTour(models.Model):
-    MA_DD = models.ForeignKey(DiaDiemDuLich, on_delete=models.CASCADE)
-    MA_TOUR = models.ForeignKey(TourDuLich, on_delete=models.CASCADE)
-    THU_THU = models.IntegerField()
-    THOI_GIAN_DI = models.DateTimeField()
-    THOI_GIAN_DEN = models.DateTimeField()
+    MA_TUOCTOUR = models.AutoField(primary_key=True)
+    MA_DD = models.ForeignKey('DiaDiemDuLich', on_delete=models.CASCADE, db_column='MA_DD')
+    MA_TOUR = models.ForeignKey('TourDuLich', on_delete=models.CASCADE, db_column='MA_TOUR')
+    THU_THU = models.PositiveSmallIntegerField()  # Nếu là số ngày trong tuần từ 0 đến 6
+    THOI_GIAN_DI = models.DateTimeField()  # Nếu cần cả ngày và giờ
+    THOI_GIAN_DEN = models.DateTimeField()  # Nếu cần cả ngày và giờ
 
     class Meta:
         db_table = 'thuoctour'
-        unique_together = ('MA_DD', 'MA_TOUR', 'THU_THU')
+        constraints = [
+            models.UniqueConstraint(fields=['MA_DD', 'MA_TOUR'], name='unique_ma_dd_ma_tour')  # Thay thế unique_together
+        ]
+
+    def __str__(self):
+        return f"Tour {self.MA_TOUR} tại {self.MA_DD}"
+

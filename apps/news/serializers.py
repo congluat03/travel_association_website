@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import TheTag, CoTheTag, TinTuc, TrackingXemTin
+from django.db.models import Max
+
 
 class TheTagSerializer(serializers.ModelSerializer):
     class Meta:
@@ -7,37 +9,24 @@ class TheTagSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class CoTheTagSerializer(serializers.ModelSerializer):
+    # Sử dụng `MA_TIN` và `MA_TAG` dưới dạng các đối tượng thay vì chỉ khóa ngoại
+    MA_TIN = serializers.PrimaryKeyRelatedField(queryset=TinTuc.objects.all(), required=False)
+    MA_TAG = serializers.PrimaryKeyRelatedField(queryset=TheTag.objects.all(), required=False)
+
     class Meta:
         model = CoTheTag
         fields = '__all__'
-
+        extra_kwargs = {
+            'MA_TIN': {'required': False},  # Nếu không bắt buộc, bạn có thể để trường này không yêu cầu
+            'MA_TAG': {'required': False}   # Tương tự cho MA_TAG
+        }
 class TinTucSerializer(serializers.ModelSerializer):
-    TAGS = serializers.PrimaryKeyRelatedField(many=True, queryset=TheTag.objects.all())
 
     class Meta:
         model = TinTuc
         fields = '__all__'
 
-    def create(self, validated_data):
-        # Pop the tags data before creating the TinTuc object
-        tags_data = validated_data.pop('TAGS', [])
-        # Create TinTuc instance
-        tintuc = TinTuc.objects.create(**validated_data)
-        # Set ManyToMany relation after instance is created
-        tintuc.TAGS.set(tags_data)
-        return tintuc
 
-    def update(self, instance, validated_data):
-        # Pop tags data from validated data (if present)
-        tags_data = validated_data.pop('TAGS', None)
-        # Update other fields of the instance
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
-        instance.save()
-        # Update ManyToMany relationship if 'TAGS' was included in the request data
-        if tags_data is not None:
-            instance.TAGS.set(tags_data)
-        return instance
 
 class TrackingXemTinSerializer(serializers.ModelSerializer):
     class Meta:
