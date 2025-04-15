@@ -1,0 +1,100 @@
+<!-- DANH SÁCH ĐỊA ĐIỂM -->
+<div class="mb-10">
+  <!-- Tiêu đề và nút thêm -->
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-2xl font-bold text-green-700">📍 Danh sách địa điểm</h2>
+    <button
+      onclick="openModal()"
+      class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 shadow"
+    >
+      ➕ Thêm địa điểm
+    </button>
+  </div>
+
+  <!-- Bảng danh sách địa điểm -->
+  <div
+    class="overflow-x-auto rounded-lg shadow border border-gray-200 h-[65vh] overflow-y-auto"
+  >
+    <table class="min-w-full text-sm text-gray-800">
+      <thead class="bg-green-100 text-gray-700 text-left sticky top-0 z-10">
+        <tr>
+          <th class="px-4 py-3 border">#</th>
+          <th class="px-4 py-3 border">Tên địa điểm</th>
+          <th class="px-4 py-3 border">Doanh nghiệp</th>
+          <th class="px-4 py-3 border">Mô tả</th>
+          <th class="px-4 py-3 border">Địa chỉ</th>
+          <th class="px-4 py-3 border">Hình ảnh</th>
+          <th class="px-4 py-3 border">Google Maps</th>
+          <th class="px-4 py-3 border">Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for dia_diem in dia_diems %}
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3 border text-center">{{ dia_diem.MA_DD }}</td>
+          <td class="px-4 py-3 border">{{ dia_diem.TEN_DIA_DIEM }}</td>
+          <td class="px-4 py-3 border">{{ dia_diem.MA_DN.TEN_DN }}</td>
+          <td class="px-4 py-3 border">{{ dia_diem.MO_TA_DD }}</td>
+          <td class="px-4 py-3 border">{{ dia_diem.get_full_address }}</td>
+          <td class="px-4 py-3 border">
+            {# Có thể hiển thị ảnh nếu muốn #} {#
+            <img
+              src="{{ dia_diem.HINH_ANH_DD }}"
+              class="w-32 h-20 object-cover"
+            />
+            #}
+          </td>
+          <td class="px-4 py-3 border">
+            <a
+              href="{{ dia_diem.get_google_map_url }}"
+              target="_blank"
+              class="text-blue-500 hover:text-blue-700"
+            >
+              Xem trên Google Maps
+            </a>
+          </td>
+          <td class="px-4 py-3 border text-center">
+            <div class="flex flex-col items-center space-y-2">
+              <button
+                class="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500 text-xs w-20"
+                onclick="openModal({
+                  ma_dd: '{{ dia_diem.MA_DD.MA_DD }}',
+                  ten: '{{ dia_diem.TEN_DIA_DIEM|escapejs }}',
+                  ma_dn: '{{ dia_diem.MA_DN.MA_DN }}',
+                  mo_ta: `{{ dia_diem.MO_TA_DD|escapejs }}`,
+                  tinh_tp: '{{ dia_diem.TINH_THANH_PHO }}',
+                  quan_huyen: '{{ dia_diem.QUAN_HUYEN }}',
+                  khu_vuc: '{{ dia_diem.KHU_VUC }}',
+                  vi_tri: '{{ dia_diem.VI_TRI }}'
+                })"
+              >
+                ✏️ Sửa
+              </button>
+              <form
+                action="{% url 'admin_tourism:xoa_dia_diem' dia_diem.MA_DD %}"
+                method="POST"
+                onsubmit="return confirm('Bạn có chắc muốn xóa địa điểm này?')"
+              >
+                {% csrf_token %}
+                <button
+                  type="submit"
+                  class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-xs w-20"
+                >
+                  🗑️ Xóa
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="8" class="text-center py-3">Không có dữ liệu</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal thêm/sửa địa điểm -->
+{% include "admin/tourism/diadiem/themsuadiadiem.html" %}

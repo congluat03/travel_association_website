@@ -1,0 +1,148 @@
+<!-- MODAL THÊM / SỬA -->
+<div
+  id="diaDiemModal"
+  class="fixed inset-0 z-50 hidden bg-black bg-opacity-40 flex items-center justify-center">
+  <div class="bg-white w-full max-w-3xl rounded-xl shadow-lg p-6 relative">
+    <!-- Nút đóng -->
+    <button
+      onclick="closeModal()"
+      class="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold"
+    >
+      &times;
+    </button>
+
+    <h2 class="text-2xl font-semibold text-green-700 mb-6">
+      📍 Thêm / Sửa địa điểm du lịch
+    </h2>
+
+    <form method="POST" action="{% if dia_diem %}{% url 'admin_tourism:sua_dia_diem' dia_diem.MA_DD %}{% else %}{% url 'admin_tourism:them_dia_diem' %}{% endif %}">
+
+      {% csrf_token %}
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Tên địa điểm -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Tên địa điểm</label
+          >
+          <input
+            type="text"
+            name="TEN_DIA_DIEM"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-600 focus:border-green-600"
+            placeholder="Nhập tên địa điểm"
+            required
+          />
+        </div>
+
+        <!-- Doanh nghiệp -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Doanh nghiệp</label
+          >
+          <select
+            name="MA_DN"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-600 focus:border-green-600"
+            required
+          >
+            <option value="" disabled selected>-- Chọn doanh nghiệp --</option>
+            
+            {% for dn in doanhnghiep_list %}
+            <option value="{{ dn.MA_DN }}" {% if dia_diem and dn.MA_DN  == dia_diem.MA_DN.MA_DN %} selected{% endif %}>
+                {{ dn.TEN_DN }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <!-- Tỉnh / TP -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Tỉnh / Thành phố</label
+          >
+          <input
+            type="text"
+            name="TINH_THANH_PHO"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2"
+            placeholder="VD: Khánh Hòa"
+          />
+        </div>
+
+        <!-- Quận / Huyện -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Quận / Huyện</label
+          >
+          <input
+            type="text"
+            name="QUAN_HUYEN"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2"
+            placeholder="VD: Nha Trang"
+          />
+        </div>
+
+        <!-- Khu vực -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Khu vực</label
+          >
+          <input
+            type="text"
+            name="KHU_VUC"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2"
+            placeholder="VD: Trung tâm"
+          />
+        </div>
+
+        <!-- Hình ảnh -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Hình ảnh (URL)</label
+          >
+          <input
+            type="url"
+            name="HINH_ANH_DD"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2"
+            placeholder="https://example.com/hinh.jpg"
+          />
+        </div>
+
+        <!-- Vị trí Google Maps -->
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Vị trí Google Maps (tọa độ hoặc link)</label
+          >
+          <input
+            type="text"
+            name="VI_TRI"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2"
+            placeholder="Nhập vị trí (VD: 12.25, 109.19 hoặc link Google Maps)"
+          />
+        </div>
+      </div>
+
+      <!-- Mô tả -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1"
+          >Mô tả địa điểm</label
+        >
+        <textarea
+          name="MO_TA_DD"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2"
+          rows="5"
+          placeholder="Nhập mô tả chi tiết về địa điểm..."
+        ></textarea>
+      </div>
+
+      <!-- Nút submit -->
+      <div class="text-right pt-4">
+        <button
+          type="submit"
+          class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg shadow-md"
+        >
+          💾 Lưu địa điểm
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+  </div>
+</div>

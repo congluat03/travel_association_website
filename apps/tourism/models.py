@@ -1,6 +1,9 @@
 from django.db import models
 
 # Create your models here.
+# models.py
+from django.db import models
+
 class DiaDiemDuLich(models.Model):
     MA_DD = models.AutoField(primary_key=True)
     MA_DN = models.ForeignKey(
@@ -18,6 +21,15 @@ class DiaDiemDuLich(models.Model):
 
     class Meta:
         db_table = 'diadiemdulich'
+
+    def get_full_address(self):
+        return f"{self.KHU_VUC}, {self.QUAN_HUYEN}, {self.TINH_THANH_PHO}"
+
+    def get_google_map_url(self):
+        # Tạo URL Google Maps từ các thông tin địa chỉ
+        address = f"{self.KHU_VUC}, {self.QUAN_HUYEN}, {self.TINH_THANH_PHO}"
+        return f"https://www.google.com/maps?q={address.replace(' ', '+')}"
+
 
 class DacSan(models.Model):
     MA_DS = models.AutoField(primary_key=True)
@@ -40,7 +52,6 @@ class TourDuLich(models.Model):
     class Meta:
         db_table = 'tourdulich'
 
-from django.db import models
 
 class ThuocTour(models.Model):
     MA_TUOCTOUR = models.AutoField(primary_key=True)

@@ -1,0 +1,111 @@
+<!-- DANH SÁCH TOUR DU LỊCH -->
+<div class="mb-10">
+  <!-- Tiêu đề và nút thêm -->
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-2xl font-bold text-green-700">📋 Danh sách Tour du lịch</h2>
+    <button
+      onclick="openTourModal()"
+      class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 shadow"
+    >
+      ➕ Thêm tour
+    </button>
+  </div>
+
+  <!-- Bảng danh sách tour -->
+  <div
+    class="overflow-x-auto rounded-lg shadow border border-gray-200 h-[65vh] overflow-y-auto"
+  >
+    <table class="min-w-full text-sm text-gray-800">
+      <thead class="bg-green-100 text-gray-700 text-left sticky top-0 z-10">
+        <tr>
+          <th class="px-4 py-3 border">#</th>
+          <th class="px-4 py-3 border">Tên tour</th>
+          <th class="px-4 py-3 border">Giá tour</th>
+          <th class="px-4 py-3 border">Thời gian di chuyển</th>
+          <th class="px-4 py-3 border">Mô tả</th>
+          <th class="px-4 py-3 border">Hình ảnh</th>
+          <th class="px-4 py-3 border">Lịch trình</th>
+          <th class="px-4 py-3 border text-center">Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for tour in tours %}
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3 border text-center">{{ tour.MA_TOUR }}</td>
+          <td class="px-4 py-3 border">{{ tour.TEN_TOUR }}</td>
+          <td class="px-4 py-3 border">{{ tour.GIA_TOUR|floatformat:0 }}₫</td>
+          <td class="px-4 py-3 border">{{ tour.THOI_GIAN_DI_CHUYEN }}</td>
+          <td class="px-4 py-3 border">
+            {{ tour.MO_TA_TOUR|truncatewords:20 }}
+          </td>
+          <td class="px-4 py-3 border">
+            {% if tour.HINH_TOUR %}
+            <img
+              src="{{ tour.HINH_TOUR }}"
+              class="w-32 h-20 object-cover rounded"
+            />
+            {% else %}
+            <span class="text-gray-400 italic">Không có</span>
+            {% endif %}
+          </td>
+          <td class="px-4 py-3 border">
+            {% with thuoctours=tour.thuoctour_set.all %} {% if thuoctours %}
+            <ul class="list-disc pl-4 text-xs text-gray-700">
+              {% for item in thuoctours %}
+              <li>
+                {{ item.MA_DD.TEN_DIA_DIEM }} - {{ item.THOI_GIAN_DI|date:"d/m/Y
+                H:i" }} đến {{ item.THOI_GIAN_DEN|date:"d/m/Y H:i" }}
+              </li>
+              {% endfor %}
+            </ul>
+            {% else %}
+            <span class="text-gray-400 italic">Chưa có lịch trình</span>
+            {% endif %} {% endwith %}
+          </td>
+
+          <td class="px-4 py-3 border text-center">
+            <div class="flex flex-col items-center space-y-2">
+              <!-- Nút sửa -->
+              <button
+                class="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500 text-xs w-20"
+                onclick="openTourModal({
+                    ma_tour: '{{ tour.MA_TOUR }}',
+                    ten_tour: '{{ tour.TEN_TOUR|escapejs }}',
+                    gia_tour: '{{ tour.GIA_TOUR }}',
+                    mo_ta: `{{ tour.MO_TA_TOUR|escapejs }}`,
+                   
+                    thoi_gian: '{{ tour.THOI_GIAN_DI_CHUYEN }}'
+                  })"
+              >
+                ✏️ Sửa
+              </button>
+
+              <!-- Form xóa -->
+              <form
+                action="{% url 'admin_tourism:xoa_tour' tour.MA_TOUR %}"
+                method="POST"
+                onsubmit="return confirm('Bạn có chắc muốn xóa tour này?')"
+              >
+                {% csrf_token %}
+                <button
+                  type="submit"
+                  class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-xs w-20"
+                >
+                  🗑️ Xóa
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="8" class="text-center py-3">Không có tour nào.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal thêm/sửa tour -->
+{% include "admin/tourism/tourdulich/themsuatour.html" %}

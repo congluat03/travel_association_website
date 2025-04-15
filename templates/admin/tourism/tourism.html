@@ -1,47 +1,51 @@
-{% extends "admin/admin_layout.html" %} {% block content %}
+{% extends "admin/admin_layout.html" %}
+
+{% block content %}
 <div class="container mx-auto px-4 pt-6">
   <!-- Tabs hàng ngang hình chữ nhật đều -->
-  <div class="grid grid-cols-3 gap-2 mb-6">
+  <div class="grid grid-cols-4 gap-2 mb-6">  <!-- Thêm 1 cột nữa cho tab Lịch trình -->
     <button
+      id="diadiem-btn"
       class="tab-btn w-full px-6 py-3 text-white bg-green-600 font-semibold text-center rounded-t-md transition duration-300"
       onclick="showTab('diadiem', this)"
     >
       Địa điểm
     </button>
     <button
+      id="dacsan-btn"
       class="tab-btn w-full px-6 py-3 text-gray-700 bg-gray-100 hover:bg-green-100 font-semibold text-center rounded-t-md transition duration-300"
       onclick="showTab('dacsan', this)"
     >
       Đặc sản
     </button>
     <button
+      id="tour-btn"
       class="tab-btn w-full px-6 py-3 text-gray-700 bg-gray-100 hover:bg-green-100 font-semibold text-center rounded-t-md transition duration-300"
       onclick="showTab('tour', this)"
     >
       Tour du lịch
     </button>
+    <button
+      id="lichtrinh-btn"
+      class="tab-btn w-full px-6 py-3 text-gray-700 bg-gray-100 hover:bg-green-100 font-semibold text-center rounded-t-md transition duration-300"
+      onclick="showTab('lichtrinh', this)"
+    >
+      Lịch trình Tour
+    </button>
   </div>
 
   <!-- Tab Contents -->
-  <div id="diadiem" class="tab-content block bg-white p-6 rounded-b-lg shadow">
-    <h2 class="text-xl font-semibold mb-4 text-green-700">
-      📍 Quản lý Địa điểm
-    </h2>
-    <p>Danh sách địa điểm, thêm, sửa, xóa...</p>
+  <div id="dacsan" class="tab-content hidden bg-white p-6 rounded-lg shadow">
+    {% include "admin/tourism/dacsan/dacsan.html" %}
   </div>
-
-  <div id="dacsan" class="tab-content hidden bg-white p-6 rounded-b-lg shadow">
-    <h2 class="text-xl font-semibold mb-4 text-green-700">
-      🍽️ Quản lý Đặc sản
-    </h2>
-    <p>Danh sách đặc sản, thêm, sửa, xóa...</p>
+  <div id="tour" class="tab-content hidden bg-white p-6 rounded-lg shadow">
+    {% include "admin/tourism/tourdulich/tourdulich.html" %}
   </div>
-
-  <div id="tour" class="tab-content hidden bg-white p-6 rounded-b-lg shadow">
-    <h2 class="text-xl font-semibold mb-4 text-green-700">
-      🧳 Quản lý Tour du lịch
-    </h2>
-    <p>Danh sách tour, thêm, sửa, xóa...</p>
+  <div id="lichtrinh" class="tab-content hidden bg-white p-6 rounded-lg shadow">
+    {% include "admin/tourism/lichtrinh/lichtrinh.html" %}  <!-- Thêm file cho phần Lịch trình -->
+  </div>
+  <div id="diadiem" class="tab-content block bg-white p-6 rounded-lg shadow h-full">
+    {% include "admin/tourism/diadiem/diadiem.html" %}
   </div>
 </div>
 {% endblock %}

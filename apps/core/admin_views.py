@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from apps.tourism.models import DiaDiemDuLich, DacSan, ThuocTour, TourDuLich  
+from apps.members.models import DoanhNghiep
 # Create your views here.
 def home(request):
     return render(request, 'index/index_layout.html', {'title': 'Trang chủ'})
@@ -50,4 +52,20 @@ def manage_support(request):
 
 # @login_required
 def manage_tourism(request):
-    return render(request, 'admin/tourism/tourism.html')
+    dia_diems = DiaDiemDuLich.objects.all()
+    doanhnghiep_list = DoanhNghiep.objects.all()
+    dac_sans = DacSan.objects.select_related('MA_DD').all()
+    tours = TourDuLich.objects.prefetch_related('thuoctour_set__MA_DD').all()
+    schedules = ThuocTour.objects.select_related('MA_TOUR', 'MA_DD').all().order_by('THOI_GIAN_DI')  # Quan trọng!
+
+    return render(
+        request,
+        'admin/tourism/tourism.html',
+        {
+            'dia_diems': dia_diems,
+            'doanhnghiep_list': doanhnghiep_list,
+            'dac_sans': dac_sans,
+            'tours': tours,
+            'schedules': schedules,  # 👈 Truyền vào đây
+        }
+    )

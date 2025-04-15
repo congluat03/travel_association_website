@@ -1,0 +1,111 @@
+<!-- MODAL THÊM / SỬA ĐẶC SẢN -->
+<div
+  id="dacSanModal"
+  class="fixed inset-0 z-50 hidden bg-black bg-opacity-40 flex items-center justify-center"
+>
+  <div class="bg-white w-full max-w-3xl rounded-xl shadow-lg p-6 relative">
+    <!-- Nút đóng -->
+    <button
+      onclick="closeModalDS()"
+      class="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold"
+    >
+      &times;
+    </button>
+
+    <h2 class="text-2xl font-semibold text-green-700 mb-6">
+      🍽️ Thêm / Sửa Đặc Sản
+    </h2>
+
+    <form method="POST" action="" id="dacSanForm">
+      {% csrf_token %}
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Tên đặc sản -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Tên đặc sản</label
+          >
+          <input
+            type="text"
+            name="TEN_DS"
+            id="TEN_DS"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-600 focus:border-green-600"
+            placeholder="Nhập tên đặc sản"
+            required
+          />
+        </div>
+
+        <!-- Địa điểm liên kết -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Địa điểm</label
+          >
+          <select
+            name="MA_DD"
+            id="MA_DD"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2"
+            required
+          >
+            <option value="" disabled selected>
+              -- Chọn địa điểm liên kết --
+            </option>
+            {% for dd in dia_diems %}
+            <option value="{{ dd.MA_DD }}">{{ dd.TEN_DIA_DIEM }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- Hình ảnh -->
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Hình ảnh (URL)</label
+          >
+          <input
+            type="url"
+            name="HINH_DS"
+            id="HINH_DS"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2"
+            placeholder="https://example.com/image.jpg"
+          />
+        </div>
+      </div>
+
+      <!-- Mô tả -->
+      <div class="mt-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1"
+          >Mô tả đặc sản</label
+        >
+        <textarea
+          name="MO_TA_DS"
+          id="MO_TA_DS"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2"
+          rows="5"
+          placeholder="Nhập mô tả chi tiết về đặc sản..."
+        ></textarea>
+      </div>
+
+      <!-- Image Preview -->
+      <div class="mt-4 hidden" id="image-preview-container">
+        <label class="block text-sm font-medium text-gray-700 mb-1"
+          >Hình ảnh hiện tại</label
+        >
+        <img
+          id="image-preview"
+          src=""
+          alt="Hình ảnh hiện tại"
+          class="w-32 h-20 object-cover"
+        />
+      </div>
+
+      <!-- Nút lưu -->
+      <div class="text-right pt-4">
+        <button
+          type="submit"
+          class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg shadow-md"
+        >
+          💾 Lưu đặc sản
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

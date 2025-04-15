@@ -1,0 +1,91 @@
+<!-- DANH SÁCH ĐẶC SẢN -->
+<div class="mb-10">
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-2xl font-bold text-green-700">🍱 Danh sách đặc sản</h2>
+    <button
+      onclick="openDacSanModal()"
+      class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 shadow"
+    >
+      ➕ Thêm đặc sản
+    </button>
+  </div>
+
+  <!-- Table -->
+  <div
+    class="overflow-x-auto rounded-lg shadow border border-gray-200 h-[65vh] overflow-y-auto"
+  >
+    <table class="min-w-full text-sm text-gray-800">
+      <thead class="bg-green-100 text-gray-700 text-left sticky top-0 z-10">
+        <tr>
+          <th class="px-4 py-3 border text-center">#</th>
+          <th class="px-4 py-3 border">Tên đặc sản</th>
+          <th class="px-4 py-3 border">Địa điểm</th>
+          <th class="px-4 py-3 border">Mô tả</th>
+          <th class="px-4 py-3 border">Hình ảnh</th>
+          <th class="px-4 py-3 border text-center">Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for dac_san in dac_sans %}
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3 border text-center">{{ dac_san.MA_DS }}</td>
+          <td class="px-4 py-3 border">{{ dac_san.TEN_DAC_SAN }}</td>
+          <td class="px-4 py-3 border">{{ dac_san.MA_DD.TEN_DIA_DIEM }}</td>
+          <td class="px-4 py-3 border">{{ dac_san.MO_TA_DS }}</td>
+          <td class="px-4 py-3 border">
+            {% if dac_san.HINH_DS %}
+            <img
+              src="{{ dac_san.HINH_DS }}"
+              alt="Hình ảnh {{ dac_san.TEN_DAC_SAN }}"
+              class="w-32 h-20 object-cover"
+            />
+            {% else %}
+            <span class="italic text-gray-400">Không có hình</span>
+            {% endif %}
+          </td>
+          <td class="px-4 py-3 border text-center">
+            <div class="flex flex-col items-center space-y-2">
+              <button
+                class="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500 text-xs w-20"
+                onclick="openDacSanModal({
+                    ma_ds: '{{ dac_san.MA_DS }}',
+                    ten: '{{ dac_san.TEN_DAC_SAN|escapejs }}',
+                    ma_dd: '{{ dac_san.MA_DD.MA_DD }}',
+                    mo_ta: `{{ dac_san.MO_TA_DS|escapejs }}`,
+                    {% comment %} hinh: '{{ dac_san.HINH_DS }}' {% endcomment %}
+                  })"
+              >
+                ✏️ Sửa
+              </button>
+
+              <form
+                method="POST"
+                action="{% url 'admin_tourism:xoa_dac_san' dac_san.MA_DS %}"
+                onsubmit="return confirm('Bạn có chắc muốn xóa đặc sản này?');"
+              >
+                {% csrf_token %}
+                <button
+                  type="submit"
+                  class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-xs w-20"
+                >
+                  🗑️ Xóa
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="text-center py-3 italic text-gray-500">
+            Không có đặc sản nào được tìm thấy.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal form thêm/sửa đặc sản -->
+{% include "admin/tourism/dacsan/themsuadacsan.html" %}
