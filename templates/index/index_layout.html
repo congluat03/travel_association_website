@@ -1,169 +1,73 @@
-{% load static %}
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}Green Travel{% endblock %}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script
-      src="https://kit.fontawesome.com/a076d05399.js"
-      crossorigin="anonymous"
-    ></script>
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trang chủ - Du Lịch Xanh</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-800">
 
-  <body class="bg-green-50 font-sans text-gray-800 leading-relaxed">
-    <!-- Header -->
-    <header class="bg-green-500 text-white sticky top-0 z-50 shadow-md">
-      <div
-        class="max-w-7xl mx-auto flex justify-between items-center px-4 py-4"
-      >
-        <!-- Logo -->
-        <div class="flex items-center gap-3">
-          <img
-            src="{% static 'images/logo.png' %}"
-            alt="Logo"
-            class="h-10 w-10"
-          />
-          <h1 class="text-2xl font-bold tracking-wide">Green Travel</h1>
-        </div>
+  <!-- Navbar -->
+  <header class="bg-green-600 text-white shadow">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold">Du Lịch Xanh</h1>
+      <nav class="space-x-6">
+        <a href="/" class="hover:underline">Trang chủ</a>
+        <a href="/gioi-thieu/" class="hover:underline">Giới thiệu</a>
+        <a href="/tourism/" class="hover:underline">Cẩm nang</a>
+        <a href="/news/" class="hover:underline">Tin tức</a>
+        <a href="/members/" class="hover:underline">Hội viên</a>
+        <a href="/support/" class="hover:underline">Biểu mẫu</a>
+        <a href="/lien-he/" class="hover:underline">Liên hệ</a>
+      </nav>
+    </div>
+  </header>
 
-        <!-- Navigation & Auth -->
-        <div class="flex items-center gap-6">
-          <nav class="hidden md:flex gap-6">
-            <a href="#" class="hover:text-green-200 transition duration-300"
-              >Trang chủ</a
-            >
-            <a href="#" class="hover:text-green-200 transition duration-300"
-              >Điểm đến</a
-            >
-            <a href="#" class="hover:text-green-200 transition duration-300"
-              >Chuyến đi</a
-            >
-            <a href="#" class="hover:text-green-200 transition duration-300"
-              >Giới thiệu</a
-            >
-            <a href="#" class="hover:text-green-200 transition duration-300"
-              >Liên hệ</a
-            >
-          </nav>
+  <!-- Banner -->
+  <section class="bg-green-100 py-16">
+    <div class="max-w-6xl mx-auto text-center">
+      <h2 class="text-4xl font-bold text-green-700">Khám phá Du lịch Xanh Việt Nam</h2>
+      <p class="mt-4 text-gray-700 text-lg">Hành trình kết nối thiên nhiên, bảo vệ môi trường và phát triển bền vững.</p>
+      <a href="/tourism/" class="inline-block mt-6 bg-green-600 text-white px-6 py-3 rounded-full hover:bg-green-700">
+        Khám phá ngay
+      </a>
+    </div>
+  </section>
 
-          {% if user.is_authenticated %}
-          <div class="flex items-center gap-3">
-            <span class="text-green-200 text-sm"
-              >Xin chào, {{ user.username }}</span
-            >
-            <a
-              href="{% url 'logout' %}"
-              class="bg-green-600 hover:bg-green-700 px-3 py-1 rounded transition duration-300"
-              >Đăng xuất</a
-            >
-          </div>
-          {% else %}
-          <div class="flex gap-3">
-            <a
-              href="{% url 'login' %}"
-              class="bg-green-600 hover:bg-green-700 px-3 py-1 rounded transition duration-300"
-              >Đăng nhập</a
-            >
-            <!-- <a href="{% url 'register' %}" class="border border-white px-3 py-1 rounded hover:bg-green-700 transition duration-300">Đăng ký</a> -->
-          </div>
-          {% endif %}
-        </div>
+  <!-- Các module -->
+  <section class="py-16 bg-white">
+    <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Cẩm nang -->
+      <div class="bg-green-50 p-6 rounded-xl shadow hover:shadow-lg">
+        <h3 class="text-xl font-semibold text-green-700 mb-2">Cẩm nang Du lịch</h3>
+        <p>Địa điểm, đặc sản, tour mẫu và bản đồ số cho hành trình xanh.</p>
+        <a href="/tourism/" class="text-green-600 font-medium mt-2 inline-block">Xem thêm →</a>
       </div>
-    </header>
 
-    <!-- Main Content -->
-    <main class="min-h-screen">
-      {% block content %}
-      <!-- Hero Section -->
-      <section
-        class="relative bg-cover bg-center h-[32rem]"
-        style="
-          background-image: url('{% static 'images/istockphoto-1372488167-612x612.jpg' %}');
-        "
-      >
-        <div
-          class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center"
-        >
-          <div class="text-center text-white px-6">
-            <h2 class="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-lg">
-              Khám phá thế giới một cách bền vững
-            </h2>
-            <p class="text-lg md:text-xl mb-6 max-w-2xl mx-auto">
-              Cùng Green Travel du hành đến những địa điểm thân thiện với môi
-              trường.
-            </p>
-            <a
-              href="#"
-              class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full text-lg font-semibold transition duration-300"
-              >Bắt đầu hành trình</a
-            >
-          </div>
-        </div>
-      </section>
-      {% endblock %}
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-green-900 text-white py-10">
-      <div
-        class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 px-4"
-      >
-        <!-- About -->
-        <div>
-          <h3 class="text-xl font-semibold mb-4">Về Green Travel</h3>
-          <p class="text-green-200 leading-relaxed">
-            Chúng tôi cam kết phát triển du lịch bền vững, giúp du khách khám
-            phá thế giới mà vẫn bảo tồn thiên nhiên cho thế hệ tương lai.
-          </p>
-        </div>
-
-        <!-- Quick Links -->
-        <div>
-          <h3 class="text-xl font-semibold mb-4">Liên kết nhanh</h3>
-          <ul class="space-y-2 text-green-200">
-            <li>
-              <a href="#" class="hover:text-white transition duration-300"
-                >Trang chủ</a
-              >
-            </li>
-            <li>
-              <a href="#" class="hover:text-white transition duration-300"
-                >Điểm đến</a
-              >
-            </li>
-            <li>
-              <a href="#" class="hover:text-white transition duration-300"
-                >Chuyến đi</a
-              >
-            </li>
-            <li>
-              <a href="#" class="hover:text-white transition duration-300"
-                >Liên hệ</a
-              >
-            </li>
-          </ul>
-        </div>
-
-        <!-- Contact -->
-        <div>
-          <h3 class="text-xl font-semibold mb-4">Liên hệ</h3>
-          <p class="text-green-200">Email: info@greentravel.com</p>
-          <p class="text-green-200">SĐT: +1 (555) 123-4567</p>
-          <div class="flex space-x-4 mt-4">
-            <a href="#" class="hover:text-white text-green-200 transition"
-              ><i class="fab fa-facebook-f text-xl"></i
-            ></a>
-            <a href="#" class="hover:text-white text-green-200 transition"
-              ><i class="fab fa-twitter text-xl"></i
-            ></a>
-            <a href="#" class="hover:text-white text-green-200 transition"
-              ><i class="fab fa-instagram text-xl"></i
-            ></a>
-          </div>
-        </div>
+      <!-- Hội viên -->
+      <div class="bg-green-50 p-6 rounded-xl shadow hover:shadow-lg">
+        <h3 class="text-xl font-semibold text-green-700 mb-2">Hội viên – Doanh nghiệp</h3>
+        <p>Kết nối cộng đồng doanh nghiệp chung tay vì môi trường.</p>
+        <a href="/members/" class="text-green-600 font-medium mt-2 inline-block">Xem thêm →</a>
       </div>
-    </footer>
-  </body>
+
+      <!-- Tin tức -->
+      <div class="bg-green-50 p-6 rounded-xl shadow hover:shadow-lg">
+        <h3 class="text-xl font-semibold text-green-700 mb-2">Tin tức – Sự kiện</h3>
+        <p>Cập nhật xu hướng, hoạt động nổi bật về du lịch xanh.</p>
+        <a href="/news/" class="text-green-600 font-medium mt-2 inline-block">Xem thêm →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-green-600 text-white py-6 mt-12">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      &copy; 2025 Du Lịch Xanh Việt Nam. All rights reserved.
+    </div>
+  </footer>
+
+</body>
 </html>
