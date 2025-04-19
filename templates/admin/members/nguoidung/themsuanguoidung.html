@@ -1,0 +1,99 @@
+<!-- MODAL THÊM / SỬA NGƯỜI DÙNG -->
+<div id="nguoiDungModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-40 flex items-center justify-center">
+  <div class="bg-white w-full max-w-3xl rounded-xl shadow-lg p-6 relative">
+    <!-- Nút đóng -->
+    <button onclick="closeModal()" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold">
+      &times;
+    </button>
+
+    <h2 id="form-title'" class="text-2xl font-semibold text-green-700 mb-6">
+      👤 Thêm / Sửa người dùng
+    </h2>
+
+    <form method="POST"
+    action="{% if taikhoan and taikhoan.MA_TK %}{% url 'admin_members:sua_tai_khoan' taikhoan.MA_TK %}{% else %}{% url 'admin_members:them_tai_khoan' %}{% endif %}">
+      {% csrf_token %}
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Tên đăng nhập -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Tên đăng nhập</label>
+            <input
+              type="text"
+              name="TEN_DANG_NHAP"
+              value="{% if taikhoan %}{{ taikhoan.TEN_DANG_NHAP }}{% else %}{{ '' }}{% endif %}"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-600 focus:border-green-600"
+              placeholder="Nhập tên đăng nhập"
+              required
+            />
+          </div>
+        <!-- Email người dùng -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Email người dùng</label>
+          <input type="email" name="EMAIL_TK"
+            value="{% if taikhoan %}{{ taikhoan.EMAIL_TK }}{% else %}{{ '' }}{% endif %}"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-600 focus:border-green-600"
+            placeholder="Nhập email" required />
+        </div>
+  
+        <!-- Mật khẩu -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Mật khẩu</label>
+          <input
+            type="password"
+            name="MAT_KHAU"
+            value="{% if taikhoan %}{{ taikhoan.MAT_KHAU }}{% else %}{{ '' }}{% endif %}"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-600 focus:border-green-600"
+            placeholder="Nhập mật khẩu"
+            required
+          />
+        </div>
+
+        <!-- Vai trò -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Vai trò</label>
+          <input
+            type="text"
+            name="VAI_TRO"
+            value="{% if taikhoan %}{{ taikhoan.VAI_TRO }}{% else %}{{ '' }}{% endif %}"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-600 focus:border-green-600"
+            placeholder="Nhập vai trò"
+            required
+          />
+        </div>
+
+          <!-- Trạng thái tài khoản -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Trạng thái tài khoản</label>
+        <select
+          name="TRANG_THAI_TK"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-600 focus:border-green-600"
+          required
+        >
+          <option value="1" {% if taikhoan and taikhoan.TRANG_THAI_TK == 1 %}selected{% endif %}>Hoạt động</option>
+          <option value="0" {% if taikhoan and taikhoan.TRANG_THAI_TK == 0 %}selected{% endif %}>khóa</option>
+        </select>
+      </div>
+      <!-- Combobox Doanh Nghiệp -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Doanh nghiệp</label>
+        <select name="MA_DN" id="MA_DN" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-600 focus:border-green-600">
+          <option value="">Chọn doanh nghiệp</option>
+          {% for dn in doanhnghiep_list %}
+            <option value="{{ dn.id }}" {% if taikhoan and taikhoan.MA_DN.id == dn.id %}selected{% endif %}>{{ dn.ten }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+
+
+      <!-- Nút submit -->
+      <div class="text-right pt-4">
+        <button id="submit-button" type="submit"
+          class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg shadow-md">
+          💾 Lưu người dùng
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,106 @@
+<!-- DANH SÁCH DOANH NGHIỆP -->
+<div class="mb-10">
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-2xl font-bold text-green-700">Danh sách doanh nghiệp</h2>
+    <button
+      onclick="openDoanhNghiepModal()"
+      class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 shadow"
+    >
+      ➕ Thêm doanh nghiệp
+    </button>
+  </div>
+
+  <!-- Table -->
+  <div class="overflow-x-auto rounded-lg shadow border border-gray-200 h-[65vh] overflow-y-auto">
+    <table class="min-w-full text-sm text-gray-800">
+      <thead class="bg-blue-100 text-gray-700 text-left sticky top-0 z-10">
+        <tr>
+          <th class="px-4 py-3 border text-center">#</th>
+          <th class="px-4 py-3 border">Tên doanh nghiệp</th>
+          <th class="px-4 py-3 border">Ngành</th> <!-- Thêm cột Ngành -->
+          <th class="px-4 py-3 border">Người đại diện</th>
+          <th class="px-4 py-3 border">Email</th>
+          <th class="px-4 py-3 border">SĐT</th>
+          <th class="px-4 py-3 border">Địa chỉ</th> 
+          <th class="px-4 py-3 border">Mã QR</th> 
+          <th class="px-4 py-3 border">Trạng thái duyệt</th>
+          <th class="px-4 py-3 border text-center">Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for dn in doanhnghiep %}
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3 border text-center">{{ dn.MA_DN }}</td>
+          <td class="px-4 py-3 border">{{ dn.TEN_DN }}</td>
+          <td class="px-4 py-3 border">{{ dn.MA_NGANH.TEN_NGANH }}</td> <!-- Hiển thị Tên Ngành -->
+          <td class="px-4 py-3 border">{{ dn.NGUOI_DAI_DIEN }}</td>
+          <td class="px-4 py-3 border">{{ dn.EMAIL_DN }}</td>
+          <td class="px-4 py-3 border">{{ dn.SDT_DN }}</td>
+          <td class="px-4 py-3 border">{{ dn.DIA_CHI }}</td> 
+          <td>
+            {% if dn.MA_QR %}
+                <img src="{{ dn.MA_QR.url }}" alt="QR Code" class="w-12 h-12">
+            {% else %}
+                <span>Chưa có mã QR</span>
+            {% endif %}
+          </td>
+          <td class="text-center">
+            {% if dn.TRANG_THAI_DUYET %}
+            <span class="text-green-500 font-semibold">Đã duyệt</span>
+            {% else %}
+            <span class="text-red-500 font-semibold">Chưa duyệt</span>
+            {% endif %}
+        </td>
+        
+          <td class="px-4 py-3 border text-center">
+            <div class="flex flex-col items-center space-y-2">
+              <!-- Sửa doanh nghiệp -->
+              <button
+              class="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500 text-xs w-20"
+              onclick="openDoanhNghiepModal({
+                ma_dn: '{{ dn.MA_DN }}',
+                ma_nganh: '{{ dn.MA_NGANH_id }}',  // lấy id để đưa vào <select>
+                ten_nganh: '{{ dn.MA_NGANH.TEN_NGANH|escapejs }}',  // lấy tên để hiển thị (nếu cần)
+                ten_dn: '{{ dn.TEN_DN|escapejs }}',
+                nguoi_dai_dien: '{{ dn.NGUOI_DAI_DIEN|escapejs }}',
+                dia_chi: '{{ dn.DIA_CHI|escapejs }}',
+                sdt: '{{ dn.SDT_DN }}',
+                email: '{{ dn.EMAIL_DN }}',
+                ma_qr: '{{ dn.MA_QR }}',
+                trang_thai_duyet: '{{ dn.TRANG_THAI_DUYET }}'
+              })"
+            >
+              ✏️ Sửa
+            </button>
+            
+            
+              <!-- Xóa doanh nghiệp -->
+              <form
+                method="POST"
+                action="{% url 'admin_members:xoa_doanh_nghiep' dn.MA_DN %}"
+                onsubmit="return confirm('Bạn có chắc muốn xóa doanh nghiệp này?');"
+              >
+                {% csrf_token %}
+                <button
+                  type="submit"
+                  class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-xs w-20"
+                >
+                  🗑️ Xóa
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="9" class="text-center py-3 italic text-gray-500">
+            Không có doanh nghiệp nào được tìm thấy.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% include "admin/members/doanhnghiep/themsuadoanhnghiep.html" %}

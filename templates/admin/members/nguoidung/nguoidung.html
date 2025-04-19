@@ -1,0 +1,146 @@
+<!-- DANH SÁCH TÀI KHOẢN -->
+<div class="mb-10">
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-2xl font-semibold text-green-700">👤 Danh sách tài khoản</h2>
+    <button
+      onclick="openTaiKhoanModal()"
+      class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 shadow"
+    >
+      ➕ Thêm tài khoản
+    </button>
+  </div>
+
+  <!-- Table -->
+  <div class="overflow-x-auto rounded-lg shadow-md border border-gray-200 h-[65vh] overflow-y-auto bg-white">
+    <table class="min-w-full text-sm text-gray-800">
+      <thead class="bg-green-100 text-gray-700 text-left sticky top-0 z-10">
+        <tr>
+          <th class="px-4 py-3 border text-center">STT</th>
+          <th class="px-4 py-3 border">Tên đăng nhập</th>
+          <th class="px-4 py-3 border">Email</th>
+          <th class="px-4 py-3 border">Mật khẩu</th>
+          <th class="px-4 py-3 border">Tên doanh nghiệp</th>
+          <th class="px-4 py-3 border">Vai trò</th>
+          <th class="px-4 py-3 border">Trạng thái</th>
+          <th class="px-4 py-3 border text-center">Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for taikhoan in taikhoan %}
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3 border text-center">{{ taikhoan.MA_TK }}</td>
+          <td class="px-4 py-3 border">{{ taikhoan.TEN_DANG_NHAP }}</td>
+          <td class="px-4 py-3 border">{{ taikhoan.EMAIL_TK }}</td>
+                    <!-- Thêm cột Mật khẩu trong <tbody> -->
+          <td class="px-4 py-3 border">
+            {{ taikhoan.MAT_KHAU|default:"-" }}
+          </td>
+          <td class="px-4 py-3 border">
+            {{ taikhoan.MA_DN.TEN_DN|default:"-" }}
+          </td>          
+          <td class="px-4 py-3 border">{{ taikhoan.VAI_TRO }}</td>
+          <td class="px-4 py-2">
+            {% if taikhoan.TRANG_THAI_TK %}
+            <span class="text-green-500 font-semibold">Hoạt động</span>
+            {% else %}
+            <span class="text-red-500 font-semibold">Khóa</span>
+            {% endif %}
+          </td>
+
+          <td class="px-4 py-3 border text-center">
+            <div class="flex flex-col items-center space-y-2">
+              <button
+              class="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500 text-xs w-20"
+              onclick="openTaiKhoanModal({
+                ma_tk: '{{ taikhoan.MA_TK }}',
+                ten_dang_nhap: '{{ taikhoan.TEN_DANG_NHAP|escapejs }}',
+                email: '{{ taikhoan.EMAIL_TK|escapejs }}',
+                vai_tro: '{{ taikhoan.VAI_TRO|escapejs }}',
+                trang_thai: '{{ taikhoan.TRANG_THAI_TK }}',
+                mat_khau: '{{ taikhoan.MAT_KHAU|escapejs }}'
+              })"
+            >
+              ✏️ Sửa
+            </button>
+            
+
+              <form
+                method="POST"
+                action="{% url 'admin_members:xoa_tai_khoan' taikhoan.MA_TK %}"
+                onsubmit="return confirm('Bạn có chắc muốn xóa tài khoản này?');"
+              >
+                {% csrf_token %}
+                <button
+                  type="submit"
+                  class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-xs w-20"
+                >
+                  🗑️ Xóa
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="text-center py-3 italic text-gray-500">
+            Không có tài khoản nào được tìm thấy.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<script>
+    function openTaiKhoanModal(data = null) {
+      const modal = document.getElementById('nguoiDungModal');
+      modal.classList.remove('hidden');
+  
+      if (data) {
+        document.getElementById('form-title').innerText = 'Cập nhật tài khoản';
+        document.getElementById('submit-button').value = 'Cập nhật';
+  
+        document.getElementById('TEN_DANG_NHAP').value = data.ten_dang_nhap || '';
+        document.getElementById('EMAIL_TK').value = data.email || '';
+        document.getElementById('MAT_KHAU').value = data.mat_khau || '';
+        document.getElementById('VAI_TRO').value = data.vai_tro || '';
+        document.getElementById('TRANG_THAI_TK').value = data.trang_thai === 'True' ? '1' : '0';
+  
+        // Nếu có mã doanh nghiệp
+        if (data.ma_dn) {
+          document.getElementById('MA_DN').value = data.ma_dn;
+        }
+  
+        // Nếu bạn có thêm trường ngày đăng ký (nếu cần)
+        if (data.ngay_dang_ky) {
+          document.getElementById('NGAY_DANG_KY_TK').value = data.ngay_dang_ky;
+        }
+  
+      } else {
+        document.getElementById('form-title').innerText = 'Thêm tài khoản mới';
+        document.getElementById('submit-button').value = 'Thêm mới';
+  
+        document.getElementById('TEN_DANG_NHAP').value = '';
+        document.getElementById('EMAIL_TK').value = '';
+        document.getElementById('MAT_KHAU').value = data.mat_khau || '';
+        document.getElementById('VAI_TRO').value = '';
+        document.getElementById('TRANG_THAI_TK').value = '1';
+        document.getElementById('NGAY_DANG_KY_TK').value = '';
+  
+        if (document.getElementById('MA_DN')) {
+          document.getElementById('MA_DN').value = '';
+        }
+      }
+    }
+  
+    function closeTaiKhoanModal() {
+      document.getElementById('taiKhoanModal').classList.add('hidden');
+    }
+     // Lấy ngày hiện tại
+     const currentDate = new Date().toISOString().split('T')[0];  // Định dạng yyyy-mm-dd
+    document.querySelector('input[name="NGAY_DANG_KY_TK"]').value = currentDate;
+  </script>
+  
+
+{% include "admin/members/nguoidung/themsuanguoidung.html" %}x  

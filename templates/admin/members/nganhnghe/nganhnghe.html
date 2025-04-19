@@ -1,0 +1,95 @@
+
+<div class="mb-10">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-2xl font-bold text-indigo-700">💼 Danh sách ngành nghề</h2>
+      <button
+        onclick="openNganhModal()"
+        class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 shadow"
+      >
+        ➕ Thêm ngành nghề
+      </button>
+    </div>
+  
+    <!-- Table -->
+    <div class="overflow-x-auto rounded-lg shadow border border-gray-200 h-[65vh] overflow-y-auto">
+      <table class="min-w-full text-sm text-gray-800">
+        <thead class="bg-indigo-100 text-gray-700 text-left sticky top-0 z-10">
+          <tr>
+            <th class="px-4 py-3 border text-center">#</th>
+            <th class="px-4 py-3 border">Tên ngành nghề</th>
+            <th class="px-4 py-3 border text-center">Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for nn in nganhnghe %}
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 border text-center">{{ nn.MA_NGANH }}</td>
+            <td class="px-4 py-3 border">{{ nn.TEN_NGANH }}</td>
+            <td class="px-4 py-3 border text-center">
+              <div class="flex flex-col items-center space-y-2">
+                <!-- Nút sửa -->
+                <button
+                  class="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500 text-xs w-20"
+                  onclick="openNganhModal({
+                      ma_nganh: '{{ nn.MA_NGANH }}',
+                      ten_nganh: '{{ nn.TEN_NGANH|escapejs }}'
+                    })"
+                >
+                  ✏️ Sửa
+                </button>
+  
+                <!-- Nút xóa -->
+                <form
+                  method="POST"
+                  action="{% url 'admin_members:xoa_nganh_nghe' nn.MA_NGANH %}"
+                  onsubmit="return confirm('Bạn có chắc muốn xóa ngành nghề này?');"
+                >
+                  {% csrf_token %}
+                  <button
+                    type="submit"
+                    class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-xs w-20"
+                  >
+                    🗑️ Xóa
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="3" class="text-center py-3 italic text-gray-500">
+              Không có ngành nghề nào được tìm thấy.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+//     function openNganhModal(data = null) {
+//       const modal = document.getElementById("nganhModal");
+//       const form = document.getElementById("nganhForm");
+  
+//       if (data) {
+//         form.MA_NGANH.value = data.ma_nganh || "";
+//         form.TEN_NGANH.value = data.ten_nganh || "";
+//         // form.action = `/admin_members/sua_nganh_nghe/${data.ma_nganh}/`; // URL sửa
+//       } else {
+//         form.reset();
+//         // form.action = "{% url 'admin_members:them_nganh_nghe' %}"; // URL thêm
+//       }
+  
+//       modal.classList.remove("hidden");
+//     }
+  
+//     function closeNganhModal() {
+//       document.getElementById("nganhModal").classList.add("hidden");
+//     }
+//   </script>
+  
+  
+  <!-- Modal form thêm/sửa ngành nghề -->
+  {% include "admin/members/nganhnghe/themsuanganhnghe.html" %}
+  

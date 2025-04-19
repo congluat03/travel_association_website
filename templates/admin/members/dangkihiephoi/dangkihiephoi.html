@@ -1,0 +1,83 @@
+<!-- DANH SÁCH HỘI VIÊN -->
+<div class="mb-10">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-2xl font-bold text-green-700">Danh sách đăng ký hội viên</h2>
+      <button
+        onclick="openHoiVienModal()"
+        class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 shadow"
+      >
+        ➕ Thêm hội viên
+      </button>
+    </div>
+  
+    <!-- Table -->
+    <div class="overflow-x-auto rounded-lg shadow border border-gray-200 h-[65vh] overflow-y-auto">
+      <table class="min-w-full text-sm text-gray-800">
+        <thead class="bg-blue-100 text-gray-700 text-left sticky top-0 z-10">
+          <tr>
+            <th class="px-4 py-3 border text-center">#</th>
+            <th class="px-4 py-3 border">Mã hội viên</th>
+            <th class="px-4 py-3 border">Mã doanh nghiệp</th>
+            <th class="px-4 py-3 border">Ngày đăng ký</th>
+            <th class="px-4 py-3 border">Tình trạng</th>
+            <th class="px-4 py-3 border text-center">Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for hv in dangkyhoivien %}
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 border text-center">{{ forloop.counter }}</td>
+            <td class="px-4 py-3 border">{{ hv.MA_HH.TEN_HH }}</td> 
+            <td class="px-4 py-3 border">{{ hv.MA_DN.TEN_DN }}</td>
+           
+            <td class="px-4 py-3 border">{{ hv.NGAY_DANG_KY|date:"d/m/Y" }}</td>
+            <td class="px-4 py-3 border text-center">
+                {% if hv.TINH_TRANG %}
+                  <span class="text-red-500 font-semibold">{{ hv.TINH_TRANG }}</span>
+                {% else %}
+                  <span class="text-green-500  font-semibold">Chưa cập nhật</span>
+                {% endif %}
+              </td>
+            <td class="px-4 py-3 border text-center">
+              <div class="flex flex-col items-center space-y-2">
+                <!-- Sửa -->
+                <button
+                  class="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500 text-xs w-20"
+                  onclick="openHoiVienModal({
+                    id: '{{ hv.MA_DK_HH  }}',
+                    ma_hh: '{{ hv.MA_HH }}',
+                    ma_dn: '{{ hv.MA_DN }}',
+                    tinh_trang: '{{ hv.TINH_TRANG|escapejs }}',
+                    ngay_dang_ky: '{{ hv.NGAY_DANG_KY }}'
+                  })"
+                >
+                  ✏️ Sửa
+                </button>
+                <!-- Xóa -->
+                <form method="POST" action="{% url 'admin_members:xoa_dk_hoivien' hv.MA_DK_HH  %}" onsubmit="return confirm('Bạn có chắc muốn xóa hội viên này?');">
+                  {% csrf_token %}
+                  <button
+                    type="submit"
+                    class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-xs w-20"
+                  >
+                    🗑️ Xóa
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="6" class="text-center py-3 italic text-gray-500">
+              Không có hội viên nào được tìm thấy.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  {% include "admin/members/dangkihiephoi/themsuahoivien.html" %}
+  

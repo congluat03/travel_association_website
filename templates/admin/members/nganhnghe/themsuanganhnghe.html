@@ -1,0 +1,29 @@
+<!-- MODAL THÊM / SỬA NGÀNH NGHỀ -->
+<div id="nganhModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-40 flex items-center justify-center">
+  <div class="bg-white w-full max-w-lg rounded-xl shadow-lg p-6 relative">
+    <!-- Nút đóng -->
+    <button onclick="closeNganhModal()" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold">
+      &times;
+    </button>
+
+    <h2 class="text-2xl font-semibold text-blue-700 mb-6">🏷️ Thêm / Sửa Ngành Nghề</h2>
+
+    <form method="POST" action="" id="nganhForm">
+      {% csrf_token %}
+      <input type="hidden" name="MA_NGANH" id="MA_NGANH" />
+
+      <!-- Tên ngành nghề -->
+      <div class="mb-4">
+        <label for="TEN_NGANH" class="block text-sm font-medium text-gray-700 mb-1">Tên ngành nghề</label>
+        <input type="text" name="TEN_NGANH" id="TEN_NGANH" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-600 focus:border-blue-600" placeholder="Nhập tên ngành nghề" required />
+      </div>
+
+      <!-- Nút lưu -->
+      <div class="text-right pt-2">
+        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow-md">
+          💾 Lưu ngành nghề
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

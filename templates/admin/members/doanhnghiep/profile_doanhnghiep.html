@@ -1,0 +1,46 @@
+<!-- templates/admin/members/doanhnghiep/profile_doanhnghiep.html -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Thông tin doanh nghiệp</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+
+  <div class="max-w-3xl mx-auto bg-white p-6 rounded shadow-md">
+    <h1 class="text-2xl font-bold text-yellow-600 mb-4">Thông tin Doanh nghiệp</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+      <div>
+        <p><strong>Tên doanh nghiệp:</strong> {{ dn.TEN_DN }}</p>
+        <p><strong>Người đại diện:</strong> {{ dn.NGUOI_DAI_DIEN }}</p>
+        <p><strong>Email:</strong> {{ dn.EMAIL_DN }}</p>
+        <p><strong>SĐT:</strong> {{ dn.SDT_DN }}</p>
+      </div>
+      <div>
+        <p><strong>Địa chỉ:</strong> {{ dn.DIA_CHI }}</p>
+        <p><strong>Ngành nghề:</strong> {{ dn.MA_NGANH.TEN_NGANH }}</p>
+        <p>
+          <strong>Trạng thái duyệt:</strong>
+          {% if dn.TRANG_THAI_DUYET == "1" %}
+            <span class="text-green-600 font-semibold">Đã duyệt</span>
+          {% else %}
+            <span class="text-red-600 font-semibold">Chưa duyệt</span>
+          {% endif %}
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <h2 class="text-lg font-semibold mb-2">Mã QR Doanh nghiệp</h2>
+      {% if dn.MA_QR %}
+        <img src="{{ dn.MA_QR.url }}" alt="Mã QR" class="w-40 h-40 border rounded" />
+      {% else %}
+        <p class="text-gray-500 italic">Chưa có mã QR</p>
+      {% endif %}
+    </div>
+  </div>
+
+</body>
+</html>
