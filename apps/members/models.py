@@ -96,22 +96,31 @@ class HiepHoi(models.Model):
     class Meta:
         db_table = 'hiephoi'
 
+from django.db import models
+
 class DangKyHoiVien(models.Model):
     MA_DK_HH = models.AutoField(primary_key=True)  # Khóa chính riêng
     MA_HH = models.ForeignKey(
-        HiepHoi, 
+        'HiepHoi', 
         on_delete=models.CASCADE, 
         related_name="dang_ky_hv",
         db_column='MA_HH'
     )
     MA_DN = models.ForeignKey(
-        DoanhNghiep, 
+        'DoanhNghiep', 
         on_delete=models.CASCADE, 
         related_name="dang_ky_hv",
         db_column='MA_DN'
     )
-    TINH_TRANG = models.CharField(max_length=100, null=True, blank=True)
+    # Trường trạng thái duyệt
+    TINH_TRANG = models.IntegerField(
+        choices=[(0, 'Chưa Duyệt'), (1, 'Duyệt')],  # Sử dụng số 0 và 1
+        default=0  # Mặc định là Chưa Duyệt (0)
+    )
     NGAY_DANG_KY = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Đăng ký hội viên: {self.MA_DK_HH} - {self.MA_DN.TEN_DN}"
 
     class Meta:
         db_table = 'dangkyhoivien'

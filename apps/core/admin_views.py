@@ -41,8 +41,6 @@ def admin_dashboard(request):
 
 # @login_required
 
-
-
 def manage_members(request):
     # Lấy danh sách tài khoản và liên kết doanh nghiệp
     taikhoan = TaiKhoan.objects.select_related('MA_DN').all()

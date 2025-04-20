@@ -1,32 +1,35 @@
 <!-- MODAL THÊM / SỬA DOANH NGHIỆP -->
 <div id="doanhNghiepModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-40 flex items-center justify-center">
-    <div class="bg-white w-full max-w-xl rounded-xl shadow-lg p-6 relative">
+    <div class="bg-white w-full max-w-2xl rounded-xl shadow-lg p-6 relative">
         <!-- Nút đóng -->
         <button onclick="closeDoanhNghiepModal()"
             class="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold">
             &times;
         </button>
 
-        <h2 class="text-2xl font-semibold text-blue-700 mb-6">🏢 Thêm / Sửa Doanh Nghiệp</h2>
+        <h2 class="text-2xl font-semibold text-green-500 mb-6">🏢 Thêm / Sửa Doanh Nghiệp</h2>
 
         <form method="POST" action="" id="doanhNghiepForm">
             {% csrf_token %}
             <input type="hidden" name="MA_DN" id="MA_DN" /> <!-- Mã doanh nghiệp (ẩn khi thêm mới) -->
-
-            <!-- Tên doanh nghiệp -->
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Tên doanh nghiệp</label>
-                <input type="text" name="TEN_DN" id="TEN_DN"
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-600 focus:border-blue-600"
-                    placeholder="Nhập tên doanh nghiệp" required />
+            <div class="grid grid-cols-2 gap-2">
+                <!-- Tên doanh nghiệp -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tên doanh nghiệp</label>
+                    <input type="text" name="TEN_DN" id="TEN_DN"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-600 focus:border-green-600"
+                        placeholder="Nhập tên doanh nghiệp" required />
+                </div>
+            
+                <!-- Người đại diện -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Người đại diện</label>
+                    <input type="text" name="NGUOI_DAI_DIEN" id="NGUOI_DAI_DIEN"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Nhập người đại diện" />
+                </div>  
             </div>
-
-            <!-- Người đại diện -->
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Người đại diện</label>
-                <input type="text" name="NGUOI_DAI_DIEN" id="NGUOI_DAI_DIEN"
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Nhập người đại diện" />
-            </div>
+            
+          
 
             <!-- Email doanh nghiệp -->
             <div class="mb-4">
@@ -75,7 +78,7 @@
 
             <!-- Nút lưu -->
             <div class="text-right pt-2">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow-md">
+                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white px-6 py-2 rounded-lg shadow-md">
                     💾 Lưu doanh nghiệp
                 </button>
             </div>

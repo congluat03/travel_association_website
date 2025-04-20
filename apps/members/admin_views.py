@@ -12,6 +12,8 @@ from io import BytesIO
 from django.core.files.base import ContentFile
 from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
+import datetime
+
 # @login_required
 def all_members(request):
     return render(request, 'admin/members/add_members.html')
@@ -239,9 +241,68 @@ def profile_doanhnghiep(request, ma_dn):
     dn = get_object_or_404(DoanhNghiep, pk=ma_dn)
     return render(request, 'admin/members/doanhnghiep/profile_doanhnghiep.html', {'dn': dn})
 
+
+
+from datetime import datetime
+from django.shortcuts import get_object_or_404
+
+def them_sua_dangkyhoivien(request, ma_dk_hh=None):
+    dangky = DangKyHoiVien.objects.filter(pk=ma_dk_hh).first() if ma_dk_hh else None
+
+    if request.method == 'POST':
+        ma_hh = request.POST.get('MA_HH')
+        ma_dn = request.POST.get('MA_DN')
+        tinh_trang = request.POST.get('TINH_TRANG')
+        ngay_dang_ky = request.POST.get('NGAY_DANG_KY')  # dạng 'YYYY-MM-DD'
+
+        # Debug kiểm tra đầu vào
+        print(f"MA_HH: {ma_hh}, MA_DN: {ma_dn}, TINH_TRANG: {tinh_trang}, NGAY_DANG_KY: {ngay_dang_ky}")
+
+        # Kiểm tra nếu ngày đăng ký hợp lệ
+        try:
+            ngay_dk = datetime.strptime(ngay_dang_ky, '%Y-%m-%d').date() if ngay_dang_ky else None
+        except ValueError as e:
+            print(f"Error parsing date: {e}")
+            ngay_dk = None
+
+        # Kiểm tra và lấy đối tượng Hiệp hội và Doanh nghiệp
+        hiep_hoi = get_object_or_404(HiepHoi, pk=ma_hh)
+        doanh_nghiep = get_object_or_404(DoanhNghiep, pk=ma_dn)
+
+        # Kiểm tra tình trạng duyệt có hợp lệ
+        try:
+            tinh_trang_int = int(tinh_trang) if tinh_trang else 0  # Mặc định là 0 nếu không có giá trị
+            if tinh_trang_int not in [0, 1]:  # Đảm bảo chỉ nhận giá trị 0 hoặc 1
+                tinh_trang_int = 0  # Mặc định là 0 nếu giá trị không hợp lệ
+        except ValueError as e:
+            print(f"Error converting TINH_TRANG to integer: {e}")
+            tinh_trang_int = 0  # Mặc định là 0 nếu lỗi
+
+        # Xử lý dữ liệu và lưu vào cơ sở dữ liệu
+        if dangky:
+            # Sửa đăng ký hội viên
+            dangky.MA_HH = hiep_hoi
+            dangky.MA_DN = doanh_nghiep
+            dangky.TINH_TRANG = tinh_trang_int
+            dangky.NGAY_DANG_KY = ngay_dk
+            dangky.save()
+        else:
+            # Thêm mới đăng ký hội viên
+            DangKyHoiVien.objects.create(
+                MA_HH=hiep_hoi,
+                MA_DN=doanh_nghiep,
+                TINH_TRANG=tinh_trang_int,
+                NGAY_DANG_KY=ngay_dk
+            )
+
+        # Sau khi xử lý, chuyển hướng về trang quản lý đăng ký
+        return admin_views.manage_members(request)
+
+    return admin_views.manage_members(request)
+
 def xoa_dangkyhiephoi(request, ma_dk_hh):
     try:
-        dangkihoivien = DangKyHoiVien.objects.get(MA_DK_HHH=ma_dk_hh)
+        dangkihoivien = DangKyHoiVien.objects.get(MA_DK_HH=ma_dk_hh)
         dangkihoivien.delete()
         return admin_views.manage_members(request)  # hoặc redirect nếu muốn
     except DangKyHoiVien.DoesNotExist:

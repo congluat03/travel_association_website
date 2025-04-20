@@ -16,7 +16,7 @@
     <table class="min-w-full text-sm text-gray-800">
       <thead class="bg-blue-100 text-gray-700 text-left sticky top-0 z-10">
         <tr>
-          <th class="px-4 py-3 border text-center">#</th>
+          <th class="px-4 py-3 border text-center">STT</th>
           <th class="px-4 py-3 border">Tên hiệp hội</th>
           <th class="px-4 py-3 border">Mô tả</th>
           <th class="px-4 py-3 border text-center">Hành động</th>
@@ -25,7 +25,7 @@
       <tbody>
         {% for hiepHoi in hiepHoi %}
         <tr class="hover:bg-gray-50">
-          <td class="px-4 py-3 border text-center">{{ hiepHoi.MA_HH }}</td>
+          <td class="px-4 py-3 border text-center">{{ forloop.counter }}</td>
           <td class="px-4 py-3 border">{{ hiepHoi.TEN_HH }}</td>
           <td class="px-4 py-3 border">{{ hiepHoi.MO_TA_HH }}</td>
           <td class="px-4 py-3 border text-center">

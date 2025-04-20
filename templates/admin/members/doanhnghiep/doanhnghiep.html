@@ -16,7 +16,7 @@
     <table class="min-w-full text-sm text-gray-800">
       <thead class="bg-blue-100 text-gray-700 text-left sticky top-0 z-10">
         <tr>
-          <th class="px-4 py-3 border text-center">#</th>
+          <th class="px-4 py-3 border text-center">STT</th>
           <th class="px-4 py-3 border">Tên doanh nghiệp</th>
           <th class="px-4 py-3 border">Ngành</th> <!-- Thêm cột Ngành -->
           <th class="px-4 py-3 border">Người đại diện</th>
@@ -31,7 +31,7 @@
       <tbody>
         {% for dn in doanhnghiep %}
         <tr class="hover:bg-gray-50">
-          <td class="px-4 py-3 border text-center">{{ dn.MA_DN }}</td>
+          <td class="px-4 py-3 border text-center">{{ forloop.counter }}</td>
           <td class="px-4 py-3 border">{{ dn.TEN_DN }}</td>
           <td class="px-4 py-3 border">{{ dn.MA_NGANH.TEN_NGANH }}</td> <!-- Hiển thị Tên Ngành -->
           <td class="px-4 py-3 border">{{ dn.NGUOI_DAI_DIEN }}</td>

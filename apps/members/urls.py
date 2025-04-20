@@ -25,9 +25,9 @@ urlpatterns = [
     path('hiephoi/sua/<int:ma_hh>/', admin_views.them_sua_hiephoi, name='sua_hiep_hoi'),
     path('hiephoi/xoa/<int:ma_hh>/', admin_views.xoa_hiep_hoi, name='xoa_hiep_hoi'),
 
-    # path('dangkihoivien/them/', admin_views.them_sua_doanhnghiep, name='them_doanh_nghiep'),
-    # path('dangkihoivien/sua/<int:ma_dn>/', admin_views.them_sua_doanhnghiep, name='sua_doanh_nghiep'),
-    path('dangkihoivien/xoa/<int:ma_dk_hh>/', admin_views.xoa_dangkyhiephoi, name='xoa_dk_hoivien'),
+    path('dangkyhoivien/them/', admin_views.them_sua_dangkyhoivien, name='them_đk_hoivien'),
+    path('dangkyhoivien/sua/<int:ma_dk_hh>/', admin_views.them_sua_dangkyhoivien, name='sua_đk_hoivien'),
+    path('dangkyhoivien/xoa/<int:ma_dk_hh>/', admin_views.xoa_dangkyhiephoi, name='xoa_dk_hoivien'),
    
     
 ]

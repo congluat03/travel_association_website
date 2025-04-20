@@ -1,4 +1,4 @@
-
+console.log("Script loaded");
 function openHiepHoiModal(data = null) {
   const modal = document.getElementById("hiepHoiModal");
   const form = document.getElementById("hiepHoiForm");
@@ -65,7 +65,49 @@ function openHiepHoiModal(data = null) {
 
     modal.classList.remove("hidden");
 }
+// const today = new Date("2025-04-20");  // Ngày hiện tại
+//   const rows = document.querySelectorAll("tbody tr");
+
+//   rows.forEach(row => {
+//     const ngayDangKyStr = row.querySelector("[data-ngay-dang-ky]").getAttribute("data-ngay-dang-ky");
+//     if (ngayDangKyStr) {
+//       const ngayDangKy = new Date(ngayDangKyStr);
+//       const soNgay = Math.floor((today - ngayDangKy) / (1000 * 60 * 60 * 24));  // Tính số ngày
+//       row.querySelector("[data-ngay-dang-ky]").textContent = soNgay >= 0 ? soNgay : "N/A";
+//     } else {
+//       row.querySelector("[data-ngay-dang-ky]").textContent = "N/A";
+//     }
+//   });
 
 function closeDoanhNghiepModal() {
     document.getElementById("doanhNghiepModal").classList.add("hidden");
+}
+function openDangKyHoiVienModal(data = null) {
+  console.log("Dữ liệu truyền vào modal:", data);  // Gỡ lỗi dữ liệu
+  const modal = document.getElementById("dangKyHoiVienModal");
+  const form = document.getElementById("dangKyHoiVienForm");
+
+  if (data) {
+    console.log("Đặt MA_HH thành:", data.ma_hh);  // Gỡ lỗi giá trị MA_HH
+    console.log("Tên Hiệp Hội:", data.ten_hh);    // Gỡ lỗi tên Hiệp Hội
+    console.log("Đặt MA_DN thành:", data.ma_dn);  // Gỡ lỗi giá trị MA_DN
+    console.log("Tên Doanh Nghiệp:", data.ten_dn); // Gỡ lỗi tên Doanh Nghiệp
+
+    form.MA_DK_HH.value = data.ma_dk_hh || "";
+    form.MA_HH.value = data.ma_hh || "";  // Đặt ID cho dropdown Hiệp Hội
+    form.MA_DN.value = data.ma_dn || "";  // Đặt ID cho dropdown Doanh Nghiệp
+    form.TINH_TRANG.value = data.tinh_trang !== undefined ? data.tinh_trang : "0";
+    form.NGAY_DANG_KY.value = data.ngay_dang_ky || "";
+    form.action = `/admin/members/dangkyhoivien/sua/${data.ma_dk_hh}/`;
+  } else {
+    form.reset();
+    form.TINH_TRANG.value = "0"; // Mặc định là Chưa duyệt
+    form.action = "/admin/members/dangkyhoivien/them/";
+  }
+
+  modal.classList.remove("hidden");
+}
+
+function closeDangKyHoiVienModal() {
+  document.getElementById("dangKyHoiVienModal").classList.add("hidden");
 }
