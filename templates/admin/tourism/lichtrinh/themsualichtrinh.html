@@ -1,65 +1,64 @@
-<!-- MODAL THÊM / SỬA TOUR -->
 <div id="scheduleModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-40 flex items-center justify-center">
-    <div class="bg-white w-full max-w-3xl rounded-xl shadow-lg p-6 relative">
-      <!-- Nút đóng -->
-      <button onclick="closeModalTour()" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold">&times;</button>
-  
-      <h2 class="text-2xl font-semibold text-green-700 mb-6">🧳 Thêm / Sửa Tour du lịch</h2>
-  
-      <form id="tourForm" method="POST" action="{% if tour and tour.MA_TOUR %} {% url 'admin_tourism:sua_tour' tour.MA_TOUR %} {% else %} {% url 'admin_tourism:them_tour' %} {% endif %}">
-        {% csrf_token %}
-  
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- Tên tour -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Tên tour</label>
-            <input type="text" id="TEN_TOUR" name="TEN_TOUR" class="w-full border border-gray-300 rounded-lg px-3 py-2"
-              placeholder="Nhập tên tour" value="{% if tour %}{{ tour.TEN_TOUR }}{% endif %}" required />
-          </div>
-  
-          <!-- Giá tour -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Giá tour (VNĐ)</label>
-            <input type="number" id="GIA_TOUR" name="GIA_TOUR" class="w-full border border-gray-300 rounded-lg px-3 py-2"
-              placeholder="VD: 1500000" value="{% if tour %}{{ tour.GIA_TOUR }}{% endif %}" required />
-          </div>
-  
-          <!-- Thời gian tour -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Thời gian (số ngày)</label>
-            <input type="text" id="THOI_GIAN_DI_CHUYEN" name="THOI_GIAN_DI_CHUYEN"
-              class="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="VD: 3 ngày 2 đêm"
-              value="{% if tour %}{{ tour.THOI_GIAN_DI_CHUYEN }}{% endif %}" required />
-          </div>
-  
-          <!-- Hình ảnh -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Hình ảnh (URL)</label>
-            <input type="url" id="HINH_TOUR" name="HINH_TOUR" class="w-full border border-gray-300 rounded-lg px-3 py-2"
-              placeholder="https://example.com/hinh.jpg" value="{% if tour %}{{ tour.HINH_TOUR }}{% endif %}" />
-          </div>
+  <div class="bg-white w-full max-w-3xl rounded-xl shadow-lg p-6 relative">
+    <!-- Nút đóng -->
+    <button onclick="closeModalLichTrinh()" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold">
+      &times;
+    </button>
+
+    <h2 class="text-2xl font-semibold text-green-700 mb-6">📌 Thêm / Sửa lịch trình Tour</h2>
+
+    <form id="thuocTourForm" method="POST" action="{% if thuoctour and thuoctour.MA_TUOCTOUR %}{% url 'admin_tourism:sua_lich_trinh' thuoctour.MA_TUOCTOUR %}{% else %}{% url 'admin_tourism:them_lich_trinh' %}{% endif %}">
+      {% csrf_token %}
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- MA_TOUR -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Tour du lịch</label>
+          <select name="MA_TOUR" id="ma_tour" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-600 focus:border-green-600" required>
+            <option value="">-- Chọn tour --</option>
+            {% for tour in tours %}
+              <option value="{{ tour.MA_TOUR }}" {% if thuoctour and thuoctour.MA_TOUR.MA_TOUR == tour.MA_TOUR %}selected{% endif %}>
+                {{ tour.TEN_TOUR }}
+              </option>
+            {% endfor %}
+          </select>
         </div>
-  
-        <!-- Xem trước hình ảnh -->
-        <div id="image-preview-container-tour" class="mt-4 {% if not tour or not tour.HINH_TOUR %}hidden{% endif %}">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Xem trước ảnh:</label>
-          <img id="image-preview-tour" src="{% if tour %}{{ tour.HINH_TOUR }}{% endif %}"
-            class="rounded-lg border border-gray-300 w-full max-h-64 object-contain" alt="Xem trước ảnh tour" />
+        <!-- MA_DD -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Địa điểm du lịch</label>
+          <select name="MA_DD" id="ma_dd" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-600 focus:border-green-600" required>
+            <option value="">-- Chọn địa điểm --</option>
+            {% for dd in dia_diems %}
+              <option value="{{ dd.MA_DD }}" {% if thuoctour and thuoctour.MA_DD.MA_DD == dd.MA_DD %}selected{% endif %}>
+                {{ dd.TEN_DIA_DIEM }}
+              </option>
+            {% endfor %}
+          </select>
         </div>
-  
-        <!-- Mô tả -->
-        <div class="mt-4">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Mô tả tour</label>
-          <textarea id="MO_TA_TOUR" name="MO_TA_TOUR"
-            class="w-full border border-gray-300 rounded-lg px-3 py-2" rows="4"
-            placeholder="Nhập mô tả ngắn về tour...">{% if tour %}{{ tour.MO_TA_TOUR }}{% endif %}</textarea>
+
+        <!-- THỜI GIAN ĐI -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Thời gian đi</label>
+          <input type="datetime-local" name="THOI_GIAN_DI" id="thoi_gian_di"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-600 focus:border-green-600"
+            value="{% if thuoctour %}{{ thuoctour.THOI_GIAN_DI|date:'Y-m-d\\TH:i' }}{% endif %}" required />
         </div>
-  
-        <!-- Nút submit -->
-        <div class="text-right pt-4">
-          <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg shadow-md">💾 Lưu tour</button>
+
+        <!-- THỜI GIAN ĐẾN -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Thời gian đến</label>
+          <input type="datetime-local" name="THOI_GIAN_DEN" id="thoi_gian_den"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-600 focus:border-green-600"
+            value="{% if thuoctour %}{{ thuoctour.THOI_GIAN_DEN|date:'Y-m-d\\TH:i' }}{% endif %}" required />
         </div>
-      </form>
-    </div>
+      </div>
+
+      <!-- Nút submit -->
+      <div class="text-right pt-4">
+        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg shadow-md">
+          💾 Lưu lịch trình
+        </button>
+      </div>
+    </form>
   </div>
-  
+</div>

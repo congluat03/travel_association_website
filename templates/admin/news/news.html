@@ -1,4 +1,32 @@
-{% extends "admin/admin_layout.html" %} {% block content %}
-<h2 class="text-2xl font-bold mb-4">Quản lý Tin tức</h2>
-<!-- Hiển thị danh sách hội viên tại đây -->
+{% extends "admin/admin_layout.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 pt-6">
+  <!-- Tabs chia đều theo chiều ngang -->
+  <div class="grid grid-cols-2 gap-0 mb-6 border-b border-gray-200">
+    <button
+      id="tintuc-btn"
+      class="tab-btn w-full px-6 py-3 text-white bg-green-600 font-semibold text-center transition duration-300"
+      onclick="showTab('tintuc', this)"
+    >
+      Tin tức
+    </button>
+    <button
+      id="thetag-btn"
+      class="tab-btn w-full px-6 py-3 text-gray-700 bg-gray-100 hover:bg-green-100 font-semibold text-center transition duration-300"
+      onclick="showTab('thetag', this)"
+    >
+      Thẻ tag
+    </button>
+  </div>
+
+  <!-- Nội dung tab -->
+  <div id="thetag" class="tab-content hidden bg-white p-6 rounded-lg shadow">
+    {% include "admin/news/thetag/thetag.html" %}
+  </div>
+  <div id="tintuc" class="tab-content block bg-white p-6 rounded-lg shadow">
+    {% include "admin/news/tintuc/tintuc.html" %}
+  </div>
+ 
+</div>
 {% endblock %}

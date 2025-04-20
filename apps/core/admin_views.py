@@ -3,7 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from apps.tourism.models import DiaDiemDuLich, DacSan, ThuocTour, TourDuLich  
-from apps.members.models import DoanhNghiep
+from apps.news.models import TheTag, TinTuc
+from apps.members.models import DoanhNghiep, TaiKhoan
+from apps.support.models import TaiLieu
 # Create your views here.
 def home(request):
     return render(request, 'index/index_layout.html', {'title': 'Trang chủ'})
@@ -41,14 +43,31 @@ def admin_dashboard(request):
 
 # @login_required
 def manage_members(request):
-    return render(request, 'admin/members/members.html')
+    taikhoan = TaiKhoan.objects.all()
+    return render(request, 'admin/members/members.html', {
+            'taikhoan': taikhoan})
 
 # @login_required
 def manage_news(request):
-    return render(request, 'admin/news/news.html')
+    # Lấy tất cả thẻ tag, tin tức và tài khoản từ cơ sở dữ liệu
+    tags = TheTag.objects.all()
+    news_list = TinTuc.objects.all()
+    tai_khoans = TaiKhoan.objects.all()  # Lấy dữ liệu tài khoản
+
+    # Truyền dữ liệu vào template
+    return render(request, 'admin/news/news.html', {
+        'tags': tags,
+        'news_list': news_list,
+        'tai_khoans': tai_khoans,  # Truyền dữ liệu tài khoản vào template
+    })
 
 def manage_support(request):
-    return render(request, 'admin/support/support.html')
+    doanhnghieps = DoanhNghiep.objects.all()
+    tailieus = TaiLieu.objects.all()  # Lấy tất cả tài liệu
+    return render(request, 'admin/support/support.html', {
+        'doanhnghieps': doanhnghieps,
+        'tailieus': tailieus  # Truyền danh sách tài liệu vào context
+    })
 
 # @login_required
 def manage_tourism(request):

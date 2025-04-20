@@ -1,4 +1,107 @@
-{% extends "admin/admin_layout.html" %} {% block content %}
-<h2 class="text-2xl font-bold mb-4">Quản lý tài liệu</h2>
-<!-- Hiển thị danh sách hội viên tại đây -->
+{% extends "admin/admin_layout.html" %}
+
+{% block content %}
+<!-- DANH SÁCH TÀI LIỆU -->
+<div class="mb-10">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-4">
+        <h2 class="text-2xl font-bold text-green-700">📚 Danh sách tài liệu</h2>
+        <button
+            onclick="openTaiLieuModal()"
+            class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 shadow"
+        >
+            ➕ Thêm tài liệu
+        </button>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto rounded-lg shadow border border-gray-200 h-[65vh] overflow-y-auto">
+        <table class="min-w-full text-sm text-gray-800">
+            <thead class="bg-green-100 text-gray-700 text-left sticky top-0 z-10">
+                <tr>
+                    <th class="px-4 py-3 border text-center">#</th>
+                    <th class="px-4 py-3 border">Tiêu đề</th>
+                    <th class="px-4 py-3 border">Mô tả</th>
+                    <th class="px-4 py-3 border">Loại tài liệu</th>
+                    <th class="px-4 py-3 border">Ngày cập nhật</th>
+                    <th class="px-4 py-3 border">Doanh nghiệp</th>
+                    <th class="px-4 py-3 border">File</th>
+                    <th class="px-4 py-3 border text-center">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tl in tailieus %}
+                <tr class="hover:bg-gray-50">
+                    <td class="px-4 py-3 border text-center">{{ tl.MA_TL }}</td>
+                    <td class="px-4 py-3 border">{{ tl.TIEU_DE_TL }}</td>
+                    <td class="px-4 py-3 border">{{ tl.MO_TA_TL|truncatechars:80 }}</td>
+                    <td class="px-4 py-3 border">{{ tl.LOAI_TAI_LIEU }}</td>
+                    <td class="px-4 py-3 border">{{ tl.NGAY_CAP_NHAT|date:"d-m-y" }}</td>
+                    <td class="px-4 py-3 border">{{ tl.MA_DN.TEN_DN }}</td>
+                    <td class="px-4 py-3 border">
+                        <a href="{{ tl.DUONG_DAN_FILE }}" target="_blank" class="text-green-600 underline">Xem</a>
+                    </td>
+                    <td class="px-4 py-3 border text-center">
+                        <div class="flex flex-col items-center space-y-2">
+                            <button
+                                class="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500 text-xs w-20"
+                                onclick="openTaiLieuModal({
+                                    ma_tl: '{{ tl.MA_TL }}',
+                                    tieu_de_tl: '{{ tl.TIEU_DE_TL|escapejs }}',
+                                    mo_ta_tl: '{{ tl.MO_TA_TL|escapejs }}',
+                                    loai_tai_lieu: '{{ tl.LOAI_TAI_LIEU|escapejs }}',
+                                    duong_dan_file: '{{ tl.DUONG_DAN_FILE|escapejs }}',
+                                    ngay_cap_nhat: '{{ tl.NGAY_CAP_NHAT|date:"Y-m-d" }}', <!-- Chuyển định dạng ngày -->
+                                    ma_dn: '{{ tl.MA_DN.MA_DN }}'
+                                })"
+                            >
+                                ✏️ Sửa
+                            </button>
+
+                            <form
+                                method="POST"
+                                action="{% url 'admin_support:xoa_tailieu' tl.MA_TL %}"
+                                onsubmit="return confirm('Bạn có chắc muốn xóa tài liệu này?');"
+                            >
+                                {% csrf_token %}
+                                <button
+                                    type="submit"
+                                    class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-xs w-20"
+                                >
+                                    🗑️ Xóa
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center py-3 italic text-gray-500">
+                        Không có tài liệu nào được tìm thấy.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% comment %} <!-- Phân trang nếu cần -->
+    <div class="mt-4 flex justify-center">
+        <div class="inline-flex rounded-md shadow-sm">
+            {% if tailieus.has_previous %}
+                <a href="?page=1" class="px-4 py-2 text-sm font-medium text-green-600 border border-gray-300 rounded-l-lg">Đầu</a>
+                <a href="?page={{ tailieus.previous_page_number }}" class="px-4 py-2 text-sm font-medium text-green-600 border border-gray-300">Trước</a>
+            {% endif %}
+            <span class="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300">Trang {{ tailieus.number }} / {{ tailieus.paginator.num_pages }}</span>
+            {% if tailieus.has_next %}
+                <a href="?page={{ tailieus.next_page_number }}" class="px-4 py-2 text-sm font-medium text-green-600 border border-gray-300">Tiếp theo</a>
+                <a href="?page={{ tailieus.paginator.num_pages }}" class="px-4 py-2 text-sm font-medium text-green-600 border border-gray-300 rounded-r-lg">Cuối</a>
+            {% endif %}
+        </div>
+    </div> {% endcomment %}
+</div>
+
+<!-- Modal thêm/sửa tài liệu -->
+{% include "admin/support/themsuatailieu.html" %}
+
 {% endblock %}

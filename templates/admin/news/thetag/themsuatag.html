@@ -1,0 +1,60 @@
+<!-- MODAL THÊM / SỬA THẺ TAG -->
+<div
+  id="tagModal"
+  class="fixed inset-0 z-50 hidden bg-black bg-opacity-40 flex items-center justify-center"
+>
+  <div class="bg-white w-full max-w-3xl rounded-xl shadow-lg p-6 relative">
+    <!-- Nút đóng -->
+    <button
+      onclick="closeModalTag()"
+      class="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold"
+    >
+      &times;
+    </button>
+
+    <h2 class="text-2xl font-semibold text-green-700 mb-6">
+      🏷️ Thêm / Sửa Thẻ Tag
+    </h2>
+
+    <form method="POST" action="" id="tagForm">
+      {% csrf_token %}
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Tên thẻ tag -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Tên thẻ tag</label>
+          <input
+            type="text"
+            name="TEN_TAG"
+            id="ten_tag"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-600 focus:border-green-600"
+            placeholder="Nhập tên thẻ tag"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- Mô tả -->
+      <div class="mt-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Mô tả thẻ tag</label>
+        <textarea
+          name="MO_TA_TAG"
+          id="mo_ta_tag"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2"
+          rows="5"
+          placeholder="Nhập mô tả về thẻ tag..."
+        ></textarea>
+      </div>
+
+      <!-- Nút lưu -->
+      <div class="text-right pt-4">
+        <button
+          type="submit"
+          class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg shadow-md"
+        >
+          💾 Lưu thẻ tag
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

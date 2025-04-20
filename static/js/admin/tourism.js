@@ -57,6 +57,7 @@ function openDacSanModal(data = null) {
     form.action = `/admin/tourism/dacsan/them/`; // URL thêm đặc sản
     imagePreviewContainer.classList.add("hidden"); // Ẩn hình ảnh khi thêm mới
   }
+  alert(form.action); // Thông báo mở modal
 }
 
 function closeModalTour() {
@@ -101,19 +102,17 @@ function openScheduleModal(data = null) {
   const modal = document.getElementById("scheduleModal");
   modal.classList.remove("hidden");
 
-  const form = modal.querySelector("form"); // Lấy form bên trong modal
+  const form = modal.querySelector("form");
 
   if (data) {
+    console.log(data);  // In ra dữ liệu để kiểm tra
+
     // Gán URL sửa nếu có lịch trình
-    form.action = `/admin/tourism/lichtrinh/sua/${data.ma_tour}/${data.ma_lich_trinh}/`;
+    form.action = `/admin/tourism/lichtrinh/sua/${data.ma_tour}/${data.ma_tuoctour}/`;
 
     // Chuyển thời gian về định dạng mà input[type="datetime-local"] có thể hiểu (yyyy-mm-ddThh:mm)
-    const thoiGianDi = data.thoi_gian_di
-      ? data.thoi_gian_di.replace(" ", "T")
-      : "";
-    const thoiGianDen = data.thoi_gian_den
-      ? data.thoi_gian_den.replace(" ", "T")
-      : "";
+    const thoiGianDi = data.thoi_gian_di ? data.thoi_gian_di.replace(" ", "T") : "";
+    const thoiGianDen = data.thoi_gian_den ? data.thoi_gian_den.replace(" ", "T") : "";
 
     // Điền dữ liệu vào các input
     document.getElementById("ma_tour").value = data.ma_tour || "";
@@ -122,13 +121,13 @@ function openScheduleModal(data = null) {
     document.getElementById("thoi_gian_den").value = thoiGianDen;
 
     // Lưu mã lịch trình
-    document.getElementById("ma_lich_trinh").value = data.ma_lich_trinh || "";
+    document.getElementById("ma_lich_trinh").value = data.ma_tuoctour || "";
   } else {
-    // Gán URL thêm mới và reset form
     form.action = `/admin/tourism/lichtrinh/them/`;
     form.reset();
   }
 }
-function closeModalTour() {
+
+function closeModalLichTrinh() {
   document.getElementById("scheduleModal").classList.add("hidden");
 }

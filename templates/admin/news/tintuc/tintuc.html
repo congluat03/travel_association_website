@@ -1,0 +1,117 @@
+<!-- DANH SÁCH TIN TỨC -->
+<div class="mb-10">
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-2xl font-bold text-green-700">📰 Danh sách Tin Tức</h2>
+    <button
+      onclick="openNewsModal()"
+      class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 shadow"
+    >
+      ➕ Thêm Tin Tức
+    </button>
+  </div>
+
+  <!-- Bảng danh sách -->
+  <div class="overflow-x-auto rounded-lg shadow border border-gray-200 h-[65vh] overflow-y-auto">
+    <table class="min-w-full text-sm text-gray-800">
+      <!-- Tiêu đề bảng -->
+      <thead class="bg-green-100 text-gray-700 text-left sticky top-0 z-10">
+        <tr>
+          <th class="px-4 py-3 border text-center">#</th>
+          <th class="px-4 py-3 border">Tiêu Đề</th>
+          <th class="px-4 py-3 border">Ngày Đăng</th>
+          <th class="px-4 py-3 border">Loại</th>
+          <th class="px-4 py-3 border text-center">Nổi Bật</th>
+          <th class="px-4 py-3 border">Thẻ Tag</th>
+          <th class="px-4 py-3 border">Tài Khoản</th> <!-- Cột Tài Khoản -->
+          <th class="px-4 py-3 border text-center">Lượt Xem</th>
+          <th class="px-4 py-3 border text-center">Hành Động</th>
+        </tr>
+      </thead>
+
+      <!-- Dữ liệu tin tức -->
+      <tbody>
+        {% for news in news_list %}
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3 border text-center">{{ news.MA_TIN }}</td>
+          <td class="px-4 py-3 border">{{ news.TIEU_DE }}</td>
+          <td class="px-4 py-3 border">{{ news.NGAY_DANG|date:"d/m/Y" }}</td>
+
+          <td class="px-4 py-3 border">{{ news.LOAI_TIN_TUC }}</td>
+
+          <!-- Nổi bật -->
+          <td class="px-4 py-3 border text-center">
+            {% if news.TIN_NOI_BAT %} ✅ {% else %} ❌ {% endif %}
+          </td>
+
+          <!-- Thẻ tag -->
+          <td class="px-4 py-3 border">
+            {% for tag in news.MA_TAG.all %}
+              <span class="bg-green-200 text-green-800 text-xs font-semibold mr-1 mb-1 px-2.5 py-0.5 rounded inline-block">
+                {{ tag.TEN_TAG }}
+              </span>
+            {% empty %}
+              <span class="text-gray-400 italic">Không có</span>
+            {% endfor %}
+          </td>
+
+          <!-- Tài khoản -->
+          <td class="px-4 py-3 border">
+            {{ news.MA_TK.TEN_DANG_NHAP }}  <!-- Hiển thị tên tài khoản từ MA_TK -->
+          </td>
+
+          <!-- Lượt xem -->
+          <td class="px-4 py-3 border text-center">{{ news.SO_LUOT_XEM }}</td>
+
+          <!-- Hành động -->
+          <td class="px-4 py-3 border text-center">
+            <div class="flex flex-col items-center space-y-2">
+              <!-- Nút sửa -->
+              <button
+                class="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500 text-xs w-20"
+                onclick="openNewsModal({
+                  ma_tk: '{{ news.MA_TK.MA_TK }}',
+                  ma_tin: '{{ news.MA_TIN }}',
+                  tieu_de: '{{ news.TIEU_DE|escapejs }}',
+                  ngay_dang: '{{ news.NGAY_DANG|date:'Y-m-d' }}',
+                  noi_dung: `{{ news.NOI_DUNG_CHI_TIET|escapejs }}`,
+                  loai: '{{ news.LOAI_TIN_TUC }}',
+                  tin_noi_bat: {{ news.TIN_NOI_BAT|yesno:'true,false' }},
+                  url_hinh: '{{ news.URL_HINH }}',
+                  ma_tag: [{% for tag in news.MA_TAG.all %}{ pk: {{ tag.pk }}, ten_tag: '{{ tag.TEN_TAG|escapejs }}' }{% if not forloop.last %}, {% endif %}{% endfor %}]
+                })"
+              >
+                ✏️ Sửa
+              </button>
+
+              <!-- Nút xóa -->
+              <form
+                method="POST"
+                action="{% url 'admin_news:xoa_news' news.MA_TIN %}"
+                onsubmit="return confirm('Bạn có chắc muốn xóa tin tức này?');"
+              >
+                {% csrf_token %}
+                <button
+                  type="submit"
+                  class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-xs w-20"
+                >
+                  🗑️ Xóa
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="9" class="text-center py-3 italic text-gray-500">
+            Không có tin tức nào được tìm thấy.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal thêm/sửa tin tức -->
+{% include "admin/news/tintuc/themsuatintuc.html" %}

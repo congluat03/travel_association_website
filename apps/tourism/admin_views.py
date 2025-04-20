@@ -1,3 +1,4 @@
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,7 +8,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.csrf import csrf_exempt
 from apps.members.models import DoanhNghiep
 from apps.core import admin_views
-from django.http import Http404
+from django.http import Http404, JsonResponse
+from django.contrib import messages
 # Generic functions
 def get_object_or_404(model, pk):
     try:
@@ -219,48 +221,57 @@ def xoa_tour(request, ma_tour):
     except TourDuLich.DoesNotExist:
         raise Http404("Tour không tồn tại.")
 def them_sua_lich_trinh(request, ma_tour=None, ma_lich_trinh=None):
-    tour = TourDuLich.objects.filter(MA_TOUR=ma_tour).first()
+    thuoc_tour = ThuocTour.objects.filter(pk=ma_lich_trinh).first() if ma_lich_trinh else None
 
     if request.method == 'POST':
         ma_dd = request.POST.get('MA_DD')
-        thu_thu = request.POST.get('THU_THU')
+        ma_tour = request.POST.get('MA_TOUR')
         thoi_gian_di = request.POST.get('THOI_GIAN_DI')
         thoi_gian_den = request.POST.get('THOI_GIAN_DEN')
 
-        if tour:
-            try:
-                dia_diem = DiaDiemDuLich.objects.get(MA_DD=ma_dd)
-                if ma_lich_trinh:
-                    # Sửa lịch trình
-                    thuoc_tour = ThuocTour.objects.get(MA_TOUR=tour, MA_LICH_TRINH=ma_lich_trinh)
-                    thuoc_tour.THU_THU = thu_thu
-                    thuoc_tour.THOI_GIAN_DI = thoi_gian_di
-                    thuoc_tour.THOI_GIAN_DEN = thoi_gian_den
-                    thuoc_tour.save()
-                else:
-                    # Thêm mới lịch trình
-                    ThuocTour.objects.create(
-                        MA_TOUR=tour,
-                        MA_DD=dia_diem,
-                        THU_THU=thu_thu,
-                        THOI_GIAN_DI=thoi_gian_di,
-                        THOI_GIAN_DEN=thoi_gian_den
-                    )
-            except DiaDiemDuLich.DoesNotExist:
-                raise Http404("Địa điểm không tồn tại.")
+        tour = TourDuLich.objects.filter(pk=ma_tour).first()
+        dia_diem = DiaDiemDuLich.objects.filter(pk=ma_dd).first()
+
+        if not tour or not dia_diem:
+            raise Http404("Tour hoặc Địa điểm không tồn tại.")
+
+        # Nếu là thêm mới
+        if not thuoc_tour:
+            if ThuocTour.objects.filter(MA_TOUR=tour, MA_DD=dia_diem).exists():
+                messages.error(request, "Địa điểm này đã có trong tour.")
+                return admin_views.manage_tourism(request)
+
+            ThuocTour.objects.create(
+                MA_TOUR=tour,
+                MA_DD=dia_diem,
+                THOI_GIAN_DI=thoi_gian_di,
+                THOI_GIAN_DEN=thoi_gian_den
+            )
+            messages.success(request, "Thêm lịch trình thành công.")
         else:
-            raise Http404("Tour không tồn tại.")
+            # Kiểm tra trùng khi cập nhật (bỏ qua chính nó)
+            if ThuocTour.objects.filter(MA_TOUR=tour, MA_DD=dia_diem).exclude(pk=thuoc_tour.pk).exists():
+                messages.error(request, "Địa điểm này đã có trong tour.")
+                return admin_views.manage_tourism(request)
+
+            thuoc_tour.MA_TOUR = tour
+            thuoc_tour.MA_DD = dia_diem
+            thuoc_tour.THOI_GIAN_DI = thoi_gian_di
+            thuoc_tour.THOI_GIAN_DEN = thoi_gian_den
+            thuoc_tour.save()
+            messages.success(request, "Cập nhật lịch trình thành công.")
 
         return admin_views.manage_tourism(request)
 
     return admin_views.manage_tourism(request)
+
 def xoa_lich_trinh(request, ma_tour, ma_lich_trinh):
     try:
         # Lấy tour theo mã
         tour = TourDuLich.objects.get(MA_TOUR=ma_tour)
         
         # Lấy lịch trình theo mã
-        thuoc_tour = ThuocTour.objects.get(MA_TOUR=tour, MA_DD=ma_lich_trinh)
+        thuoc_tour = ThuocTour.objects.get(MA_DD=ma_lich_trinh)
         
         # Xóa lịch trình
         thuoc_tour.delete()

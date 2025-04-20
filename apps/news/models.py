@@ -3,13 +3,13 @@ from django.db import models
 class TheTag(models.Model):
     MA_TAG = models.AutoField(primary_key=True)
     TEN_TAG = models.CharField(max_length=255)
+    MO_TA_TAG = models.TextField(blank=True, null=True)  # Thêm trường mô tả thẻ tag
 
     def __str__(self):
         return self.TEN_TAG
 
     class Meta:
         db_table = 'thetag'
-
 
 class TinTuc(models.Model):
     MA_TIN = models.AutoField(primary_key=True)

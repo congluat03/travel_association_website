@@ -1,0 +1,161 @@
+<div id="newsModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-40 flex items-center justify-center">
+  <div class="bg-white w-full max-w-3xl rounded-xl shadow-lg p-4 relative">
+    <!-- Nút đóng -->
+    <button
+      onclick="closeModalNews()"
+      class="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold"
+    >
+      &times;
+    </button>
+
+    <h2 class="text-2xl font-semibold text-green-700 mb-4">
+      📰 Thêm / Sửa Tin Tức
+    </h2>
+
+    <form method="POST" action="{% if tin_tuc %}{% url 'admin_news:sua_tin_tuc' tin_tuc.MA_TIN %}{% else %}{% url 'admin_news:them_tin_tuc' %}{% endif %}" id="newsForm">
+      {% csrf_token %}
+
+      <!-- Tiêu đề và Ngày đăng -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Tiêu đề -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Tiêu đề</label>
+          <input
+            type="text"
+            name="TIEU_DE"
+            id="tieu_de"
+            class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-green-600 focus:border-green-600"
+            placeholder="Nhập tiêu đề tin tức"
+            required
+          />
+        </div>
+
+        <!-- Ngày đăng -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Ngày đăng</label>
+          <input
+            type="date"
+            name="NGAY_DANG"
+            id="ngay_dang"
+            class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-green-600 focus:border-green-600"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- Loại tin tức và Nổi bật -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <!-- Loại tin tức -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Loại tin tức</label>
+          <select
+            name="LOAI_TIN_TUC"
+            id="loai_tin_tuc"
+            class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-green-600 focus:border-green-600"
+            required>
+            <option value="" disabled selected>Chọn loại tin tức</option>
+            <option value="Tin Tức Chung">Tin Tức Chung</option>
+            <option value="Tin Tức Du Lịc">Tin Tức Du Lịch</option>
+            <option value="Tin Tức Sự Kiện">Tin Tức Sự Kiện</option>
+            <option value="Tin Tức Đổi Mới">Tin Tức Đổi Mới</option>
+          </select>
+        </div>
+
+        <!-- Nổi bật -->
+        <div class="mt-2 flex items-center">
+          <label for="tin_noi_bat" class="block text-sm font-medium text-gray-700 mr-4">Nổi bật</label>
+      
+          <!-- Input ẩn để gửi giá trị false khi không chọn -->
+          <input type="hidden" name="tin_noi_bat" value="false">
+      
+          <!-- Checkbox (Khi checked sẽ gửi giá trị true) -->
+          <input type="checkbox" id="tin_noi_bat" name="tin_noi_bat" value="true" class="hidden peer" onchange="toggleTinNoiBat()" />
+      
+          <label for="tin_noi_bat" class="inline-flex items-center cursor-pointer">
+              <span id="status-off" class="mr-2 text-sm text-gray-700">Tắt</span>
+              <div class="relative w-14 h-7">
+                  <div class="absolute inset-0 bg-gray-200 border-2 border-gray-300 rounded-full transition-colors duration-300" id="toggle-background"></div>
+                  <div class="absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full shadow-md transition-transform duration-300" id="dot"></div>
+              </div>
+              <span id="status-on" class="ml-2 text-sm text-gray-700">Bật</span>
+          </label>
+      </div>
+      
+      
+      </div>
+
+      <!-- Chọn tài khoản -->
+      <div class="mt-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Chọn tài khoản</label>
+        <select
+          name="MA_TK"
+          id="ma_tk"
+          class="w-full border border-gray-300 rounded-lg px-2 py-1 focus:ring-green-600 focus:border-green-600"
+          required
+        >
+          <option value="" disabled selected>Chọn tài khoản</option>
+          {% for tai_khoan in tai_khoans %}
+            <option value="{{ tai_khoan.MA_TK }}">{{ tai_khoan.TEN_DANG_NHAP }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Nội dung -->
+      <div class="mt-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Nội dung</label>
+        <textarea
+          name="NOI_DUNG_CHI_TIET"
+          id="noi_dung"
+          class="w-full border border-gray-300 rounded-lg px-2 py-1"
+          rows="4"
+          placeholder="Nhập nội dung chi tiết tin tức..."
+        ></textarea>
+      </div>
+
+      <div class="mt-6 flex gap-4">
+        <!-- Vùng chọn thẻ tag -->
+        <div class="w-1/2 bg-gray-50 p-4 rounded-xl border border-gray-200 shadow">
+          <label class="block text-sm font-semibold text-gray-800 mb-2">Danh sách Thẻ Tag</label>
+          <div class="grid grid-cols-2 gap-2 max-h-[100px] overflow-y-auto pr-1">
+            {% for tag in tags %}
+              <div class="flex items-center">
+                <input 
+                  type="checkbox" 
+                  id="tag_{{ tag.MA_TAG }}" 
+                  name="MA_TAG" 
+                  value="{{ tag.MA_TAG }}" 
+                  {% if tag in news.tags.all %}checked{% endif %}
+                  class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                  onchange="updateSelectedTags()"
+                />
+                <label for="tag_{{ tag.MA_TAG }}" class="ml-2 text-sm text-gray-700">{{ tag.TEN_TAG }}</label>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      
+        <!-- Vùng hiển thị thẻ tag đã chọn -->
+        <div class="w-1/2 bg-gray-50 p-4 rounded-xl border border-gray-200 shadow">
+          <label class="block text-sm font-semibold text-gray-800 mb-2">Thẻ Tag đã chọn</label>
+          <div id="selected_tags" class="flex flex-wrap gap-2 min-h-[48px]">
+            {% for tag in news.tags.all %}
+              <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm shadow-sm">
+                {{ tag.TEN_TAG }}
+              </span>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Nút lưu -->
+      <div class="text-right pt-4">
+        <button
+          type="submit"
+          class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg shadow-md"
+        >
+          💾 Lưu tin tức
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
