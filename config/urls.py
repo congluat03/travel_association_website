@@ -22,7 +22,7 @@ urlpatterns = [
     path('news/', include('apps.news.urls')),
     path('tourism/', include('apps.tourism.urls')),
     path('support/', include('apps.support.urls')),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

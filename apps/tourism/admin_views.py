@@ -1,4 +1,5 @@
 
+import shutil
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -8,8 +9,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.csrf import csrf_exempt
 from apps.members.models import DoanhNghiep
 from apps.core import admin_views
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.contrib import messages
+import os
+from django.conf import settings
+from django.core.files.storage import default_storage
 # Generic functions
 def get_object_or_404(model, pk):
     try:
@@ -152,33 +156,91 @@ def them_sua_dacsan(request, id=None):
     if request.method == 'POST':
         ten_ds = request.POST.get('TEN_DS')
         ma_dd = request.POST.get('MA_DD')
-        hinh_anh = request.POST.get('HINH_DS')
         mo_ta = request.POST.get('MO_TA_DS')
+        hinh_files = request.FILES.getlist('HINH_DS[]')
+        deleted_images = request.POST.get('DELETED_IMAGES', '').split(',')
+
+        deleted_images = [img.strip() for img in deleted_images if img.strip()]
 
         if dacsan:
-            # Sửa
+            # === SỬA ===
             dacsan.TEN_DAC_SAN = ten_ds
             dacsan.MA_DD_id = ma_dd
-            dacsan.HINH__DS = hinh_anh
             dacsan.MO_TA_DS = mo_ta
+
+            folder_path = os.path.join(settings.MEDIA_ROOT, 'dacsan', str(dacsan.MA_DS))
+
+            # Xóa các ảnh bị đánh dấu xóa
+            for img in deleted_images:
+                file_path = os.path.join(folder_path, os.path.basename(img))
+                if os.path.exists(file_path) and os.path.isfile(file_path):
+                    os.remove(file_path)
+
+            # Thêm ảnh mới
+            if hinh_files:
+                os.makedirs(folder_path, exist_ok=True)
+                image_paths = []
+                for f in hinh_files:
+                    image_path = os.path.join('dacsan', str(dacsan.MA_DS), f.name)
+                    full_image_path = os.path.join(settings.MEDIA_ROOT, image_path)
+                    with default_storage.open(image_path, 'wb+') as destination:
+                        for chunk in f.chunks():
+                            destination.write(chunk)
+                    image_paths.append(image_path)
+
+                # Cập nhật lại danh sách ảnh mới vào cơ sở dữ liệu
+                dacsan.HINH_DS = ','.join(image_paths)
+
             dacsan.save()
+
         else:
-            # Thêm
-            DacSan.objects.create(
+            # === THÊM MỚI ===
+            dacsan = DacSan.objects.create(
                 TEN_DAC_SAN=ten_ds,
                 MA_DD_id=ma_dd,
-                HINH_DS=hinh_anh,
-                MO_TA_DS=mo_ta
+                MO_TA_DS=mo_ta,
             )
-        return admin_views.manage_tourism(request)
 
-    return admin_views.manage_tourism(request)
+            if hinh_files:
+                folder_path = os.path.join('dacsan', str(dacsan.MA_DS))
+                full_folder_path = os.path.join(settings.MEDIA_ROOT, folder_path)
+                os.makedirs(full_folder_path, exist_ok=True)
+
+                image_paths = []
+                for f in hinh_files:
+                    image_path = os.path.join(folder_path, f.name)
+                    with default_storage.open(image_path, 'wb+') as destination:
+                        for chunk in f.chunks():
+                            destination.write(chunk)
+                    image_paths.append(image_path)
+
+                dacsan.HINH_DS = ','.join(image_paths)
+                dacsan.save()
+
+        return redirect('admin_core:manage_tourism')
+
+    return redirect('admin_core:manage_tourism')
+
 def xoa_dac_san(request, ma_ds):
     try:
-        dac_san = DacSan.objects.get(MA_DS=ma_ds)  # Tìm đặc sản theo MA_DS
-        dac_san.delete()  # Xóa đặc sản
+        # Tìm đối tượng DacSan theo MA_DS
+        dac_san = DacSan.objects.get(MA_DS=ma_ds)
+
+        # Lấy đường dẫn thư mục chứa hình ảnh của đặc sản
+        folder_path = os.path.join(settings.MEDIA_ROOT, 'dacsan', str(dac_san.MA_DS))
+        
+        # Kiểm tra nếu thư mục tồn tại, xóa thư mục và các file bên trong
+        if os.path.exists(folder_path):
+            shutil.rmtree(folder_path)  # Xóa thư mục và tất cả các file trong thư mục
+
+        # Xóa đối tượng DacSan khỏi cơ sở dữ liệu
+        dac_san.delete()
+
+        # Sau khi xóa thành công, chuyển hướng đến trang quản lý
         return admin_views.manage_tourism(request)
+
     except DacSan.DoesNotExist:
+        # Nếu không tìm thấy đối tượng DacSan, trả về lỗi 404
         raise Http404("Đặc sản không tồn tại.")
 
 def them_sua_tour(request, ma_tour=None):

@@ -1,3 +1,5 @@
+import os
+from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
@@ -75,7 +77,21 @@ def manage_tourism(request):
     doanhnghiep_list = DoanhNghiep.objects.all()
     dac_sans = DacSan.objects.select_related('MA_DD').all()
     tours = TourDuLich.objects.prefetch_related('thuoctour_set__MA_DD').all()
-    schedules = ThuocTour.objects.select_related('MA_TOUR', 'MA_DD').all().order_by('THOI_GIAN_DI')  # Quan trọng!
+    schedules = ThuocTour.objects.select_related('MA_TOUR', 'MA_DD').all().order_by('THOI_GIAN_DI')
+
+    for ds in dac_sans:
+        # Lấy thư mục chứa ảnh, ví dụ: dacsan/23
+        folder_name = f'dacsan/{ds.MA_DS}'
+        folder_path = os.path.join(settings.MEDIA_ROOT, folder_name)
+
+        if os.path.exists(folder_path) and os.path.isdir(folder_path):
+            ds.image_list = [
+                os.path.join(settings.MEDIA_URL, folder_name, f)
+                for f in os.listdir(folder_path)
+                if f.lower().endswith(('.jpg', '.jpeg', '.png', '.gif'))
+            ]
+        else:
+            ds.image_list = []
 
     return render(
         request,
@@ -85,6 +101,6 @@ def manage_tourism(request):
             'doanhnghiep_list': doanhnghiep_list,
             'dac_sans': dac_sans,
             'tours': tours,
-            'schedules': schedules,  # 👈 Truyền vào đây
+            'schedules': schedules,
         }
     )

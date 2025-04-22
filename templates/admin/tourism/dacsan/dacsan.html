@@ -1,3 +1,5 @@
+{% load custom_filters %}
+
 <!-- DANH SÁCH ĐẶC SẢN -->
 <div class="mb-10">
   <!-- Header -->
@@ -12,9 +14,7 @@
   </div>
 
   <!-- Table -->
-  <div
-    class="overflow-x-auto rounded-lg shadow border border-gray-200 h-[65vh] overflow-y-auto"
-  >
+  <div class="overflow-x-auto rounded-lg shadow border border-gray-200 h-[65vh] overflow-y-auto">
     <table class="min-w-full text-sm text-gray-800">
       <thead class="bg-green-100 text-gray-700 text-left sticky top-0 z-10">
         <tr>
@@ -34,16 +34,39 @@
           <td class="px-4 py-3 border">{{ dac_san.MA_DD.TEN_DIA_DIEM }}</td>
           <td class="px-4 py-3 border">{{ dac_san.MO_TA_DS }}</td>
           <td class="px-4 py-3 border">
-            {% if dac_san.HINH_DS %}
-            <img
-              src="{{ dac_san.HINH_DS }}"
-              alt="Hình ảnh {{ dac_san.TEN_DAC_SAN }}"
-              class="w-32 h-20 object-cover"
-            />
+            {% if dac_san.image_list %}
+              <div id="carousel-{{ dac_san.MA_DS }}" class="relative">
+                <!-- Carousel -->
+                <div class="carousel-container">
+                  <div class="carousel-images" style="display: none;"> <!-- Ẩn ảnh nhưng vẫn giữ trong DOM -->
+                    {% for img in dac_san.image_list %}
+                      <img
+                        src="{{ img }}"
+                        alt="Ảnh {{ dac_san.TEN_DAC_SAN }}"
+                        class="w-20 h-14 object-cover rounded shadow cursor-pointer"
+                        onclick="openCarousel({{ dac_san.MA_DS }})"
+                      />
+                    {% endfor %}
+                  </div>
+                </div>
+                <!-- Nút xem ảnh lớn và số lượng ảnh -->
+                <div class="flex items-center justify-between mt-2">
+                  <button
+                    class="text-blue-600 text-xs hover:underline"
+                    onclick="openCarousel({{ dac_san.MA_DS }})"
+                  >
+                    📸 Xem ảnh
+                  </button>
+                  <span class="text-gray-500 text-xs">
+                    ({{ dac_san.image_list|length }} ảnh)
+                  </span>
+                </div>
+              </div>
             {% else %}
-            <span class="italic text-gray-400">Không có hình</span>
+              <span class="italic text-gray-400">Không có hình</span>
             {% endif %}
           </td>
+          
           <td class="px-4 py-3 border text-center">
             <div class="flex flex-col items-center space-y-2">
               <button
@@ -52,8 +75,7 @@
                     ma_ds: '{{ dac_san.MA_DS }}',
                     ten: '{{ dac_san.TEN_DAC_SAN|escapejs }}',
                     ma_dd: '{{ dac_san.MA_DD.MA_DD }}',
-                    mo_ta: `{{ dac_san.MO_TA_DS|escapejs }}`,
-                    {% comment %} hinh: '{{ dac_san.HINH_DS }}' {% endcomment %}
+                    mo_ta: `{{ dac_san.MO_TA_DS|escapejs }}`
                   })"
               >
                 ✏️ Sửa
@@ -87,5 +109,43 @@
   </div>
 </div>
 
-<!-- Modal form thêm/sửa đặc sản -->
+<div id="carouselModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden" >
+  <div class="bg-white rounded-lg p-4 max-w-3xl w-full relative h-auto flex flex-col justify-center items-center">
+    <!-- Nút đóng modal -->
+    <button
+      onclick="closeCarousel()"
+      class="absolute top-4 right-4 text-gray-600 hover:text-red-600 text-3xl font-bold z-20"
+    >
+      &times;
+    </button>
+
+    <!-- Carousel container for showing all images -->
+    <div id="carouselImages" class="flex justify-center items-center w-full h-full overflow-auto">
+      <!-- Các hình ảnh và thông tin sẽ được thêm vào bằng JS -->
+    </div>
+
+    <!-- Image count and file name -->
+    <div id="imageCount" class="mt-4 text-center text-lg font-semibold z-10">
+      <!-- Số lượng ảnh sẽ được hiển thị ở đây -->
+    </div>
+
+    <!-- Left and Right arrows -->
+    <div class="absolute bottom-4 left-0 right-0 px-8 flex justify-between">
+      <button
+        onclick="prevImage()"
+        class="text-white text-3xl bg-black bg-opacity-50 p-2 rounded-full hover:bg-opacity-70 z-10"
+      >
+        &#10094;
+      </button>
+      <button
+        onclick="nextImage()"
+        class="text-white text-3xl bg-black bg-opacity-50 p-2 rounded-full hover:bg-opacity-70 z-10"
+      >
+        &#10095;
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal thêm/sửa đắc sản -->
 {% include "admin/tourism/dacsan/themsuadacsan.html" %}
