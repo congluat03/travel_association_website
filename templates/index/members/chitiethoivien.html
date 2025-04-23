@@ -1,0 +1,69 @@
+{% extends "index/index_layout.html" %}
+{% load static %}
+
+{% block title %}Chi tiết Doanh nghiệp{% endblock %}
+
+{% block content %}
+<section class="py-20 px-6 bg-green-50">
+  <div class="max-w-3xl mx-auto">
+    <!-- Profile Card -->
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+      <!-- Header background accent -->
+      <div class="bg-green-600 h-24"></div>
+      <div class="relative -mt-16 flex justify-center">
+        {% if dn.hinh_anh %}
+          <img
+            src="{{ dn.hinh_anh.url }}"
+            alt="{{ dn.TEN_DN }}"
+            class="w-32 h-32 rounded-full border-4 border-white object-cover"
+          />
+        {% else %}
+          <div class="w-32 h-32 bg-gray-200 rounded-full border-4 border-white flex items-center justify-center">
+            <span class="text-gray-500">Chưa có</span>
+          </div>
+        {% endif %}
+      </div>
+      <div class="px-8 py-6 text-center">
+        <h2 class="text-3xl font-bold text-gray-800">{{ dn.TEN_DN }}</h2>
+        {% comment %} <p class="mt-2 text-gray-500">Mã DN: <span class="font-medium text-gray-700">{{ doanh_nghiep.MA_DN }}</span></p> {% endcomment %}
+      </div>
+      <div class="border-t border-gray-100 px-8 py-6">
+        <dl class="space-y-4 text-left text-gray-700">
+          <div class="flex justify-between">
+            <dt class="font-medium">Mã ngành</dt>
+            <dd>{{ dn.MA_NGANH }}</dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="font-medium">Địa chỉ</dt>
+            <dd>{{ dn.DIA_CHI }}</dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="font-medium">Số ĐT</dt>
+            <dd>{{ dn.SDT_DN }}</dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="font-medium">Email</dt>
+            <dd>{{ dn.EMAIL_DN }}</dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="font-medium">Người đại diện</dt>
+            <dd>{{ dn.NGUOI_DAI_DIEN }}</dd>
+          </div>
+          <div class="flex flex-col">
+            <dt class="font-medium">Mã QR</dt>
+            <dd><code class="mt-1 whitespace-pre-wrap text-sm text-gray-600">{{ dn.MA_QR }}</code></dd>
+          </div>
+        </dl>
+      </div>
+      <div class="mt-6 pb-8 text-center">
+        <a
+          href="/members/hoivien/"
+          class="inline-block bg-green-600 text-white px-10 py-3 rounded-full font-semibold hover:bg-green-700 transition"
+        >
+          Trở về danh sách
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

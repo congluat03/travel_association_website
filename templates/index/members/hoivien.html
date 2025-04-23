@@ -1,0 +1,58 @@
+{% extends "index/index_layout.html" %}
+{% load static %}
+
+{% block title %}Hội viên - Doanh nghiệp{% endblock %}
+
+{% block content %}
+<section class="py-16 px-6 bg-green-50">
+  <div class="max-w-7xl mx-auto">
+    <h2 class="text-3xl font-extrabold mb-8 text-center text-green-700">Danh sách Doanh nghiệp Hội viên</h2>
+
+    <!-- Bộ lọc ngành -->
+    <form method="get" class="mb-8 flex justify-center">
+      <select name="nganh" onchange="this.form.submit()" class="w-64 px-4 py-2 rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-green-500">
+        <option value="">-- Tất cả ngành --</option>
+        {% for ng in cac_nganh %}
+          <option value="{{ ng }}" {% if request.GET.nganh == ng %}selected{% endif %}>{{ ng }}</option>
+        {% endfor %}
+      </select>
+    </form>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for dn in doanh_nghiep %}
+      <div class="group bg-white shadow-md hover:shadow-lg rounded-xl overflow-hidden transition">
+        <div class="h-48 overflow-hidden">
+          {% if dn.hinh_anh %}
+          <img src="{{ dn.hinh_anh.url }}" alt="{{ dn.TEN_DN }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+          {% else %}
+          <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+            <span class="text-gray-400">Chưa có ảnh</span>
+          </div>
+          {% endif %}
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl font-semibold text-green-600 mb-2 truncate">{{ dn.TEN_DN }}</h3>
+          <p class="text-gray-600 text-sm mb-4">{{ dn.DIA_CHI|truncatechars:50 }}</p>
+          <div class="flex items-center text-sm text-gray-500 space-x-4 mb-4">
+            <span><strong>Ngành:</strong> {{ dn.nganh_nghe }}</span>
+            <span><strong>Đại diện:</strong> {{ dn.NGUOI_DAI_DIEN }}</span>
+          </div>
+          <a href="/members/hoivien/{{ dn.MA_DN }}/" class="inline-block w-full text-center bg-green-600 text-white py-2 rounded-full hover:bg-green-700 transition">
+            Xem chi tiết
+          </a>
+        </div>
+      </div>
+      {% empty %}
+      <p class="col-span-3 text-center text-gray-600">Chưa có doanh nghiệp hội viên.</p>
+      {% endfor %}
+    </div>
+
+    <!-- Nút Đăng ký Hội viên -->
+    <div class="mt-10 text-center">
+     {% comment %} <a a href="/members/hoivien/dangky/" class="inline-block bg-white border-2 border-green-600 text-green-600 px-8 py-3 rounded-full font-semibold hover:bg-green-600 hover:text-white transition">
+        Đăng ký trở thành hội viên
+      </a> {% endcomment %}
+    </div>
+  </div>
+</section>
+{% endblock %}

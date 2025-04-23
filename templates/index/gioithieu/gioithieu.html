@@ -1,0 +1,93 @@
+{% extends "index/index_layout.html" %}
+{% load static %}
+
+{% block title %}Giới thiệu Du Lịch Xanh{% endblock %}
+
+{% block content %}
+
+<!-- 1. Banner mở đầu -->
+<section class="py-20 px-6 bg-green-50">
+  <div class="max-w-6xl mx-auto text-center">
+    <h1 class="text-4xl font-bold text-green-800 mb-6">Giới thiệu về Du Lịch Xanh</h1>
+    <p class="text-lg text-gray-700 mb-4">
+      Du lịch xanh là hình thức du lịch bền vững, chú trọng bảo vệ môi trường và phát triển cộng đồng địa phương. 
+    </p>
+    <p class="text-lg text-gray-700">
+      Hướng đến xây dựng một hệ sinh thái du lịch thân thiện với thiên nhiên, gìn giữ các giá trị văn hóa - sinh thái 
+      cho thế hệ tương lai.
+    </p>
+  </div>
+</section>
+
+<!-- 2. Mục tiêu và lợi ích -->
+<section class="py-16 px-6 bg-white">
+  <div class="max-w-6xl mx-auto text-center mb-10">
+    <h2 class="text-3xl font-semibold text-green-700">Mục tiêu và Lợi ích</h2>
+    <p class="text-gray-600 mt-4 text-lg">Cùng nhau lan tỏa du lịch có trách nhiệm vì một Việt Nam xanh và phát triển bền vững.</p>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto text-center">
+    <div class="bg-green-50 rounded-xl p-6 shadow-md hover:shadow-lg transition">
+      <h4 class="text-xl font-semibold text-green-700 mb-3">Phát triển bền vững</h4>
+      <p class="text-gray-600">Thúc đẩy du lịch đi đôi với bảo vệ môi trường, văn hóa và cộng đồng.</p>
+    </div>
+    <div class="bg-green-50 rounded-xl p-6 shadow-md hover:shadow-lg transition">
+      <h4 class="text-xl font-semibold text-green-700 mb-3">Hỗ trợ doanh nghiệp</h4>
+      <p class="text-gray-600">Kết nối doanh nghiệp du lịch xanh, hỗ trợ truyền thông và phát triển dịch vụ.</p>
+    </div>
+    <div class="bg-green-50 rounded-xl p-6 shadow-md hover:shadow-lg transition">
+      <h4 class="text-xl font-semibold text-green-700 mb-3">Nâng cao nhận thức</h4>
+      <p class="text-gray-600">Lan tỏa giá trị du lịch có trách nhiệm đến cộng đồng và du khách.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Danh sách doanh nghiệp -->
+<section class="py-20 px-6 bg-green-50">
+  <div class="max-w-7xl mx-auto text-center mb-10">
+    <h2 class="text-3xl font-semibold text-green-700">Doanh Nghiệp Đồng Hành</h2>
+    <p class="text-gray-600 mt-4">Những đơn vị tiên phong trong hoạt động du lịch xanh và bền vững.</p>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {% for doanh_nghiep_item in doanh_nghiep %}
+      <div class="bg-white shadow-md rounded-xl p-6 transition-transform transform hover:scale-105 hover:shadow-lg">
+        {% if doanh_nghiep_item.hinh_anh %}
+          <img src="{{ doanh_nghiep_item.hinh_anh.url }}" alt="{{ doanh_nghiep_item.TEN_DN }}" class="w-full h-40 object-cover rounded-md mb-4">
+        {% else %}
+          <img src="{% static 'images/default-business-image.jpg' %}" alt="Doanh nghiệp" class="w-full h-40 object-cover rounded-md mb-4">
+        {% endif %}
+
+        <h3 class="text-xl font-semibold text-green-600 mb-2">{{ doanh_nghiep_item.TEN_DN }}</h3>
+        <p class="text-gray-600 mb-2">{{ doanh_nghiep_item.DIA_CHI }}</p>
+        <div class="text-left text-sm space-y-1">
+          <p class="text-gray-500">SĐT: {{ doanh_nghiep_item.SDT_DN }}</p>
+          <p class="text-gray-500">Email: 
+            <a href="mailto:{{ doanh_nghiep_item.EMAIL_DN }}" class="text-blue-500 hover:underline">
+              {{ doanh_nghiep_item.EMAIL_DN }}
+            </a>
+          </p>
+          <p class="text-gray-500">Người đại diện: {{ doanh_nghiep_item.NGUOI_DAI_DIEN }}</p>
+          {% if doanh_nghiep_item.ma_qr %}
+            <p class="text-gray-500">Mã QR: {{ doanh_nghiep_item.MA_QR }}</p>
+          {% endif %}
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-gray-600 col-span-3">Hiện tại chưa có thông tin doanh nghiệp nào để hiển thị.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- 4. CTA - Kêu gọi tham gia -->
+<section class="py-20 px-6 bg-green-100 text-center">
+  <div class="max-w-4xl mx-auto">
+    <h3 class="text-2xl font-semibold text-green-800 mb-6">Tham gia vào Du Lịch Xanh ngay hôm nay!</h3>
+    <p class="text-lg text-gray-700 mb-8">
+      Hãy trở thành hội viên để cùng xây dựng hệ sinh thái du lịch bền vững và lan tỏa những giá trị tốt đẹp đến cộng đồng.
+    </p>
+    <a href="#" class="bg-green-600 text-white px-8 py-3 rounded-full text-lg font-medium hover:bg-green-700 transition">
+      Đăng ký hội viên
+    </a>
+  </div>
+</section>
+
+{% endblock %}
