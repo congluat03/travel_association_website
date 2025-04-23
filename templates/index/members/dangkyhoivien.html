@@ -1,0 +1,16 @@
+{% extends "index/index_layout.html" %}
+
+{% block title %}Đăng ký Hội viên{% endblock %}
+
+{% block content %}
+<section class="py-16 px-6 bg-green-100">
+  <div class="max-w-xl mx-auto">
+    <h2 class="text-3xl font-bold mb-6 text-green-700 text-center">Đăng ký trở thành Hội viên</h2>
+    <form method="POST" enctype="multipart/form-data" class="space-y-4">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Gửi đăng ký</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

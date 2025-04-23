@@ -11,7 +11,7 @@ urlpatterns = [
     path('taikhoan/xoa/<int:ma_tk>/', admin_views.xoa_tai_khoan, name='xoa_tai_khoan'),
 
     # Doanh nghiệp
-     path('doanhnghiep/them/', admin_views.them_sua_doanhnghiep, name='them_doanh_nghiep'),
+    path('doanhnghiep/them/', admin_views.them_sua_doanhnghiep, name='them_doanh_nghiep'),
     path('doanhnghiep/sua/<int:ma_dn>/', admin_views.them_sua_doanhnghiep, name='sua_doanh_nghiep'),
     path('doanhnghiep/xoa/<int:ma_dn>/', admin_views.xoa_doanhnghiep, name='xoa_doanh_nghiep'),
     path('profile/<int:ma_dn>/', admin_views.profile_doanhnghiep, name='profile_doanhnghiep'),
@@ -28,6 +28,8 @@ urlpatterns = [
     path('dangkyhoivien/them/', admin_views.them_sua_dangkyhoivien, name='them_đk_hoivien'),
     path('dangkyhoivien/sua/<int:ma_dk_hh>/', admin_views.them_sua_dangkyhoivien, name='sua_đk_hoivien'),
     path('dangkyhoivien/xoa/<int:ma_dk_hh>/', admin_views.xoa_dangkyhiephoi, name='xoa_dk_hoivien'),
-   
+
+    path('hoivien/', views.hoivien, name='hoivien'),
+    path('hoivien/<int:ma_dn>/', views.chitiethoivien, name='chitiethoivien'),
     
 ]

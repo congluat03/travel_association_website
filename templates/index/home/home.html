@@ -1,0 +1,140 @@
+{% extends "index/index_layout.html" %}
+{% load static %}
+
+{% block title %}Trang chủ - Green Travel{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section
+  class="relative bg-cover bg-center h-[24rem] sm:h-[30rem] lg:h-[36rem] hero-bg"
+  style="background-image: url('{% static 'images/pietro-de-grandi-T7K4aEPoGGk-unsplash.jpg' %}');"
+>
+  <div class="absolute inset-0 flex items-center justify-center">
+    <div class="text-center text-white px-6 max-w-4xl mx-auto">
+      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 drop-shadow-xl leading-tight animate__animated animate__fadeIn">
+        Khám phá thế giới một cách bền vững
+      </h2>
+      <p class="text-base sm:text-lg lg:text-xl mb-8 font-light tracking-wide opacity-80">
+        Cùng Green Travel du hành đến những địa điểm thân thiện với môi trường.
+      </p>
+      <div class="flex justify-center gap-4">
+        <a
+          href="#destinations"
+          class="inline-block bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
+        >
+          Bắt đầu hành trình
+        </a>
+        <a
+          href="#resources"
+          class="inline-block bg-transparent border-2 border-white text-white px-8 py-3 rounded-full text-lg font-semibold transition-all duration-300 hover:bg-white hover:text-green-600"
+        >
+          Tài liệu
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Điểm đến hấp dẫn -->
+<section class="py-16 bg-gray-50 px-6" id="destinations">
+  <div class="max-w-7xl mx-auto">
+    <h2 class="text-3xl font-semibold mb-8 text-gray-800 animate__animated animate__fadeIn">Điểm đến hấp dẫn</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% for dia_diem_item in dia_diem %}
+        <div class="bg-white shadow-md rounded-xl overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1 relative">
+          <div class="relative image-overlay">
+            {% if dia_diem_item.HINH_ANH_DD %}
+              <img src="{{ dia_diem_item.HINH_ANH_DD.url }}" alt="{{ dia_diem_item.TEN_DIA_DIEM }}" class="w-full h-40 sm:h-48 lg:h-56 object-cover" loading="lazy">
+            {% else %}
+              <img src="{% static 'images/du-lich-xanh-2.jpg' %}" alt="{{ dia_diem_item.TEN_DIA_DIEM }}" class="w-full h-40 sm:h-48 lg:h-56 object-cover" loading="lazy">
+            {% endif %}
+            <span class="absolute top-4 right-4 bg-yellow-400 text-white text-xs font-semibold py-1 px-2 rounded-full">Nổi bật</span>
+          </div>
+          <div class="p-4 sm:p-6">
+            <h3 class="text-xl font-semibold text-green-600 mb-2">{{ dia_diem_item.TEN_DIA_DIEM }}</h3>
+            <p class="text-gray-600 text-sm mb-2">{{ dia_diem_item.MO_TA_DD|truncatewords:20 }}</p>
+            <p class="text-gray-500 text-sm mb-4">Khu vực: {{ dia_diem_item.TINH_THANH_PHO }} - {{ dia_diem_item.QUAN_HUYEN }}</p>
+            <a href="#" class="flex items-center gap-2 text-green-500 hover:text-green-600 font-medium text-sm transition-all duration-300 hover:underline">
+              Xem thêm
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-gray-600">Hiện tại chưa có địa điểm nào để hiển thị.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Tin tức mới nhất -->
+<section class="py-16 px-6 max-w-7xl mx-auto">
+  <h2 class="text-3xl font-semibold mb-8 text-gray-800 animate__animated animate__fadeIn">Tin tức mới nhất</h2>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div>
+      <div class="mb-4">
+        <span class="inline-block bg-blue-600 text-white text-xs font-semibold px-4 py-2 rounded-full uppercase tracking-wide shadow-md">Thông Cáo Báo Chí</span>
+      </div>
+      {% if tin_tuc %}
+        <div class="bg-white shadow-md rounded-xl overflow-hidden">
+          {% if tin_tuc.0.URL_HINH %}
+            <img src="{{ tin_tuc.0.URL_HINH }}" alt="{{ tin_tuc.0.TIEU_DE }}" class="w-full h-40 sm:h-48 lg:h-56 object-cover" loading="lazy">
+          {% else %}
+            <img src="{% static 'images/news-placeholder.jpg' %}" alt="{{ tin_tuc.0.TIEU_DE }}" class="w-full h-40 sm:h-48 lg:h-56 object-cover" loading="lazy">
+          {% endif %}
+          <div class="p-4 sm:p-6">
+            <h3 class="text-xl font-semibold text-blue-800 mb-2">{{ tin_tuc.0.TIEU_DE }}</h3>
+            <p class="text-gray-600 text-sm mb-2">{{ tin_tuc.0.NOI_DUNG_CHI_TIET|truncatewords:30 }}</p>
+            <p class="text-gray-500 text-sm">Ngày đăng: {{ tin_tuc.0.NGAY_DANG|date:"d/m/Y" }}</p>
+          </div>
+        </div>
+      {% else %}
+        <p class="text-gray-600">Hiện tại chưa có tin tức nào để hiển thị.</p>
+      {% endif %}
+    </div>
+
+    <div>
+      <h3 class="text-xl font-semibold text-blue-800 mb-4">Tin Tức</h3>
+      <ul class="space-y-4">
+        {% for tin in tin_tuc %}
+          <li class="news-item">
+            <a href="#" class="flex items-start gap-2 text-gray-800 hover:text-blue-600 transition-colors duration-200">
+              <span class="text-red-500">➤</span>
+              <span>{{ tin.TIEU_DE }} ({{ tin.NGAY_DANG|date:"d/m/Y" }})</span>
+            </a>
+          </li>
+        {% empty %}
+          <li class="text-gray-600">Hiện tại chưa có tin tức nào để hiển thị.</li>
+        {% endfor %}
+      </ul>
+      <div class="mt-6">
+        <a href="#" class="inline-block bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300">Xem tất cả tin tức</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Tài liệu -->
+<section class="py-16 px-6 max-w-7xl mx-auto bg-green-100" id="resources">
+  <h2 class="text-3xl font-semibold mb-8 text-gray-800 text-center fade-in">Tài liệu hữu ích</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    {% for tai_lieu_item in tai_lieu %}
+      <div class="bg-white shadow-md rounded-xl p-6 transition-transform duration-300 hover:shadow-xl hover:-translate-y-1">
+        <div class="flex items-center gap-3 mb-2">
+          <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3"></path>
+          </svg>
+          <h3 class="text-lg font-semibold text-gray-800">{{ tai_lieu_item.TIEU_DE_TL	 }}</h3>
+        </div>
+        <p class="text-gray-600 text-sm mb-2">{{ tai_lieu_item.MO_TA_TL|truncatewords:20 }}</p>
+        <a href="{{ tai_lieu_item.URL_TL }}" class="text-green-500 hover:text-green-600 font-medium text-sm">Tải tài liệu</a>
+      </div>
+    {% empty %}
+      <p class="text-gray-600">Hiện tại chưa có tài liệu nào để hiển thị.</p>
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock %}
