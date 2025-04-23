@@ -1,12 +1,13 @@
 <!-- MODAL THÊM / SỬA TOUR -->
 <div id="tourModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-40 flex items-center justify-center">
   <div class="bg-white w-full max-w-3xl rounded-xl shadow-lg p-6 relative">
+    
     <!-- Nút đóng -->
     <button onclick="closeModalTour()" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold">&times;</button>
 
     <h2 class="text-2xl font-semibold text-green-700 mb-6">🧳 Thêm / Sửa Tour du lịch</h2>
 
-    <form id="tourForm" method="POST"
+    <form id="tourForm" method="POST" enctype="multipart/form-data"
       action="{% if tour and tour.MA_TOUR %}
         {% url 'admin_tourism:sua_tour' tour.MA_TOUR %}
       {% else %}
@@ -14,56 +15,79 @@
       {% endif %}">
       {% csrf_token %}
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Grid Layout -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+
         <!-- Tên tour -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Tên tour</label>
-          <input type="text" id="TEN_TOUR" name="TEN_TOUR" class="w-full border border-gray-300 rounded-lg px-3 py-2"
-            placeholder="Nhập tên tour" value="{% if tour %}{{ tour.TEN_TOUR }}{% endif %}" required />
+          <label for="TEN_TOUR" class="block text-sm font-medium text-gray-700 mb-1">Tên tour</label>
+          <input type="text" id="TEN_TOUR" name="TEN_TOUR" required
+            class="w-full border border-gray-300 rounded-lg px-3 py-2"
+            placeholder="Nhập tên tour" value="{{ tour.TEN_TOUR|default:'' }}" />
         </div>
 
         <!-- Giá tour -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Giá tour (VNĐ)</label>
-          <input type="number" id="GIA_TOUR" name="GIA_TOUR" class="w-full border border-gray-300 rounded-lg px-3 py-2"
-            placeholder="VD: 1500000" value="{% if tour %}{{ tour.GIA_TOUR }}{% endif %}" required />
+          <label for="GIA_TOUR" class="block text-sm font-medium text-gray-700 mb-1">Giá tour (VNĐ)</label>
+          <input type="number" id="GIA_TOUR" name="GIA_TOUR" required
+            class="w-full border border-gray-300 rounded-lg px-3 py-2"
+            placeholder="VD: 1500000" value="{{ tour.GIA_TOUR|default:'' }}" />
         </div>
 
         <!-- Thời gian tour -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Thời gian (số ngày)</label>
-          <input type="text" id="THOI_GIAN_DI_CHUYEN" name="THOI_GIAN_DI_CHUYEN"
-            class="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="VD: 3 ngày 2 đêm"
-            value="{% if tour %}{{ tour.THOI_GIAN_DI_CHUYEN }}{% endif %}" required />
+          <label for="THOI_GIAN_DI_CHUYEN" class="block text-sm font-medium text-gray-700 mb-1">Thời gian (số ngày)</label>
+          <input type="text" id="THOI_GIAN_DI_CHUYEN" name="THOI_GIAN_DI_CHUYEN" required
+            class="w-full border border-gray-300 rounded-lg px-3 py-2"
+            placeholder="VD: 3 ngày 2 đêm" value="{{ tour.THOI_GIAN_DI_CHUYEN|default:'' }}" />
         </div>
 
         <!-- Hình ảnh -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Hình ảnh (URL)</label>
-          <input type="url" id="HINH_TOUR" name="HINH_TOUR" class="w-full border border-gray-300 rounded-lg px-3 py-2"
-            placeholder="https://example.com/hinh.jpg" value="{% if tour %}{{ tour.HINH_TOUR }}{% endif %}" />
+          <label for="HINH_TOUR" class="block text-sm font-medium text-gray-700 mb-1">Hình ảnh Tour</label>
+          <input type="file" name="HINH_TOUR[]" id="HINH_TOUR" accept="image/*" multiple
+            class="w-full border border-gray-300 rounded-lg px-3 py-2" />
+        </div>
+
+        <!-- Input ẩn chứa danh sách ảnh cũ và ảnh bị xóa -->
+        <input type="hidden" id="EXISTING_TOUR_IMAGES" name="EXISTING_TOUR_IMAGES" value="">
+        <input type="hidden" id="DELETED_TOUR_IMAGES" name="DELETED_TOUR_IMAGES">
+
+      </div>
+
+      <!-- Mô tả tour -->
+      <div class="mt-4">
+        <label for="MO_TA_TOUR" class="block text-sm font-medium text-gray-700 mb-1">Mô tả tour</label>
+        <textarea id="MO_TA_TOUR" name="MO_TA_TOUR" rows="4"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2"
+          placeholder="Nhập mô tả ngắn về tour...">{{ tour.MO_TA_TOUR|default:'' }}</textarea>
+      </div>
+
+      <!-- Xem trước ảnh -->
+      <div class="mt-4 {% if not tour or not tour.hinh_list %}hidden{% endif %}" id="tour-image-preview-container">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Xem trước hình ảnh</label>
+        <div id="tour-image-preview-list" class="flex flex-wrap gap-4">
+          {% if tour and tour.hinh_list %}
+            {% for img in tour.hinh_list %}
+              <div class="relative group w-32 h-32">
+                <img src="{{ img }}" alt="Ảnh tour"
+                  class="rounded-lg object-cover w-full h-full border border-gray-300 shadow-sm" />
+                <button type="button" onclick="removeTourImage('{{ img }}')"
+                  class="absolute top-1 right-1 text-red-600 bg-white rounded-full px-1 shadow hidden group-hover:block">
+                  ×
+                </button>
+              </div>
+            {% endfor %}
+          {% endif %}
         </div>
       </div>
 
-      <!-- Xem trước hình ảnh -->
-      <div id="image-preview-container-tour" class="mt-4 {% if not tour or not tour.HINH_TOUR %}hidden{% endif %}">
-        <label class="block text-sm font-medium text-gray-700 mb-1">Xem trước ảnh:</label>
-        <img id="image-preview-tour" src="{% if tour %}{{ tour.HINH_TOUR }}{% endif %}"
-          class="rounded-lg border border-gray-300 w-full max-h-64 object-contain" alt="Xem trước ảnh tour" />
-      </div>
-
-      <!-- Mô tả -->
-      <div class="mt-4">
-        <label class="block text-sm font-medium text-gray-700 mb-1">Mô tả tour</label>
-        <textarea id="MO_TA_TOUR" name="MO_TA_TOUR"
-          class="w-full border border-gray-300 rounded-lg px-3 py-2" rows="4"
-          placeholder="Nhập mô tả ngắn về tour...">{% if tour %}{{ tour.MO_TA_TOUR }}{% endif %}</textarea>
-      </div>
-
-      <!-- Nút submit -->
-      <div class="text-right pt-4">
+      <!-- Nút Lưu -->
+      <div class="text-right pt-6">
         <button type="submit"
-          class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg shadow-md">💾 Lưu tour</button>
+          class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg shadow-md">
+          💾 Lưu tour
+        </button>
       </div>
     </form>
   </div>

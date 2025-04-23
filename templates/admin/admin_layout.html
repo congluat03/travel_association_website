@@ -18,48 +18,54 @@
   </head>
   <body class="bg-gray-100 flex min-h-screen">
     <!-- Sidebar -->
-    <aside class="w-64 bg-green-500 text-white flex flex-col shadow-lg">
-      <div class="px-4 py-5 border-b border-green-600">
-        <h1 class="text-xl font-bold">🌿 Green Travel</h1>
+    <aside class="w-64 bg-gradient-to-b from-green-600 to-green-500 text-white flex flex-col shadow-xl rounded-r-lg">
+      <!-- Logo -->
+      <div class="px-6 py-5 border-b border-green-400 flex items-center space-x-2">
+        <span class="text-2xl">🌿</span>
+        <h1 class="text-xl font-bold tracking-wide">Green Travel</h1>
       </div>
-      <nav class="flex-grow p-4 space-y-2 text-sm">
-        <a
-          href="{% url 'admin_dashboard' %}"
-          class="block px-3 py-2 rounded hover:bg-green-600 transition"
-          >📊 Trang chủ</a
-        >
-        <a
-          href="{% url 'admin_core:manage_members' %}"
-          class="block px-3 py-2 rounded hover:bg-green-600 transition"
-          >👥 Danh sách thành viên</a
-        >
-        <a
-          href="{% url 'admin_core:manage_news' %}"
-          class="block px-3 py-2 rounded hover:bg-green-600 transition"
-          >📰 Danh sách doanh nghiệp</a
-        >
-        <a
-          href="{% url 'admin_core:manage_news' %}"
-          class="block px-3 py-2 rounded hover:bg-green-600 transition"
-          >🏭 Ngành nghề (Industry)</a
-        >
-        <a
-          href="{% url 'admin_core:manage_tourism' %}"
-          class="block px-3 py-2 rounded bg-green-600 font-semibold"
-          >🌍 Địa điểm du lịch</a
-        >
-        <a
-          href="{% url 'admin_core:manage_news' %}"
-          class="block px-3 py-2 rounded bg-green-600 font-semibold"
-          >📰 Tin tức (News)</a
-        >
-        <a
-          href="{% url 'admin_core:manage_support' %}"
-          class="block px-3 py-2 rounded bg-green-600 font-semibold"
-          >📚 Tài liệu (Documents)</a
-        >
+    
+      <!-- Navigation -->
+      <nav class="flex-grow px-4 py-6 space-y-2 text-[15px]">
+        <a href="{% url 'admin_dashboard' %}"
+           class="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200 ease-in-out 
+                  {% if request.path == '/admin/' %}bg-white/20 shadow-inner font-semibold{% else %}hover:bg-green-700{% endif %}">
+          📊 <span>Trang chủ</span>
+        </a>
+    
+        <a href="{% url 'admin_core:manage_members' %}"
+           class="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200 
+                  {% if request.path == '/admin/thanh-vien/' %}bg-white/20 shadow-inner font-semibold{% else %}hover:bg-green-700{% endif %}">
+          👥 <span>Thành viên</span>
+        </a>
+    
+        <a href="{% url 'admin_core:manage_business' %}"
+           class="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200 
+                  {% if request.path == '/admin/doanh-nghiep/' %}bg-white/20 shadow-inner font-semibold{% else %}hover:bg-green-700{% endif %}">
+          🏢 <span>Doanh nghiệp</span>
+        </a>
+    
+        <a href="{% url 'admin_core:manage_tourism' %}"
+           class="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200 
+                  {% if request.path == '/admin/dia-diem/' %}bg-white/20 shadow-inner font-semibold{% else %}hover:bg-green-700{% endif %}">
+          🌍 <span>Địa điểm du lịch</span>
+        </a>
+    
+        <a href="{% url 'admin_core:manage_news' %}"
+           class="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200 
+                  {% if request.path == '/admin/tin-tuc/' %}bg-white/20 shadow-inner font-semibold{% else %}hover:bg-green-700{% endif %}">
+          📰 <span>Tin tức</span>
+        </a>
+    
+        <a href="{% url 'admin_core:manage_support' %}"
+           class="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200 
+                  {% if request.path == '/admin/tai-lieu/' %}bg-white/20 shadow-inner font-semibold{% else %}hover:bg-green-700{% endif %}">
+          📚 <span>Tài liệu</span>
+        </a>
       </nav>
     </aside>
+    
+    
 
     <!-- Main content -->
     <div class="flex-1 flex flex-col bg-gray-100">
@@ -113,7 +119,7 @@
               <a href="#" class="block px-4 py-2 hover:bg-gray-100"
                 >Đổi mật khẩu</a
               >
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100 border-t"
+              <a href="{% url 'custom_logout' %}" class="block px-4 py-2 hover:bg-gray-100 border-t"
                 >Đăng xuất</a
               >
             </div>
@@ -130,10 +136,13 @@
         </div>
       </main>
     </div>
+    <script src="{% static 'js/admin/member.js' %}"></script>
     <script src="{% static 'js/admin/admin.js' %}"></script>
     <script src="{% static 'js/admin/tourism.js' %}"></script>
     <script src="{% static 'js/admin/new.js' %}"></script>
     <script src="{% static 'js/admin/support.js' %}"></script>
+    <script src="{% static 'js/admin/imagePreview.js' %}"></script>
+    <script src="{% static 'js/admin/tour.js' %}"></script>
     
   </body>
 </html>

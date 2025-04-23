@@ -1,0 +1,87 @@
+<!-- MODAL THÊM / SỬA DOANH NGHIỆP -->
+<div id="doanhNghiepModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-40 flex items-center justify-center">
+    <div class="bg-white w-full max-w-2xl rounded-xl shadow-lg p-6 relative">
+        <!-- Nút đóng -->
+        <button onclick="closeDoanhNghiepModal()"
+            class="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold">
+            &times;
+        </button>
+
+        <h2 class="text-2xl font-semibold text-green-500 mb-6">🏢 Thêm / Sửa Doanh Nghiệp</h2>
+
+        <form method="POST" action="" id="doanhNghiepForm">
+            {% csrf_token %}
+            <input type="hidden" name="MA_DN" id="MA_DN" /> <!-- Mã doanh nghiệp (ẩn khi thêm mới) -->
+            <div class="grid grid-cols-2 gap-2">
+                <!-- Tên doanh nghiệp -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tên doanh nghiệp</label>
+                    <input type="text" name="TEN_DN" id="TEN_DN"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-600 focus:border-green-600"
+                        placeholder="Nhập tên doanh nghiệp" required />
+                </div>
+            
+                <!-- Người đại diện -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Người đại diện</label>
+                    <input type="text" name="NGUOI_DAI_DIEN" id="NGUOI_DAI_DIEN"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Nhập người đại diện" />
+                </div>  
+            </div>
+            
+          
+
+            <!-- Email doanh nghiệp -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input type="email" name="EMAIL_DN" id="EMAIL_DN"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Nhập email" />
+            </div>
+
+            <!-- Số điện thoại -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Số điện thoại</label>
+                <input type="text" name="SDT_DN" id="SDT_DN" class="w-full border border-gray-300 rounded-lg px-3 py-2"
+                    placeholder="Nhập số điện thoại" />
+            </div>
+
+            <!-- Địa chỉ -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Địa chỉ</label>
+                <input type="text" name="DIA_CHI" id="DIA_CHI"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Nhập địa chỉ" />
+            </div>
+
+            <!-- Mã ngành nghề -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Ngành nghề</label>
+                <select name="MA_NGANH" id="MA_NGANH" class="w-full border border-gray-300 rounded-lg px-3 py-2"
+                    required>
+                    <!-- Populate with available industries -->
+                    {% for nganh in nganhnghe %}
+                    <option value="{{ nganh.MA_NGANH }}">{{ nganh.TEN_NGANH }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Trạng thái duyệt -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Trạng thái duyệt</label>
+                <select name="TRANG_THAI_DUYET" id="TRANG_THAI_DUYET" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
+                    <option value="1" {% if doanhnghiep and doanhnghiep.TRANG_THAI_DUYET == 1 %} selected {% endif %}>Duyệt</option>
+                    <option value="0" {% if doanhnghiep and doanhnghiep.TRANG_THAI_DUYET == 0 %} selected {% endif %}>Chưa duyệt</option>
+                </select>
+                
+            </div>
+            
+
+
+            <!-- Nút lưu -->
+            <div class="text-right pt-2">
+                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white px-6 py-2 rounded-lg shadow-md">
+                    💾 Lưu doanh nghiệp
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

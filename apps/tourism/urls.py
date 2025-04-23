@@ -5,8 +5,8 @@ app_name = 'tourism'
 urlpatterns = [
     # path('', views.home, name='tourism'),
     # Địa điểm du lịch
-    path('diadiem/them/', admin_views.dia_diem_form, name='them_dia_diem'),
-    path('diadiem/sua/<int:id>/', admin_views.dia_diem_form, name='sua_dia_diem'),
+    path('diadiem/them/', admin_views.them_sua_diadiem, name='them_dia_diem'),
+    path('diadiem/sua/<int:id>/', admin_views.them_sua_diadiem, name='sua_dia_diem'),
     path('diadiem/xoa/<int:ma_dd>/', admin_views.xoa_dia_diem, name='xoa_dia_diem'),
 
     path('dacsan/them/', admin_views.them_sua_dacsan, name='them_dacsan'),

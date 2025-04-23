@@ -39,15 +39,40 @@
             {{ tour.MO_TA_TOUR|truncatewords:20 }}
           </td>
           <td class="px-4 py-3 border">
-            {% if tour.HINH_TOUR %}
-            <img
-              src="{{ tour.HINH_TOUR }}"
-              class="w-32 h-20 object-cover rounded"
-            />
+            {% if tour.image_list %}
+            <div id="carousel-tour-{{ tour.MA_TOUR }}" class="relative">
+              <!-- Carousel -->
+              <div class="carousel-container">
+                <div class="carousel-images" style="display: none">
+                  {% for img in tour.image_list %}
+                  <img
+                    src="{{ img }}"
+                    alt="Ảnh {{ tour.TEN_TOUR }}"
+                    class="w-20 h-14 object-cover rounded shadow cursor-pointer"
+                    onclick="openCarouselTour({{ tour.MA_TOUR }})"
+                  />
+                  {% endfor %}
+                </div>
+              </div>
+
+              <!-- Nút xem ảnh lớn và số lượng ảnh -->
+              <div class="flex items-center justify-between mt-2">
+                <button
+                  class="text-blue-600 text-xs hover:underline"
+                  onclick="openTourCarousel({{ tour.MA_TOUR }})"
+                >
+                  📸 Xem ảnh
+                </button>
+                <span class="text-gray-500 text-xs">
+                  ({{ tour.image_list|length }} ảnh)
+                </span>
+              </div>
+            </div>
             {% else %}
-            <span class="text-gray-400 italic">Không có</span>
+            <span class="italic text-gray-400">Không có hình</span>
             {% endif %}
           </td>
+
           <td class="px-4 py-3 border">
             {% with thuoctours=tour.thuoctour_set.all %} {% if thuoctours %}
             <ul class="list-disc pl-4 text-xs text-gray-700">
@@ -104,6 +129,44 @@
         {% endfor %}
       </tbody>
     </table>
+  </div>
+</div>
+<!-- MODAL XEM CAROUSEL HÌNH ẢNH -->
+<div id="tourCarouselModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-lg p-4 max-w-3xl w-full relative h-auto flex flex-col justify-center items-center">
+    <!-- Nút đóng modal -->
+    <button
+      onclick="closeTourCarousel()"
+      class="absolute top-4 right-4 text-gray-600 hover:text-red-600 text-3xl font-bold z-20"
+    >
+      &times;
+    </button>
+
+    <!-- Carousel container for showing all images -->
+    <div id="tourCarouselImages" class="flex justify-center items-center w-full h-full overflow-auto">
+      <!-- Các hình ảnh và thông tin sẽ được thêm vào bằng JS -->
+    </div>
+
+    <!-- Image count and file name -->
+    <div id="tourImageCount" class="mt-4 text-center text-lg font-semibold z-10">
+      <!-- Số lượng ảnh sẽ được hiển thị ở đây -->
+    </div>
+
+    <!-- Left and Right arrows -->
+    <div class="absolute bottom-4 left-0 right-0 px-8 flex justify-between">
+      <button
+        onclick="prevTourImage()"
+        class="text-white text-3xl bg-black bg-opacity-50 p-2 rounded-full hover:bg-opacity-70 z-10"
+      >
+        &#10094;
+      </button>
+      <button
+        onclick="nextTourImage()"
+        class="text-white text-3xl bg-black bg-opacity-50 p-2 rounded-full hover:bg-opacity-70 z-10"
+      >
+        &#10095;
+      </button>
+    </div>
   </div>
 </div>
 

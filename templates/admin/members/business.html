@@ -1,0 +1,51 @@
+{% extends "admin/admin_layout.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 pt-6">
+  <!-- Tabs dạng hình chữ nhật đều -->
+  <div class="grid grid-cols-4 gap-2 mb-6">
+    <button
+      id="doanhnghiep-btn"
+      class="tab-btn w-full px-6 py-3 text-white bg-green-600 font-semibold text-center rounded-t-md transition duration-300"
+      onclick="showTab('doanhnghiep', this)"
+    >
+      🏢 Doanh nghiệp
+    </button>
+    <button
+      id="hiephoidoanhnghiep-btn"
+      class="tab-btn w-full px-6 py-3 text-gray-700 bg-gray-100 hover:bg-green-100 font-semibold text-center rounded-t-md transition duration-300"
+      onclick="showTab('hiephoidoanhnghiep', this)"
+    >
+      🤝 Hiệp hội
+    </button>
+    <button
+      id="nganhnghe-btn"
+      class="tab-btn w-full px-6 py-3 text-gray-700 bg-gray-100 hover:bg-green-100 font-semibold text-center rounded-t-md transition duration-300"
+      onclick="showTab('nganhnghe', this)"
+    >
+      🛠️ Ngành nghề
+    </button>
+    <button
+      id="dangkihiephoi-btn"
+      class="tab-btn w-full px-6 py-3 text-gray-700 bg-gray-100 hover:bg-green-100 font-semibold text-center rounded-t-md transition duration-300"
+      onclick="showTab('dangkihiephoi', this)"
+    >
+      ✍️ Đăng ký hội viên
+    </button>
+  </div>
+
+  <!-- Nội dung các tab -->
+  <div id="doanhnghiep" class="tab-content block bg-white p-6 rounded-lg shadow">
+    {% include "admin/members/doanhnghiep/doanhnghiep.html" %}
+  </div>
+  <div id="hiephoidoanhnghiep" class="tab-content hidden bg-white p-6 rounded-lg shadow">
+    {% include "admin/members/hiephoi/hiephoi.html" %}
+  </div>
+  <div id="nganhnghe" class="tab-content hidden bg-white p-6 rounded-lg shadow">
+    {% include "admin/members/nganhnghe/nganhnghe.html" %}
+  </div>
+  <div id="dangkihiephoi" class="tab-content hidden bg-white p-6 rounded-lg shadow">
+    {% include "admin/members/dangkihiephoi/dangkihiephoi.html" %}
+  </div>
+</div>
+{% endblock %}

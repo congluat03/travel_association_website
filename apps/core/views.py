@@ -1,7 +1,97 @@
+from pyexpat.errors import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from apps.members.models import TaiKhoan,DoanhNghiep,NganhNghe,HiepHoi,DangKyHoiVien
+from apps.tourism.models import DiaDiemDuLich
+from apps.news.models import TinTuc
+from apps.support.models import TaiLieu
 # Create your views here.
 def home(request):
     return render(request, 'index/index_layout.html', {'title': 'Trang chủ'})
+def custom_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        try:
+            user = TaiKhoan.objects.get(TEN_DANG_NHAP=username)
+            if user.check_mat_khau(password):
+                if user.TRANG_THAI_TK:
+                    # Lưu thông tin vào session
+                    request.session['user_id'] = user.MA_TK
+                    request.session['username'] = user.TEN_DANG_NHAP
+                    request.session['vai_tro'] = user.VAI_TRO
+
+                    # Điều hướng dựa trên vai trò
+                    if user.VAI_TRO == 'admin':
+                        return redirect('admin_dashboard')
+                    elif user.VAI_TRO == 'nhanvien':
+                        return redirect('staff_dashboard')
+                    else:
+                        return redirect('user_home')
+                else:
+                    messages.error(request, 'Tài khoản đã bị khóa.')
+            else:
+                messages.error(request, 'Mật khẩu không đúng.')
+        except TaiKhoan.DoesNotExist:
+            messages.error(request, 'Tài khoản không tồn tại.')
+
+    return render(request, 'auth/login.html')
+
+def custom_logout(request):
+    request.session.flush()
+    return redirect('custom_login')
+def register_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+
+        if password1 != password2:
+            return render(request, 'auth/register.html', {'error': 'Mật khẩu không khớp!'})
+
+        if User.objects.filter(username=username).exists():
+            return render(request, 'auth/register.html', {'error': 'Tên đăng nhập đã tồn tại!'})
+
+        User.objects.create_user(username=username, email=email, password=password1)
+        return redirect('login')  # hoặc chuyển đến trang khác
+
+    return render(request, 'auth/register.html')
+
+
+
+def trang_chu(request):
+    # Lấy 6 địa điểm đầu tiên
+    dia_diem = DiaDiemDuLich.objects.all()[:3]
+    
+    # Lấy 5 tin tức mới nhất, ưu tiên tin nổi bật
+    tin_tuc = TinTuc.objects.order_by('-TIN_NOI_BAT', '-NGAY_DANG')[:5]
+    
+    # Lấy 3 tài liệu đầu tiên
+    tai_lieu = TaiLieu.objects.order_by('-NGAY_CAP_NHAT')[:3]
+    
+    # Lấy 3 đăng ký hội viên đã duyệt
+    dang_ky_hoi_vien = DangKyHoiVien.objects.filter(TINH_TRANG=1)[:3]
+    khu_list = DiaDiemDuLich.objects.values_list('VI_TRI', flat=True).distinct()
+    
+    context = {
+        'dia_diem': dia_diem,
+        'tin_tuc': tin_tuc,
+        'tai_lieu': tai_lieu,
+        'dang_ky_hoi_vien': dang_ky_hoi_vien,
+    }
+    return render(request, 'index/home/home.html', context)
+
+
+def gioithieu(request):
+    # Lấy tất cả thông tin từ bảng DoanhNghiep
+    doanh_nghiep = DoanhNghiep.objects.all()
+    
+    # Chuyển dữ liệu vào context
+    context = {'doanh_nghiep': doanh_nghiep}
+    
+    # Render trang giới thiệu
+    return render(request, 'index/gioithieu/gioithieu.html', context)

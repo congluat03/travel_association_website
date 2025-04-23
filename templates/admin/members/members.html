@@ -1,60 +1,32 @@
-{% extends "admin/admin_layout.html" %} {% block content %}
-<div class="flex justify-between">
-  <h2 class="text-2xl font-bold mb-6 text-green-700">Quản lý thành viên</h2>
-
-  <!-- Nút thêm thành viên -->
-  <div class="flex justify-end mb-4">
-    <a
-      href="{% url 'admin_members:add_members' %}"
-      class="inline-block bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded shadow"
+{% extends "admin/admin_layout.html" %}
+{% block content %}
+<div class="container mx-auto px-4 pt-6">
+  <!-- Tabs dạng hình chữ nhật đều -->
+  <div class="grid grid-cols-2 gap-2 mb-6 border-b border-gray-200"> <!-- Sửa lại cấu trúc tab -->
+    <button
+      id="taikhoan-btn"
+      class="tab-btn w-full px-6 py-3 text-white bg-green-600 font-semibold text-center rounded-t-md transition duration-300"
+      onclick="showTab('taikhoan', this)"
     >
-      ➕ Thêm thành viên
-    </a>
+      👤 Tài khoản
+    </button>
+    <button
+      id="dangkihiephoi-btn"
+      class="tab-btn w-full px-6 py-3 text-gray-700 bg-gray-100 hover:bg-green-100 font-semibold text-center rounded-t-md transition duration-300"
+      onclick="showTab('dangkihiephoi', this)"
+    >
+      ✍️ Đăng ký hội viên
+    </button>
   </div>
-</div>
 
-<!-- Bảng danh sách thành viên -->
-<div class="overflow-x-auto bg-white rounded-xl shadow p-4">
-  <table class="min-w-full table-auto border border-gray-300 text-sm">
-    <thead class="bg-green-700 text-white">
-      <tr>
-        <th class="px-4 py-2 text-left">Mã TV</th>
-        <th class="px-4 py-2 text-left">Họ tên</th>
-        <th class="px-4 py-2 text-left">Email</th>
-        <th class="px-4 py-2 text-left">Tên đăng nhập</th>
-        <th class="px-4 py-2 text-left">Mật khẩu</th>
-        <th class="px-4 py-2 text-left">Vai trò</th>
-        <th class="px-4 py-2 text-left">Trạng thái</th>
-        <th class="px-4 py-2 text-left">Ngày đăng ký</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for tv in thanhviens %}
-      <tr class="border-t border-gray-200 hover:bg-gray-50">
-        <td class="px-4 py-2">{{ tv.matv|default:"TV001" }}</td>
-        <td class="px-4 py-2">{{ tv.hoten|default:"Nguyễn Văn A" }}</td>
-        <td class="px-4 py-2">{{ tv.email|default:"nva@example.com" }}</td>
-        <td class="px-4 py-2">{{ tv.ten_dang_nhap|default:"nguyenvana" }}</td>
-        <td class="px-4 py-2">{{ tv.mat_khau|default:"••••••" }}</td>
-        <td class="px-4 py-2">{{ tv.vaitro|default:"Quản trị viên" }}</td>
-        <td class="px-4 py-2">
-          {% if tv.trang_thai|default_if_none:True %}
-          <span class="text-green-600 font-semibold">Hoạt động</span>
-          {% else %}
-          <span class="text-red-500 font-semibold">Tạm khóa</span>
-          {% endif %}
-        </td>
-        <td class="px-4 py-2">{{ tv.ngay_dang_ki|default:"01/01/2024" }}</td>
-      </tr>
-      {% empty %}
-      <tr>
-        <td colspan="8" class="text-center text-gray-500 py-4">
-          Không có thành viên nào.
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <!-- Nội dung các tab -->
+  <div id="dangkihiephoi" class="tab-content hidden bg-white p-6 rounded-lg shadow">
+    {% include "admin/members/dangkihiephoi/dangkihiephoi.html" %}
+  </div>
+  <div id="taikhoan" class="tab-content block bg-white p-6 rounded-lg shadow">
+    {% include "admin/members/nguoidung/nguoidung.html" %}
+  </div>
 
-  {% endblock %}
+
 </div>
+{% endblock %}

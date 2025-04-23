@@ -53,16 +53,24 @@ class DacSan(models.Model):
     def __str__(self):
         return self.TEN_DAC_SAN
 
+# Hàm tạo đường dẫn lưu hình ảnh tour
+def tour_image_upload_path(instance, filename):
+    # Lưu ảnh vào: tourdulich/<MA_TOUR>/<filename>
+    return os.path.join('tourdulich', str(instance.MA_TOUR), filename)
+
 class TourDuLich(models.Model):
     MA_TOUR = models.AutoField(primary_key=True)
     TEN_TOUR = models.CharField(max_length=255)
     MO_TA_TOUR = models.TextField()
     GIA_TOUR = models.DecimalField(max_digits=12, decimal_places=2)
-    HINH_TOUR = models.URLField(blank=True, null=True)
+    HINH_TOUR = models.ImageField(upload_to=tour_image_upload_path, blank=True, null=True)
     THOI_GIAN_DI_CHUYEN = models.CharField(max_length=100)
 
     class Meta:
         db_table = 'tourdulich'
+
+    def __str__(self):
+        return self.TEN_TOUR
 
 
 class ThuocTour(models.Model):

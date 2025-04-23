@@ -1,29 +1,4 @@
-function openModal(data = null) {
-  const modal = document.getElementById("diaDiemModal");
-  modal.classList.remove("hidden");
 
-  const form = modal.querySelector("form");
-  if (data) {
-    // Cập nhật action cho form sửa
-    form.action = `/admin/tourism/diadiem/sua/${data.ma_dd}/`; // Hoặc dùng URL template nếu bạn render URL từ Django
-
-    form.TEN_DIA_DIEM.value = data.ten;
-    form.MA_DN.value = data.ma_dn;
-    form.TINH_THANH_PHO.value = data.tinh_tp;
-    form.QUAN_HUYEN.value = data.quan_huyen;
-    form.KHU_VUC.value = data.khu_vuc;
-    //   form.HINH_ANH_DD.value = data.hinh_anh;
-    form.VI_TRI.value = data.vi_tri;
-    form.MO_TA_DD.value = data.mo_ta;
-  } else {
-    form.reset(); // Nếu không có data thì reset form (thêm mới)
-    form.action = `/admin/tourism/them/`; // URL thêm địa điểm
-  }
-}
-
-function closeModal() {
-  document.getElementById("diaDiemModal").classList.add("hidden");
-}
 
 
 
@@ -87,6 +62,7 @@ function openDacSanModal(data = null) {
     imagePreviewContainer.classList.add("hidden");
   }
 }
+
 
 document.getElementById("HINH_DS").addEventListener("change", function () {
   selectedFiles = Array.from(this.files);
@@ -194,40 +170,9 @@ function closeModalTour() {
   document.getElementById("tourModal").classList.add("hidden");
 }
 
-function openTourModal(data = null) {
-  const modal = document.getElementById("tourModal");
-  modal.classList.remove("hidden");
 
-  const form = modal.querySelector("form"); // Lấy form bên trong modal
-  const imagePreviewContainer = document.getElementById(
-    "image-preview-container-tour"
-  );
-  const imagePreview = document.getElementById("image-preview-tour");
-  if (data) {
-    // Gán URL sửa nếu có tour
-    form.action = `/admin/tourism/tourdulich/sua/${data.ma_tour}/`;
 
-    // Điền dữ liệu từ `data` vào các input
-    document.getElementById("TEN_TOUR").value = data.ten_tour || "";
-    document.getElementById("GIA_TOUR").value = data.gia_tour || "";
-    document.getElementById("THOI_GIAN_DI_CHUYEN").value = data.thoi_gian || "";
-    document.getElementById("HINH_TOUR").value = data.hinh || "";
-    document.getElementById("MO_TA_TOUR").value = data.mo_ta || "";
 
-    // Hiển thị ảnh nếu có
-    if (data.hinh) {
-      imagePreview.src = data.hinh;
-      imagePreviewContainer.classList.remove("hidden");
-    } else {
-      imagePreviewContainer.classList.add("hidden");
-    }
-  } else {
-    // Gán URL thêm mới và reset form
-    form.action = `/admin/tourism/tourdulich/them/`;
-    form.reset();
-    imagePreviewContainer.classList.add("hidden");
-  }
-}
 function openScheduleModal(data = null) {
   const modal = document.getElementById("scheduleModal");
   modal.classList.remove("hidden");

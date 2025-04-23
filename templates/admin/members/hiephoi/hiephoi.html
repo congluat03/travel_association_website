@@ -1,0 +1,73 @@
+<!-- DANH SÁCH HIỆP HỘI -->
+<div class="mb-10">
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-2xl font-bold text-green-700">Danh sách hiệp hội</h2>
+    <button
+      onclick="openHiepHoiModal()"
+      class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 shadow"
+    >
+      ➕ Thêm hiệp hội
+    </button>
+  </div>
+
+  <!-- Table -->
+  <div class="overflow-x-auto rounded-lg shadow border border-gray-200 h-[65vh] overflow-y-auto">
+    <table class="min-w-full text-sm text-gray-800">
+      <thead class="bg-blue-100 text-gray-700 text-left sticky top-0 z-10">
+        <tr>
+          <th class="px-4 py-3 border text-center">STT</th>
+          <th class="px-4 py-3 border">Tên hiệp hội</th>
+          <th class="px-4 py-3 border">Mô tả</th>
+          <th class="px-4 py-3 border text-center">Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for hiepHoi in hiepHoi %}
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3 border text-center">{{ forloop.counter }}</td>
+          <td class="px-4 py-3 border">{{ hiepHoi.TEN_HH }}</td>
+          <td class="px-4 py-3 border">{{ hiepHoi.MO_TA_HH }}</td>
+          <td class="px-4 py-3 border text-center">
+            <div class="flex flex-col items-center space-y-2">
+              <!-- Sửa hiệp hội -->
+              <button
+                class="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500 text-xs w-20"
+                onclick="openHiepHoiModal({
+                  ma_hh: '{{ hiepHoi.MA_HH }}',
+                  ten: '{{ hiepHoi.TEN_HH|escapejs }}',
+                  mo_ta: `{{ hiepHoi.MO_TA_HH|escapejs }}`
+                })"
+              >
+                ✏️ Sửa
+              </button>
+
+              <!-- Xóa hiệp hội -->
+              <form
+                method="POST"
+                action="{% url 'admin_members:xoa_hiep_hoi' hiepHoi.MA_HH %}"
+                onsubmit="return confirm('Bạn có chắc muốn xóa hiệp hội này?');"
+              >
+                {% csrf_token %}
+                <button
+                  type="submit"
+                  class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-xs w-20"
+                >
+                  🗑️ Xóa
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="4" class="text-center py-3 italic text-gray-500">
+            Không có hiệp hội nào được tìm thấy.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% include "admin/members/hiephoi/themsuahiephoi.html" %}

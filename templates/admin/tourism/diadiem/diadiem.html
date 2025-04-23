@@ -3,31 +3,27 @@
   <!-- Tiêu đề và nút thêm -->
   <div class="flex items-center justify-between mb-4">
     <h2 class="text-2xl font-bold text-green-700">📍 Danh sách địa điểm</h2>
-    <button
-      onclick="openModal()"
-      class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 shadow"
-    >
+    <button onclick="openModal()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 shadow" >
       ➕ Thêm địa điểm
     </button>
   </div>
 
   <!-- Bảng danh sách địa điểm -->
-  <div
-    class="overflow-x-auto rounded-lg shadow border border-gray-200 h-[65vh] overflow-y-auto"
-  >
+  <div class="overflow-x-auto rounded-lg shadow border border-gray-200 h-[65vh] overflow-y-auto" >
     <table class="min-w-full text-sm text-gray-800">
       <thead class="bg-green-100 text-gray-700 text-left sticky top-0 z-10">
         <tr>
-          <th class="px-4 py-3 border">#</th>
-          <th class="px-4 py-3 border">Tên địa điểm</th>
-          <th class="px-4 py-3 border">Doanh nghiệp</th>
-          <th class="px-4 py-3 border">Mô tả</th>
-          <th class="px-4 py-3 border">Địa chỉ</th>
-          <th class="px-4 py-3 border">Hình ảnh</th>
-          <th class="px-4 py-3 border">Google Maps</th>
-          <th class="px-4 py-3 border">Hành động</th>
+          <th class="px-2 py-3 border w-12 text-center">#</th>
+          <th class="px-4 py-3 border w-48">Tên địa điểm</th>
+          <th class="px-4 py-3 border w-48">Doanh nghiệp</th>
+          <th class="px-4 py-3 border w-[22rem]">Mô tả</th>
+          <th class="px-4 py-3 border w-[20rem]">Địa chỉ</th>
+          <th class="px-4 py-3 border w-36">Hình ảnh</th>
+          <th class="px-4 py-3 border w-32">Google Maps</th>
+          <th class="px-2 py-3 border w-24 text-center">Hành động</th>
         </tr>
       </thead>
+      
       <tbody>
         {% for dia_diem in dia_diems %}
         <tr class="hover:bg-gray-50">
@@ -56,7 +52,7 @@
                 <div class="flex items-center justify-between mt-2">
                   <button
                     class="text-blue-600 text-xs hover:underline"
-                    onclick="openCarousel('dd-{{ dia_diem.MA_DD }}')"
+                    onclick="openDiaDiemModal1('dd-{{ dia_diem.MA_DD }}')"
                   >
                     📸 Xem ảnh
                   </button>
@@ -84,7 +80,7 @@
               <button
                 class="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500 text-xs w-20"
                 onclick="openModal({
-                  ma_dd: '{{ dia_diem.MA_DD.MA_DD }}',
+                  ma_dd: '{{ dia_diem.MA_DD }}',
                   ten: '{{ dia_diem.TEN_DIA_DIEM|escapejs }}',
                   ma_dn: '{{ dia_diem.MA_DN.MA_DN }}',
                   mo_ta: `{{ dia_diem.MO_TA_DD|escapejs }}`,
@@ -119,6 +115,45 @@
         {% endfor %}
       </tbody>
     </table>
+  </div>
+</div>
+
+<div id="diaDiemModal1" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-lg p-4 max-w-3xl w-full relative h-auto flex flex-col justify-center items-center">
+    
+    <!-- Nút đóng -->
+    <button
+      onclick="closeDiaDiemModal()"
+      class="absolute top-4 right-4 text-gray-600 hover:text-red-600 text-3xl font-bold z-20"
+    >
+      &times;
+    </button>
+
+    <!-- Container ảnh -->
+    <div id="diaDiemCarouselImages" class="flex justify-center items-center w-full h-full overflow-auto">
+      <!-- Hình ảnh sẽ được JS render -->
+    </div>
+
+    <!-- Đếm ảnh -->
+    <div id="diaDiemImageCount" class="mt-4 text-center text-lg font-semibold z-10">
+      <!-- Ảnh 1/3... -->
+    </div>
+
+    <!-- Điều hướng -->
+    <div class="absolute bottom-4 left-0 right-0 px-8 flex justify-between">
+      <button
+        onclick="prevDiaDiemImage()"
+        class="text-white text-3xl bg-black bg-opacity-50 p-2 rounded-full hover:bg-opacity-70 z-10"
+      >
+        &#10094;
+      </button>
+      <button
+        onclick="nextDiaDiemImage()"
+        class="text-white text-3xl bg-black bg-opacity-50 p-2 rounded-full hover:bg-opacity-70 z-10"
+      >
+        &#10095;
+      </button>
+    </div>
   </div>
 </div>
 

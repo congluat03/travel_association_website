@@ -1,15 +1,37 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
-
-class TaiKhoan(models.Model):
+from django.core.files.uploadedfile import InMemoryUploadedFile
+import qrcode
+from io import BytesIO
+import os
+# Hàm tạo đường dẫn lưu hình ảnh tài khoản
+def account_image_upload_path(instance, filename):
+    # Lưu ảnh vào: taikhoan/<MA_TK>/<filename>
+    return os.path.join('taikhoan', str(instance.MA_TK), filename)
+class VaiTro(models.TextChoices):
+    ADMIN = 'admin', 'Admin'
+    NHAN_VIEN = 'nhanvien', 'Nhân viên'
+    NGUOI_DUNG = 'nguoidung', 'Người dùng'
+class TaiKhoan(models.Model): 
     MA_TK = models.AutoField(primary_key=True)
-    MA_DN = models.CharField(max_length=50, null=True, blank=True)  # Có thể để rỗng
+    MA_DN = models.ForeignKey(
+        'DoanhNghiep',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        db_column='MA_DN'
+    )
     EMAIL_TK = models.EmailField(unique=True)
     TEN_DANG_NHAP = models.CharField(max_length=50, unique=True)
-    MAT_KHAU = models.CharField(max_length=100)  # Nên mã hóa mật khẩu
-    VAI_TRO = models.CharField(max_length=20, choices=[('admin', 'Admin'), ('user', 'User')])
+    MAT_KHAU = models.CharField(max_length=100)
+    VAI_TRO = models.CharField(
+        max_length=20,
+        choices=VaiTro.choices,
+        default=VaiTro.NGUOI_DUNG
+    )
     TRANG_THAI_TK = models.BooleanField(default=True)
-    NGAY_DANG_KY_TK = models.DateField(auto_now_add=True)  # Sử dụng DateTimeField
+    NGAY_DANG_KY_TK = models.DateField(auto_now_add=True)
+    HINH_TK = models.ImageField(upload_to=account_image_upload_path, blank=True, null=True)  # Hình đại diện tài khoản
 
     def set_mat_khau(self, password):
         self.MAT_KHAU = make_password(password)
@@ -22,6 +44,7 @@ class TaiKhoan(models.Model):
 
     class Meta:
         db_table = 'taikhoan'
+
 
 class NganhNghe(models.Model):
     MA_NGANH = models.AutoField(primary_key=True)
@@ -39,21 +62,40 @@ class DoanhNghiep(models.Model):
         NganhNghe, 
         on_delete=models.CASCADE, 
         related_name="doanh_nghieps", 
-        db_column='ma_nganh'  # Tên cột tùy chỉnh trong cơ sở dữ liệu
+        db_column='ma_nganh'  
     )
     TEN_DN = models.CharField(max_length=255)
-    DIA_CHI = models.TextField(blank=True)  # Có thể để rỗng
-    SDT_DN = models.CharField(max_length=20, null=True, blank=True)  # Có thể để rỗng
-    EMAIL_DN = models.EmailField(null=True, blank=True)  # Có thể để rỗng
-    MA_QR = models.CharField(max_length=100, blank=True)  # Có thể để rỗng
-    NGUOI_DAI_DIEN = models.CharField(max_length=255, null=True, blank=True)  # Có thể để rỗng
-    TRANG_THAI_DUYET = models.BooleanField(default=False)
+    DIA_CHI = models.TextField(blank=True)
+    SDT_DN = models.CharField(max_length=20, null=True, blank=True)
+    EMAIL_DN = models.EmailField(null=True, blank=True)
+    MA_QR = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
+    NGUOI_DAI_DIEN = models.CharField(max_length=255, null=True, blank=True)
+    
+    # Thay đổi kiểu TRANG_THAI_DUYET sang IntegerField
+    TRANG_THAI_DUYET = models.IntegerField(
+        choices=[(0, 'Chưa Duyệt'), (1, 'Duyệt')],  # Sử dụng số 0 và 1
+        default=0  # Mặc định là Chưa Duyệt (0)
+    )
 
     def __str__(self):
         return self.TEN_DN
 
+    def save(self, *args, **kwargs):
+        # Tạo mã QR tự động khi tạo hoặc cập nhật doanh nghiệp
+        if not self.MA_QR:
+            url = f"http://127.0.0.1:8000/profile/{self.MA_DN}/"  # hoặc dùng reverse nếu trong Django
+            qr_code = qrcode.make(url)
+            buffer = BytesIO()
+            qr_code.save(buffer, format="PNG")
+            buffer.seek(0)
+            self.MA_QR = InMemoryUploadedFile(
+                buffer, None, f"{self.MA_DN}_qr.png", 'image/png', buffer.tell(), None
+            )
+        super().save(*args, **kwargs)
+
     class Meta:
         db_table = 'doanhnghiep'
+
 
 
 class HiepHoi(models.Model):
@@ -67,22 +109,31 @@ class HiepHoi(models.Model):
     class Meta:
         db_table = 'hiephoi'
 
+from django.db import models
+
 class DangKyHoiVien(models.Model):
     MA_DK_HH = models.AutoField(primary_key=True)  # Khóa chính riêng
     MA_HH = models.ForeignKey(
-        HiepHoi, 
+        'HiepHoi', 
         on_delete=models.CASCADE, 
         related_name="dang_ky_hv",
         db_column='MA_HH'
     )
     MA_DN = models.ForeignKey(
-        DoanhNghiep, 
+        'DoanhNghiep', 
         on_delete=models.CASCADE, 
         related_name="dang_ky_hv",
         db_column='MA_DN'
     )
-    TINH_TRANG = models.CharField(max_length=100, null=True, blank=True)
+    # Trường trạng thái duyệt
+    TINH_TRANG = models.IntegerField(
+        choices=[(0, 'Chưa Duyệt'), (1, 'Duyệt')],  # Sử dụng số 0 và 1
+        default=0  # Mặc định là Chưa Duyệt (0)
+    )
     NGAY_DANG_KY = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Đăng ký hội viên: {self.MA_DK_HH} - {self.MA_DN.TEN_DN}"
 
     class Meta:
         db_table = 'dangkyhoivien'

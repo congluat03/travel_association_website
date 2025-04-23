@@ -1,0 +1,53 @@
+<!-- Modal đăng ký hội viên -->
+<div id="dangKyHoiVienModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 transition-opacity duration-300">
+    <form id="dangKyHoiVienForm" method="POST" class="bg-white rounded-2xl shadow-xl w-full max-w-xl p-6 space-y-4 relative animate-fadeIn">
+        {% csrf_token %}
+        <!-- <button onclick="closeDoanhNghiepModal()"
+        class="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold">
+        &times;
+    </button> -->
+
+    <h2 class="text-2xl font-semibold text-green-400-700 mb-6">🏢 Thêm / Sửa hội viên</h2>
+        <input type="hidden" name="MA_DK_HH" />
+        <!-- Hiệp hội -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Hiệp hội</label>
+            <select name="MA_HH" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                {% for hh in hiepHoi %}
+                    <option value="{{ hh.pk }}">{{ hh.TEN_HH }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Doanh nghiệp -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Doanh nghiệp</label>
+            <select name="MA_DN" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                {% for dn in doanhnghiep %}
+                    <option value="{{ dn.pk }}">{{ dn.TEN_DN }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Tình trạng -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Tình trạng</label>
+            <select name="TINH_TRANG" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="0">Chưa duyệt</option>
+                <option value="1">Đã duyệt</option>
+            </select>
+        </div>
+
+        <!-- Ngày đăng ký -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Ngày đăng ký</label>
+            <input type="date" name="NGAY_DANG_KY" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex justify-end gap-2 pt-2 border-t border-gray-200">
+            <button type="button" onclick="closeDangKyHoiVienModal()" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Hủy</button>
+            <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-blue-700">Lưu</button>
+        </div>
+    </form>
+</div>
