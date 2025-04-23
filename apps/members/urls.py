@@ -31,5 +31,5 @@ urlpatterns = [
 
     path('hoivien/', views.hoivien, name='hoivien'),
     path('hoivien/<int:ma_dn>/', views.chitiethoivien, name='chitiethoivien'),
-    
+    path('hoivien/dangky/', views.dangky_hoivien_user, name='dangky_hoivien_user')
 ]
