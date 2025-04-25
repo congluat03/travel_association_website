@@ -36,4 +36,11 @@ urlpatterns = [
     # Thuộc tour
     path('thuoctour/', admin_views.thuoctour_list, name='thuoctour-list'),
     path('thuoctour/<int:pk>/', admin_views.thuoctour_detail, name='thuoctour-detail'),
+    # phần index 
+
+    path('diadiem/', views.danhsachdiadiem, name='danhsachdiadiem'),
+    path('diadiem/<int:ma_dd>/', views.chitietdiadiem, name='chitietdiadiem'),
+    path('diadiemdacsan/', views.danhsachdacsan, name='diadiemdacsan'),
+    path('tourdiadiemdulich/', views.tour, name='tourdiadiemdulich'),
+    path('tourdiadiemdulich/<int:ma_tour>/', views.chitiettour, name='chitiettour'),
 ]

@@ -31,11 +31,14 @@ class DiaDiemDuLich(models.Model):
         db_table = 'diadiemdulich'
 
     def get_full_address(self):
-        return f"{self.KHU_VUC}, {self.QUAN_HUYEN}, {self.TINH_THANH_PHO}"
+        return f"{self.QUAN_HUYEN}, {self.TINH_THANH_PHO}, {self.KHU_VUC}"
 
     def get_google_map_url(self):
         address = f"{self.KHU_VUC}, {self.QUAN_HUYEN}, {self.TINH_THANH_PHO}"
         return f"https://www.google.com/maps?q={address.replace(' ', '+')}"
+
+
+
 
 def dacsan_image_upload_path(instance, filename):
     # Tạo đường dẫn lưu hình: dacsan/<MA_DS>/<filename>

@@ -1,0 +1,77 @@
+{% extends "index/index_layout.html" %}
+{% load static %}
+
+{% block title %}Du lịch xanh{% endblock %}
+
+{% block content %}
+<section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <h1 class="text-4xl font-extrabold text-center text-green-500 drop-shadow mb-10">
+    🌿 Khám phá địa điểm xanh
+  </h1>
+
+  <!-- FORM TÌM KIẾM -->
+  <form method="get" class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-12 items-center">
+    <div class="md:col-span-6">
+      <input type="text" name="q" placeholder="🌱 Tìm kiếm địa điểm sinh thái..." value="{{ query }}"
+             class="p-3 rounded-2xl shadow-sm border border-gray-300 w-full focus:outline-none focus:ring-2 focus:ring-green-500">
+    </div>
+
+    <div class="md:col-span-2">
+      <select name="tinh" class="p-3 rounded-2xl shadow-sm border border-gray-300 w-full focus:outline-none focus:ring-2 focus:ring-green-500">
+        <option value="">🌍 Tất cả tỉnh thành</option>
+        {% for tinh in danh_sach_tinh %}
+          <option value="{{ tinh }}" {% if tinh == tinh_loc %}selected{% endif %}>{{ tinh }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="md:col-span-2">
+      <select name="khu" class="p-3 rounded-2xl shadow-sm border border-gray-300 w-full focus:outline-none focus:ring-2 focus:ring-green-500">
+        <option value="">🏞️ Tất cả khu vực</option>
+        {% for khu in danh_sach_khu %}
+          <option value="{{ khu }}" {% if khu == khu_loc %}selected{% endif %}>{{ khu }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="md:col-span-2 flex justify-center">
+      <button type="submit"
+              class="bg-green-500 hover:bg-green-600 text-white py-3 px-6 rounded-2xl font-semibold shadow transition duration-300">
+        Tìm kiếm
+      </button>
+    </div>
+  </form>
+
+  <!-- DANH SÁCH ĐỊA ĐIỂM -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    {% for dd in diadiem_list %}
+      {% include 'index/tourism/diadiem/diadiem_card_item.html' %}
+    {% endfor %}
+  </div>
+
+  <!-- PHÂN TRANG -->
+  {% if diadiem_list.has_other_pages %}
+    <div class="mt-10 flex justify-center">
+      <nav class="inline-flex shadow-lg rounded-xl overflow-hidden text-sm">
+        {% if diadiem_list.has_previous %}
+          <a href="{{ base_url }}?page={{ diadiem_list.previous_page_number }}&q={{ query_params.q }}&tinh={{ query_params.tinh }}&khu={{ query_params.khu }}"
+             class="px-4 py-2 bg-white hover:bg-green-500 hover:text-white border border-gray-300 rounded-l-xl transition duration-300">
+            ← Trước
+          </a>
+        {% endif %}
+
+        <span class="px-4 py-2 bg-green-500 text-white font-semibold">
+          Trang {{ diadiem_list.number }}
+        </span>
+
+        {% if diadiem_list.has_next %}
+          <a href="{{ base_url }}?page={{ diadiem_list.next_page_number }}&q={{ query_params.q }}&tinh={{ query_params.tinh }}&khu={{ query_params.khu }}"
+             class="px-4 py-2 bg-white hover:bg-green-500 hover:text-white border border-gray-300 rounded-r-xl transition duration-300">
+            Sau →
+          </a>
+        {% endif %}
+      </nav>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

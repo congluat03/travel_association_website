@@ -4,85 +4,98 @@
 {% block title %}Hội viên - Doanh nghiệp{% endblock %}
 
 {% block content %}
-<section class="py-16 px-6 bg-green-50">
+<section class="py-16 px-4 sm:px-6 bg-green-50">
   <div class="max-w-7xl mx-auto">
-    <h2 class="text-3xl font-extrabold mb-8 text-center text-green-700">Danh sách Doanh nghiệp Hội viên</h2>
+    <h2 class="text-4xl font-bold mb-10 text-center text-green-700">Danh sách Doanh nghiệp Hội viên</h2>
 
-    <!-- Bộ lọc ngành -->
-    <form method="get" class="mb-8 flex justify-center">
-      <select name="nganh" onchange="this.form.submit()" class="w-64 px-4 py-2 rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-green-500">
-        <option value="">-- Tất cả ngành --</option>
-        {% for ng in cac_nganh %}
-          <option value="{{ ng }}" {% if request.GET.nganh == ng %}selected{% endif %}>{{ ng }}</option>
-        {% endfor %}
-      </select>
-    </form>
+    <div class="flex flex-col sm:flex-row justify-between items-center mb-10 gap-4">
+      <!-- Bộ lọc ngành -->
+      <form method="get" class="w-full sm:w-auto">
+        <select name="nganh" onchange="this.form.submit()" class="w-full sm:w-64 px-4 py-2 rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-green-500">
+          <option value="">-- Tất cả ngành --</option>
+          {% for ng in cac_nganh %}
+            <option value="{{ ng }}" {% if request.GET.nganh == ng %}selected{% endif %}>{{ ng }}</option>
+          {% endfor %}
+        </select>
+      </form>
 
+      <button onclick="openModal()" class="inline-flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-full shadow-md hover:bg-green-700 hover:shadow-lg transform hover:scale-105 transition-all duration-300 font-semibold tracking-wide">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        Đăng ký hội viên
+      </button>
+    </div>
+
+    <!-- Danh sách doanh nghiệp -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {% for dn in doanh_nghiep %}
-      <div class="group bg-white shadow-md hover:shadow-lg rounded-xl overflow-hidden transition">
-        <div class="h-48 overflow-hidden">
+      <div class="group bg-white shadow-md hover:shadow-xl rounded-xl overflow-hidden transition">
+        <div class="h-48 overflow-hidden bg-gray-100">
           {% if dn.hinh_anh %}
-          <img src="{{ dn.hinh_anh.url }}" alt="{{ dn.TEN_DN }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+            <img src="{{ dn.hinh_anh.url }}" alt="{{ dn.TEN_DN }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
           {% else %}
-          <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-            <span class="text-gray-400">Chưa có ảnh</span>
-          </div>
+            <div class="w-full h-full flex items-center justify-center text-gray-400">
+              Chưa có ảnh
+            </div>
           {% endif %}
         </div>
         <div class="p-6">
-          <h3 class="text-xl font-semibold text-green-600 mb-2 truncate">{{ dn.TEN_DN }}</h3>
-          <p class="text-gray-600 text-sm mb-4">{{ dn.DIA_CHI|truncatechars:50 }}</p>
-          <div class="flex items-center text-sm text-gray-500 space-x-4 mb-4">
-            <span><strong>Ngành:</strong> {{ dn.nganh_nghe }}</span>
-            <span><strong>Đại diện:</strong> {{ dn.NGUOI_DAI_DIEN }}</span>
-          </div>
+          <h3 class="text-xl font-bold text-green-700 mb-1 truncate">{{ dn.TEN_DN }}</h3>
+          <p class="text-gray-600 text-sm mb-3">{{ dn.DIA_CHI|truncatechars:50 }}</p>
+          <ul class="text-sm text-gray-500 space-y-1 mb-4">
+            <li><strong>Ngành:</strong> {{ dn.nganh_nghe }}</li>
+            <li><strong>Đại diện:</strong> {{ dn.NGUOI_DAI_DIEN }}</li>
+          </ul>
           <a href="/members/hoivien/{{ dn.MA_DN }}/" class="inline-block w-full text-center bg-green-600 text-white py-2 rounded-full hover:bg-green-700 transition">
             Xem chi tiết
           </a>
         </div>
       </div>
       {% empty %}
-      <p class="col-span-3 text-center text-gray-600">Chưa có doanh nghiệp hội viên.</p>
+      <p class="col-span-3 text-center text-gray-500">Chưa có doanh nghiệp hội viên.</p>
       {% endfor %}
     </div>
-<!-- Modal -->
-<div id="modalDangKy" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-  <div class="bg-white w-full max-w-xl rounded-lg shadow-lg p-6 relative">
-    <button onclick="closeModal()" class="absolute top-2 right-2 text-gray-500 hover:text-red-600 text-xl">&times;</button>
-    <h3 class="text-2xl font-bold text-green-700 mb-4">Đăng ký trở thành hội viên</h3>
-    
-    <form method="post" action="/members/dangky_hoivien/' " enctype="multipart/form-data" class="space-y-4">
-      {% csrf_token %}
-      <div>
-        <label class="block font-semibold">Tên doanh nghiệp</label>
-        <input type="text" name="ten_dn" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-green-500 focus:outline-none" required>
-      </div>
-      <div>
-        <label class="block font-semibold">Địa chỉ</label>
-        <input type="text" name="dia_chi" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-green-500 focus:outline-none" required>
-      </div>
-      <div>
-        <label class="block font-semibold">Ngành nghề</label>
-        <input type="text" name="nganh_nghe" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-green-500 focus:outline-none" required>
-      </div>
-      <div>
-        <label class="block font-semibold">Người đại diện</label>
-        <input type="text" name="nguoi_dai_dien" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-green-500 focus:outline-none">
-      </div>
-      <div class="text-center">
-        <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-700">Gửi đăng ký</button>
-      </div>
-    </form>
-  </div>
-</div>
 
-    <!-- Nút Đăng ký Hội viên -->
-    <div class="mt-10 text-center">
-      <button onclick="openModal()" class="inline-block bg-white border-2 border-green-600 text-green-600 px-8 py-3 rounded-full font-semibold hover:bg-green-600 hover:text-white transition">
-        Đăng ký trở thành hội viên
-      </button>
+    <!-- Modal Đăng ký -->
+    <div id="modalDangKy" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+      <div class="bg-white w-full max-w-xl rounded-lg shadow-lg p-6 relative">
+        <button onclick="closeModal()" class="absolute top-3 right-4 text-gray-600 hover:text-red-600 text-2xl font-bold">&times;</button>
+        <h3 class="text-2xl font-bold text-green-700 mb-6 text-center">Đăng ký trở thành hội viên</h3>
+
+        <form method="post" action="/members/dangky_hoivien/" enctype="multipart/form-data" class="space-y-4">
+          {% csrf_token %}
+          <div>
+            <label class="block font-semibold mb-1">Tên doanh nghiệp</label>
+            <input type="text" name="ten_dn" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-green-500 focus:outline-none" required>
+          </div>
+          <div>
+            <label class="block font-semibold mb-1">Địa chỉ</label>
+            <input type="text" name="dia_chi" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-green-500 focus:outline-none" required>
+          </div>
+          <div>
+            <label class="block font-semibold mb-1">Ngành nghề</label>
+            <input type="text" name="nganh_nghe" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-green-500 focus:outline-none" required>
+          </div>
+          <div>
+            <label class="block font-semibold mb-1">Người đại diện</label>
+            <input type="text" name="nguoi_dai_dien" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-green-500 focus:outline-none">
+          </div>
+          <div class="text-center pt-4">
+            <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-700 transition">Gửi đăng ký</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </section>
+
+<script>
+  function openModal() {
+    document.getElementById('modalDangKy').classList.remove('hidden');
+  }
+  function closeModal() {
+    document.getElementById('modalDangKy').classList.add('hidden');
+  }
+</script>
 {% endblock %}
