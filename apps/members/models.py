@@ -109,8 +109,6 @@ class HiepHoi(models.Model):
     class Meta:
         db_table = 'hiephoi'
 
-from django.db import models
-
 class DangKyHoiVien(models.Model):
     MA_DK_HH = models.AutoField(primary_key=True)  # Khóa chính riêng
     MA_HH = models.ForeignKey(

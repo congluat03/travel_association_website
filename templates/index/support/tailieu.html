@@ -1,0 +1,120 @@
+{% extends "index/index_layout.html" %}
+{% load static %}
+
+{% block title %}Thư viện Tài liệu Du lịch sinh thái{% endblock %}
+
+{% block content %}
+<!-- Font Awesome CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<div class="max-w-7xl mx-auto px-4 py-12">
+
+  <!-- Hero nhỏ -->
+  <div class="text-center mb-12">
+    <h1 class="text-4xl font-extrabold text-emerald-700 tracking-tight">
+      📚 Thư viện Tài liệu
+    </h1>
+    <p class="mt-2 text-gray-600">Khám phá bộ sưu tập tài liệu du lịch sinh thái mới nhất.</p>
+  </div>
+
+  <!-- Search & filter -->
+  <form method="get" class="flex flex-col md:flex-row gap-4 mb-10">
+    <input name="q" value="{{ request.GET.q }}" placeholder="Tìm tiêu đề, mô tả..."
+           class="flex-1 bg-white/50 backdrop-blur border border-gray-300 rounded-xl px-4 py-2 focus:ring-emerald-600">
+    <select name="loai"
+            class="bg-white/50 backdrop-blur border border-gray-300 rounded-xl px-3 py-2 focus:ring-emerald-600">
+      <option value="">Tất cả loại</option>
+      {% for loai in loai_list %}
+        <option value="{{ loai }}" {% if request.GET.loai == loai %}selected{% endif %}>
+          {{ loai }}
+        </option>
+      {% endfor %}
+    </select>
+    <button class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-xl shadow">
+      🔍
+    </button>
+  </form>
+
+  <!-- Grid -->
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+    {% for tl in tailieu_list %}
+    <a href="/support/tailieu-index/chitettailieu/{{ tl.MA_TL }}/"
+       class="group relative border border-white/20 bg-white/30 backdrop-blur rounded-3xl p-6 shadow-lg
+              hover:-translate-y-1 hover:shadow-2xl transition transform flex flex-col">
+      
+      <!-- Icon theo loại tài liệu -->
+      <div class="h-32 flex items-center justify-center mb-4 text-emerald-600 text-6xl">
+        {% with tl.LOAI_TAI_LIEU|lower as loai %}
+          {% if loai == "pdf" %}
+            <i class="fas fa-file-pdf"></i>
+          {% elif loai == "doc" or loai == "docx" %}
+            <i class="fas fa-file-word"></i>
+          {% elif loai == "xls" or loai == "xlsx" %}
+            <i class="fas fa-file-excel"></i>
+          {% elif loai == "ppt" or loai == "pptx" %}
+            <i class="fas fa-file-powerpoint"></i>
+          {% elif loai == "jpg" or loai == "jpeg" or loai == "png" %}
+            <i class="fas fa-file-image"></i>
+          {% elif loai == "zip" or loai == "rar" %}
+            <i class="fas fa-file-archive"></i>
+          {% else %}
+            <i class="fas fa-file-alt"></i>
+          {% endif %}
+        {% endwith %}
+      </div>
+
+      <!-- Nội dung -->
+      <h2 class="font-semibold text-lg line-clamp-2">{{ tl.TIEU_DE_TL }}</h2>
+      <p class="text-xs text-gray-500 mb-2">{{ tl.MA_DN.TEN_DN }}</p>
+      <p class="text-sm text-gray-700 flex-1 line-clamp-3">{{ tl.MO_TA_TL }}</p>
+
+      <!-- Chips -->
+      <div class="flex gap-2 mt-4">
+        <span class="text-xs px-2 py-1 bg-emerald-600/10 text-emerald-700 rounded-full">
+          {{ tl.LOAI_TAI_LIEU }}
+        </span>
+        <span class="text-xs px-2 py-1 bg-gray-600/10 text-gray-700 rounded-full">
+          {{ tl.NGAY_CAP_NHAT|date:"d/m/Y" }}
+        </span>
+      </div>
+    </a>
+    {% empty %}
+      <p class="col-span-full text-center text-gray-600">Không tìm thấy tài liệu.</p>
+    {% endfor %}
+  </div>
+
+  <!-- Pagination -->
+  {% if is_paginated %}
+  <div class="flex justify-center mt-12 gap-2">
+    {% with request.GET.q as q %}{% with request.GET.loai as loai %}
+      {% if page_obj.has_previous %}
+        <a href="?{% if q %}q={{ q|urlencode }}&{% endif %}{% if loai %}loai={{ loai|urlencode }}&{% endif %}page=1"
+           class="px-4 py-2 rounded-xl border bg-emerald-600 text-white hover:bg-emerald-700 transition-all duration-300">
+          <i class="fas fa-chevron-left"></i> Đầu
+        </a>
+        <a href="?{% if q %}q={{ q|urlencode }}&{% endif %}{% if loai %}loai={{ loai|urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}"
+           class="px-4 py-2 rounded-xl border bg-emerald-600 text-white hover:bg-emerald-700 transition-all duration-300">
+          <i class="fas fa-chevron-left"></i> Trước
+        </a>
+      {% endif %}
+
+      <span class="px-4 py-2 rounded-xl bg-emerald-50">
+        Trang {{ page_obj.number }}/{{ paginator.num_pages }}
+      </span>
+
+      {% if page_obj.has_next %}
+        <a href="?{% if q %}q={{ q|urlencode }}&{% endif %}{% if loai %}loai={{ loai|urlencode }}&{% endif %}page={{ page_obj.next_page_number }}"
+           class="px-4 py-2 rounded-xl border bg-emerald-600 text-white hover:bg-emerald-700 transition-all duration-300">
+          Tiếp <i class="fas fa-chevron-right"></i>
+        </a>
+        <a href="?{% if q %}q={{ q|urlencode }}&{% endif %}{% if loai %}loai={{ loai|urlencode }}&{% endif %}page={{ paginator.num_pages }}"
+           class="px-4 py-2 rounded-xl border bg-emerald-600 text-white hover:bg-emerald-700 transition-all duration-300">
+          Cuối <i class="fas fa-chevron-right"></i>
+        </a>
+      {% endif %}
+    {% endwith %}{% endwith %}
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "index/index_layout.html" %}
+{% load static %}
+
+{% block title %}Đặc sản Việt Nam{% endblock %}
+
+{% block content %}
+<section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <div class="text-center mb-12">
+    <h1 class="text-4xl font-extrabold text-emerald-700 tracking-tight">
+      🍲 Đặc sản Việt Nam
+    </h1>
+    <p class="mt-2 text-gray-600">
+      Khám phá tinh hoa ẩm thực Việt qua những món ăn truyền thống đặc trưng của từng vùng miền, đậm đà hương vị và bản sắc dân tộc.
+    </p>
+  </div>
+  
+
+  <!-- FORM TÌM KIẾM -->
+  <form method="get" class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-12 items-center">
+    <div class="md:col-span-6">
+      <input type="text" name="q" placeholder="🌿 Tìm kiếm đặc sản..." value="{{ query }}"
+             class="p-3 rounded-2xl shadow-sm border border-gray-300 w-full focus:outline-none focus:ring-2 focus:ring-green-500">
+    </div>
+
+    <div class="md:col-span-2">
+      <select name="province" class="p-3 rounded-2xl shadow-sm border border-gray-300 w-full focus:outline-none focus:ring-2 focus:ring-green-500">
+        <option value="">🌍 Tất cả tỉnh thành</option>
+        {% for province in provinces %}
+          <option value="{{ province }}" {% if province == selected_province %}selected{% endif %}>{{ province }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="md:col-span-2 flex justify-center">
+      <button type="submit"
+              class="bg-green-500 hover:bg-green-600 text-white py-3 px-6 rounded-2xl font-semibold shadow transition duration-300">
+        Tìm kiếm
+      </button>
+    </div>
+  </form>
+
+  <!-- DANH SÁCH ĐẶC SẢN -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    {% for ds in dacsans %}
+      {% include 'index/tourism/dacsan/dacsan_card_item.html' %}
+    {% endfor %}
+  </div>
+  
+<!-- PHÂN TRANG -->
+{% if dacsans.has_other_pages %}
+<div class="flex justify-center mt-12 gap-2">
+  {% with request.GET.q as q %}{% with request.GET.province as province %}
+    <!-- Nút Đầu -->
+    {% if dacsans.has_previous %}
+      <a href="?{% if q %}q={{ q|urlencode }}&{% endif %}{% if province %}province={{ province|urlencode }}&{% endif %}page=1"
+         class="px-4 py-2 rounded-xl border bg-emerald-600 text-white hover:bg-emerald-700 transition-all duration-300">
+        Đầu
+      </a>
+      <!-- Nút Trước -->
+      <a href="?{% if q %}q={{ q|urlencode }}&{% endif %}{% if province %}province={{ province|urlencode }}&{% endif %}page={{ dacsans.previous_page_number }}"
+         class="px-4 py-2 rounded-xl border bg-emerald-600 text-white hover:bg-emerald-700 transition-all duration-300">
+        Trước
+      </a>
+    {% endif %}
+
+    <!-- Trang hiện tại -->
+    <span class="px-4 py-2 rounded-xl bg-emerald-50 text-emerald-700 font-semibold">
+      Trang {{ dacsans.number }}/{{ dacsans.paginator.num_pages }}
+    </span>
+
+    <!-- Nút Tiếp -->
+    {% if dacsans.has_next %}
+      <a href="?{% if q %}q={{ q|urlencode }}&{% endif %}{% if province %}province={{ province|urlencode }}&{% endif %}page={{ dacsans.next_page_number }}"
+         class="px-4 py-2 rounded-xl border bg-emerald-600 text-white hover:bg-emerald-700 transition-all duration-300">
+        Tiếp theo
+      </a>
+      <!-- Nút Cuối -->
+      <a href="?{% if q %}q={{ q|urlencode }}&{% endif %}{% if province %}province={{ province|urlencode }}&{% endif %}page={{ dacsans.paginator.num_pages }}"
+         class="px-4 py-2 rounded-xl border bg-emerald-600 text-white hover:bg-emerald-700 transition-all duration-300">
+        Cuối
+      </a>
+    {% endif %}
+  {% endwith %}{% endwith %}
+</div>
+{% endif %}
+
+</section>
+{% endblock %}

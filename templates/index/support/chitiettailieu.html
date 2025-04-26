@@ -1,0 +1,83 @@
+{% extends "index/index_layout.html" %}
+{% load static %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 lg:px-8 py-12">
+
+  <div class="relative bg-white/75 backdrop-blur-lg border border-white/40
+              rounded-2xl shadow-xl overflow-hidden">
+
+    <!-- Gradient bar -->
+    <div class="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400"></div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-0">
+      <!-- Thumbnail -->
+      <div class="flex items-center justify-center p-10 text-emerald-600 text-6xl">
+        {% if tailieu.LOAI_TAI_LIEU|lower == "pdf" %}
+          <i class="fas fa-file-pdf"></i>
+        {% elif tailieu.LOAI_TAI_LIEU|lower == "docx" or tailieu.LOAI_TAI_LIEU|lower == "doc" %}
+          <i class="fas fa-file-word"></i>
+        {% elif tailieu.LOAI_TAI_LIEU|lower == "ppt" or tailieu.LOAI_TAI_LIEU|lower == "pptx" %}
+          <i class="fas fa-file-powerpoint"></i>
+        {% else %}
+          <i class="fas fa-file-alt"></i>
+        {% endif %}
+      </div>
+      
+      
+      
+
+      <!-- Nội dung -->
+      <div class="md:col-span-2 px-6 py-10 lg:py-12 lg:pr-14">
+
+        <!-- Tiêu đề -->
+        <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-emerald-700 leading-snug mb-6">
+          {{ tailieu.TIEU_DE_TL }}
+        </h1>
+
+        <!-- Metadata -->
+        <dl class="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6 text-sm mb-8">
+          <div class="flex items-center gap-2">
+            <dt class="font-medium text-gray-500">Loại:</dt>
+            <dd>
+              <span class="inline-block bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md text-xs font-medium">
+                {{ tailieu.LOAI_TAI_LIEU }}
+              </span>
+            </dd>
+          </div>
+          <div class="flex items-center gap-2">
+            <dt class="font-medium text-gray-500">Ngày cập nhật:</dt>
+            <dd>{{ tailieu.NGAY_CAP_NHAT|date:"d/m/Y" }}</dd>
+          </div>
+          <div class="flex items-center gap-2 sm:col-span-2">
+            <dt class="font-medium text-gray-500">Doanh nghiệp:</dt>
+            <dd>{{ tailieu.MA_DN.TEN_DN }}</dd>
+          </div>
+        </dl>
+
+        <!-- Mô tả -->
+        <div class="prose max-w-none mb-10 text-gray-700">
+          {{ tailieu.MO_TA_TL|linebreaksbr }}
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex flex-wrap items-center gap-4">
+          {% if tailieu.DUONG_DAN_FILE %}
+            <a href="{{ tailieu.DUONG_DAN_FILE.url }}"
+               class="btn-primary">
+              ⬇️ Tải tài liệu
+            </a>
+          {% else %}
+            <span class="text-red-600 font-semibold">Không có file đính kèm.</span>
+          {% endif %}
+          <a href="/support/tailieu-index/" class="btn-link">
+            ← Quay về thư viện
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

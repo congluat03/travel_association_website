@@ -1,22 +1,15 @@
 import shutil
-from rest_framework.decorators import api_view
 from django.shortcuts import render, redirect
-from rest_framework.response import Response
-from rest_framework import status
 from .models import TaiKhoan, DoanhNghiep, NganhNghe, HiepHoi, DangKyHoiVien
-from .serializers import TaiKhoanSerializer, DoanhNghiepSerializer, NganhNgheSerializer, HiepHoiSerializer, DangKyHoiVienSerializer
-from django.http import Http404,HttpResponse
-from apps.core import admin_views
+from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 import qrcode
 from io import BytesIO
-from django.core.files.base import ContentFile
 from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.contrib.auth.hashers import make_password
 from django.core.files.storage import default_storage
 import os
-
 import datetime
 
 
@@ -79,6 +72,7 @@ def xoa_nganhnghe(request, ma_nganh):
         return redirect('admin_core:manage_business')
     except NganhNghe.DoesNotExist:
         raise Http404("Ngành nghề không tồn tại.")
+
 def generate_qr_code(data: str):
     qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
     qr.add_data(data)
@@ -143,6 +137,7 @@ def them_sua_doanhnghiep(request, ma_dn=None):
 
 
     return redirect('admin_core:manage_business')
+
 def xoa_doanhnghiep(request, ma_dn):
     try:
         doanhnghiep = DoanhNghiep.objects.get(MA_DN=ma_dn)
@@ -176,7 +171,6 @@ def xoa_tai_khoan(request, ma_tk):
 
     except TaiKhoan.DoesNotExist:
         raise Http404("Tài khoản không tồn tại.")
-
 
 def them_sua_taikhoan(request, id=None):
     taikhoan = get_object_or_404(TaiKhoan, pk=id) if id else None

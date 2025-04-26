@@ -4,27 +4,36 @@ function openTaiLieuModal(data = null) {
 
     const form = document.getElementById("taiLieuForm");
 
-    // Nếu có dữ liệu, thiết lập để sửa
     if (data) {
-        // Đảm bảo URL sửa tài liệu đúng
+        // URL sửa
         form.action = `/admin/support/tailieu/sua/${data.ma_tl}/`;
 
-        // Cập nhật các trường trong form
-        document.getElementById("tieu_de_tl").value = data.tieu_de_tl || "";
-        document.getElementById("loai_tai_lieu").value = data.loai_tai_lieu || "";
-        document.getElementById("ngay_cap_nhat").value = data.ngay_cap_nhat || "";
-        document.getElementById("duong_dan_file").value = data.duong_dan_file || "";
-        document.getElementById("ma_dn").value = data.ma_dn || "";
-        document.getElementById("mo_ta_tl").value = data.mo_ta_tl || "";
+        // điền các trường văn bản
+        document.getElementById("tieu_de_tl").value = data.tieu_de_tl ?? "";
+        document.getElementById("loai_tai_lieu").value = data.loai_tai_lieu ?? "";
+        document.getElementById("ngay_cap_nhat").value = data.ngay_cap_nhat ?? "";
+        document.getElementById("ma_dn").value = data.ma_dn ?? "";
+        document.getElementById("mo_ta_tl").value = data.mo_ta_tl ?? "";
+        // hiển thị tên file hiện có (nếu cần)
+        const fileNameLabel = document.getElementById("duong_dan_file");
+        if (fileNameLabel) {
+            fileNameLabel.textContent = data.duong_dan_file?.split("/").pop() || "Chưa có";
+        }
+        // KHÔNG gán .value cho input file!
     } else {
-        // Nếu không có dữ liệu, thiết lập để thêm mới
+        // URL thêm mới
         form.action = "/admin/support/tailieu/them/";
-        form.reset();  // Reset form
+        form.reset();
 
-        // Reset hidden input mã tài liệu (tránh giữ mã cũ)
+        // xóa mã tài liệu ẩn
         document.getElementById("ma_tl").value = "";
+
+        // xóa nhãn tên file hiện tại (nếu có)
+        const fileNameLabel = document.getElementById("ten_file_hien_tai");
+        if (fileNameLabel) fileNameLabel.textContent = "";
     }
 }
+
 
 
 function closeTaiLieuModal() {

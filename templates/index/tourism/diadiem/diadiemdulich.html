@@ -1,0 +1,97 @@
+{% extends "index/index_layout.html" %}
+{% load static %}
+
+{% block title %}Du lịch xanh{% endblock %}
+
+{% block content %}
+<section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <div class="text-center mb-12">
+    <h1 class="text-4xl font-extrabold text-emerald-700 tracking-tight">
+      🌿 Khám phá địa điểm xanh
+    </h1>
+    <p class="mt-2 text-gray-600">
+      Hành trình đến những vùng đất tươi xanh, hòa mình vào thiên nhiên và tận hưởng những trải nghiệm du lịch bền vững, thân thiện với môi trường.
+    </p>
+  </div>
+  
+  
+  
+
+  <!-- FORM TÌM KIẾM -->
+  <form method="get" class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-12 items-center">
+    <div class="md:col-span-6">
+      <input type="text" name="q" placeholder="🌱 Tìm kiếm địa điểm sinh thái..." value="{{ query }}"
+             class="p-3 rounded-2xl shadow-sm border border-gray-300 w-full focus:outline-none focus:ring-2 focus:ring-green-500">
+    </div>
+
+    <div class="md:col-span-2">
+      <select name="tinh" class="p-3 rounded-2xl shadow-sm border border-gray-300 w-full focus:outline-none focus:ring-2 focus:ring-green-500">
+        <option value="">🌍 Tất cả tỉnh thành</option>
+        {% for tinh in danh_sach_tinh %}
+          <option value="{{ tinh }}" {% if tinh == tinh_loc %}selected{% endif %}>{{ tinh }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="md:col-span-2">
+      <select name="khu" class="p-3 rounded-2xl shadow-sm border border-gray-300 w-full focus:outline-none focus:ring-2 focus:ring-green-500">
+        <option value="">🏞️ Tất cả khu vực</option>
+        {% for khu in danh_sach_khu %}
+          <option value="{{ khu }}" {% if khu == khu_loc %}selected{% endif %}>{{ khu }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="md:col-span-2 flex justify-center">
+      <button type="submit"
+              class="bg-green-500 hover:bg-green-600 text-white py-3 px-6 rounded-2xl font-semibold shadow transition duration-300">
+        Tìm kiếm
+      </button>
+    </div>
+  </form>
+
+  <!-- DANH SÁCH ĐỊA ĐIỂM -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    {% for dd in diadiem_list %}
+      {% include 'index/tourism/diadiem/diadiem_card_item.html' %}
+    {% endfor %}
+  </div>
+  <!-- PHÂN TRANG -->
+{% if diadiem_list.has_other_pages %}
+<div class="flex justify-center mt-12 gap-2">
+  {% with request.GET.q as q %}{% with request.GET.tinh as tinh %}{% with request.GET.khu as khu %}
+    <!-- Nút Đầu -->
+    {% if diadiem_list.has_previous %}
+      <a href="?{% if q %}q={{ q|urlencode }}&{% endif %}{% if tinh %}tinh={{ tinh|urlencode }}&{% endif %}{% if khu %}khu={{ khu|urlencode }}&{% endif %}page=1"
+         class="px-4 py-2 rounded-xl border bg-emerald-600 text-white hover:bg-emerald-700 transition-all duration-300 flex items-center gap-2">
+         Đầu
+      </a>
+      <!-- Nút Trước -->
+      <a href="?{% if q %}q={{ q|urlencode }}&{% endif %}{% if tinh %}tinh={{ tinh|urlencode }}&{% endif %}{% if khu %}khu={{ khu|urlencode }}&{% endif %}page={{ diadiem_list.previous_page_number }}"
+         class="px-4 py-2 rounded-xl border bg-emerald-600 text-white hover:bg-emerald-700 transition-all duration-300 flex items-center gap-2">
+         Trước
+      </a>
+    {% endif %}
+
+    <!-- Trang hiện tại -->
+    <span class="px-4 py-2 rounded-xl bg-emerald-50 text-emerald-700 font-semibold">
+      Trang {{ diadiem_list.number }}/{{ diadiem_list.paginator.num_pages }}
+    </span>
+
+    <!-- Nút Tiếp -->
+    {% if diadiem_list.has_next %}
+      <a href="?{% if q %}q={{ q|urlencode }}&{% endif %}{% if tinh %}tinh={{ tinh|urlencode }}&{% endif %}{% if khu %}khu={{ khu|urlencode }}&{% endif %}page={{ diadiem_list.next_page_number }}"
+         class="px-4 py-2 rounded-xl border bg-emerald-600 text-white hover:bg-emerald-700 transition-all duration-300 flex items-center gap-2">
+        Tiếp theo </i>
+      </a>
+      <!-- Nút Cuối -->
+      <a href="?{% if q %}q={{ q|urlencode }}&{% endif %}{% if tinh %}tinh={{ tinh|urlencode }}&{% endif %}{% if khu %}khu={{ khu|urlencode }}&{% endif %}page={{ diadiem_list.paginator.num_pages }}"
+         class="px-4 py-2 rounded-xl border bg-emerald-600 text-white hover:bg-emerald-700 transition-all duration-300 flex items-center gap-2">
+        Cuối </i>
+      </a>
+    {% endif %}
+  {% endwith %}{% endwith %}{% endwith %}
+</div>
+{% endif %}
+</section>
+{% endblock %}

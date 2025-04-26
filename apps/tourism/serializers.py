@@ -10,6 +10,7 @@ class DacSanSerializer(serializers.ModelSerializer):
     class Meta:
         model = DacSan
         fields = '__all__'
+   
 
 class TourDuLichSerializer(serializers.ModelSerializer):
     class Meta:

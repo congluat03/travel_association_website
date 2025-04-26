@@ -1,0 +1,52 @@
+<div class="bg-white border border-gray-200 rounded-3xl shadow-md overflow-hidden flex flex-row transition duration-300 hover:shadow-xl max-h-48">
+    <!-- Hình ảnh -->
+    <div class="w-80 h-48 overflow-hidden flex-shrink-0">
+        {% if tour.HINH_TOUR %}
+            <img src="{{ tour.HINH_TOUR.url|default_if_none:'#' }}" alt="{{ tour.TEN_TOUR }}"
+                 class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                 onerror="this.onerror=null; this.src='#'">
+        {% else %}
+            <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-500 text-sm">
+                Không có hình ảnh
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Nội dung -->
+    <div class="p-4 flex flex-col justify-between flex-1">
+        <!-- Tên tour -->
+        <h2 class="text-lg font-semibold text-gray-800 flex items-center gap-2 mb-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.5-2.5 6.74-5 9.88C9.5 15.74 7 11.5 7 9z"/>
+                <circle cx="12" cy="9" r="2.5"/>
+            </svg>
+            {{ tour.TEN_TOUR }}
+        </h2>
+
+        <!-- Mô tả -->
+        <p class="text-sm text-gray-900 mb-1">
+            {% if tour.MO_TA_TOUR %}
+                {{ tour.MO_TA_TOUR|truncatewords:20 }}
+            {% else %}
+                Tour hấp dẫn với trải nghiệm tuyệt vời.
+            {% endif %}
+        </p>
+
+        <!-- Giá & Thời gian -->
+        <div class="text-sm text-gray-700 mb-2 space-y-1">
+            <p><strong>💵 Giá:</strong> {{ tour.gia_trieu }} triệu VNĐ</p>
+            <p><strong>🕒 Thời gian:</strong> {{ tour.THOI_GIAN_DI_CHUYEN }}</p>
+        </div>
+
+        <!-- Hành động -->
+        <div class="flex justify-end"> 
+            <a href="/tourism/tourdiadiemdulich/{{ tour.MA_TOUR }}/"
+            class="inline-flex items-center gap-2 text-blue-700 hover:text-blue-900 font-semibold text-sm transition-all">
+             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+             </svg>
+             Tìm hiểu thêm
+         </a>
+        </div>
+    </div>
+</div>

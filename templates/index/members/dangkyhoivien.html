@@ -1,15 +1,128 @@
 {% extends "index/index_layout.html" %}
+{% load static %}
 
 {% block title %}Đăng ký Hội viên{% endblock %}
 
 {% block content %}
-<section class="py-16 px-6 bg-green-100">
-  <div class="max-w-xl mx-auto">
-    <h2 class="text-3xl font-bold mb-6 text-green-700 text-center">Đăng ký trở thành Hội viên</h2>
-    <form method="POST" enctype="multipart/form-data" class="space-y-4">
+<section class="py-16 px-4 sm:px-6 bg-green-50">
+  <div class="w-full max-w-7xl mx-auto bg-white shadow-xl rounded-xl p-8" style="width: 100%; min-height: 700px;">
+
+    <!-- Tiêu đề và mô tả -->
+    <h2 class="text-3xl font-bold text-center text-emerald-700 mb-4 flex items-center justify-center gap-2">
+      <i class="fas fa-user-plus text-emerald-600 text-4xl"></i> Đăng ký hội viên
+    </h2>
+    <p class="text-center text-lg text-gray-600 mb-10 max-w-3xl mx-auto">
+      Hãy cung cấp đầy đủ thông tin doanh nghiệp và tài khoản để đăng ký trở thành hội viên. Sau khi hoàn tất, bạn sẽ được tiếp cận nhiều quyền lợi hấp dẫn và sự đồng hành, hỗ trợ từ hiệp hội.
+    </p>
+
+    <!-- Form đăng ký -->
+    <form method="POST" action="/members/hoivien/dangky/them" enctype="multipart/form-data">
       {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Gửi đăng ký</button>
+
+      <!-- Bố cục form: chia 2 cột -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+        <!-- Bên trái: Thông tin doanh nghiệp -->
+        <div class="space-y-6">
+          <h3 class="text-xl font-semibold text-gray-700">Thông tin doanh nghiệp</h3>
+          <p class="text-sm text-gray-500">Vui lòng điền chính xác để hiệp hội có thể xác minh và hỗ trợ bạn hiệu quả.</p>
+
+          <!-- Tên doanh nghiệp -->
+          <div class="mb-4">
+            <label class="block text-gray-600 mb-1">Tên doanh nghiệp</label>
+            <input type="text" name="ten_dn" required class="w-full px-4 py-2 border rounded-lg focus:ring-emerald-400 focus:outline-none">
+          </div>
+
+          <!-- Ngành nghề -->
+          <div class="mb-4">
+            <label class="block text-gray-600 mb-1">Ngành nghề</label>
+            <select name="ma_nganh" required class="w-full px-4 py-2 border rounded-lg focus:ring-emerald-400 focus:outline-none">
+              {% for ng in cac_nganh %}
+                <option value="{{ ng }}" {% if request.GET.nganh == ng %}selected{% endif %}>
+                  {{ ng }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Số điện thoại -->
+          <div class="mb-4">
+            <label class="block text-gray-600 mb-1">Số điện thoại</label>
+            <input type="text" name="sdt_dn" class="w-full px-4 py-2 border rounded-lg focus:ring-emerald-400 focus:outline-none">
+          </div>
+
+          <!-- Email doanh nghiệp -->
+          <div class="mb-4">
+            <label class="block text-gray-600 mb-1">Email doanh nghiệp</label>
+            <input type="email" name="email_dn" class="w-full px-4 py-2 border rounded-lg focus:ring-emerald-400 focus:outline-none">
+          </div>
+
+          <!-- Người đại diện -->
+          <div class="mb-4">
+            <label class="block text-gray-600 mb-1">Người đại diện</label>
+            <input type="text" name="nguoi_dai_dien" class="w-full px-4 py-2 border rounded-lg focus:ring-emerald-400 focus:outline-none">
+          </div>
+
+          <!-- Địa chỉ -->
+          <div class="mb-4">
+            <label class="block text-gray-600 mb-1">Địa chỉ</label>
+            <textarea name="dia_chi" rows="3" class="w-full px-4 py-2 border rounded-lg focus:ring-emerald-400 focus:outline-none"></textarea>
+          </div>
+        </div>
+
+        <!-- Bên phải: Thông tin hiệp hội và tài khoản -->
+        <div class="space-y-6">
+          <h3 class="text-xl font-semibold text-gray-700">Thông tin hiệp hội</h3>
+          <p class="text-sm text-gray-500">Chọn hiệp hội bạn muốn đăng ký tham gia.</p>
+
+          <!-- Hiệp hội -->
+          <div class="mb-4">
+            <label class="block text-gray-600 mb-1">Hiệp hội</label>
+            <select name="ma_hiephoi" required class="w-full px-4 py-2 border rounded-lg focus:ring-emerald-400 focus:outline-none">
+              {% for hh in cac_hiephoi %}
+                <option value="{{ hh.MA_HH }}">{{ hh.TEN_HH }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <h3 class="text-xl font-semibold text-gray-700">Thông tin tài khoản</h3>
+          <p class="text-sm text-gray-500">Tài khoản dùng để quản lý hồ sơ doanh nghiệp trên hệ thống.</p>
+
+          <!-- Tên đăng nhập -->
+          <div class="mb-4">
+            <label class="block text-gray-600 mb-1">Tên đăng nhập</label>
+            <input type="text" name="ten_dang_nhap" required class="w-full px-4 py-2 border rounded-lg focus:ring-emerald-400 focus:outline-none">
+          </div>
+
+          <!-- Email tài khoản -->
+          <div class="mb-4">
+            <label class="block text-gray-600 mb-1">Email tài khoản</label>
+            <input type="email" name="email_tk" required class="w-full px-4 py-2 border rounded-lg focus:ring-emerald-400 focus:outline-none">
+          </div>
+
+          <!-- Mật khẩu -->
+          <div class="mb-4">
+            <label class="block text-gray-600 mb-1">Mật khẩu</label>
+            <input type="password" name="mat_khau" required class="w-full px-4 py-2 border rounded-lg focus:ring-emerald-400 focus:outline-none">
+          </div>
+
+          <!-- Ảnh đại diện -->
+          <div class="mb-4">
+            <label class="block text-gray-600 mb-1">Ảnh đại diện (tuỳ chọn)</label>
+            <input type="file" name="hinh_tk" accept="image/*" class="w-full px-4 py-2 border rounded-lg focus:ring-emerald-400 focus:outline-none">
+          </div>
+        </div>
+      </div>
+
+      <!-- Nút đăng ký và quay lại -->
+      <div class="flex justify-center gap-6 mt-10">
+        <button type="submit" class="bg-emerald-600 text-white px-10 py-3 rounded-lg font-semibold hover:bg-emerald-700 transition duration-300 focus:outline-none">
+          Đăng ký hội viên
+        </button>
+        <a href="/members/hoivien/" class="inline-block bg-teal-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-teal-700 transition duration-300 ease-in-out transform hover:scale-105">
+          Trở về danh sách
+        </a>
+      </div>
     </form>
   </div>
 </section>

@@ -31,6 +31,7 @@ def manage_members(request):
         'dangkyhoivien': dangkyhoivien,  # Truyền danh sách tài liệu vào context
         'doanhnghiep': doanhnghiep  # Truyền danh sách tài liệu vào context
     })
+
 # @login_required
 def manage_business(request):
     # Lấy danh sách tài khoản và liên kết doanh nghiệp
@@ -91,6 +92,7 @@ def get_image_list(folder_name):
         ]
     
     return image_list
+
 def manage_tourism(request):
     # Lấy danh sách địa điểm du lịch, doanh nghiệp, đặc sản, tours và schedules
     dia_diems = DiaDiemDuLich.objects.all()

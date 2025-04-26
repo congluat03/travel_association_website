@@ -4,83 +4,122 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}Green Travel{% endblock %}</title>
+    <title>
+      {% block title %}
+        Green Travel
+      {% endblock %}
+    </title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
   </head>
-
   <body class="bg-green-50 font-sans text-gray-800 antialiased">
     <!-- Header -->
     <header class="bg-green-600 text-white sticky top-0 z-50 shadow-lg">
-      <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
         <!-- Logo -->
-        <a href="#" class="flex items-center gap-2 transition-transform hover:scale-105">
-          <h1 class="text-2xl font-bold tracking-tight">🌿 Green Travel</h1>
-        </a>
-    
-        <!-- Navigation -->
-        <nav class="hidden md:flex gap-5 flex-grow justify-center">
-          <a href="/" class="text-white hover:text-green-100 py-2 transition-colors duration-200 font-medium">Trang chủ</a>
-          <a href="/gioithieu" class="text-white hover:text-green-100 py-2 transition-colors duration-200 font-medium">Giới thiệu</a>
-          <a href="/members/hoivien/" class="text-white hover:text-green-100 py-2 transition-colors duration-200 font-medium">Hội viên</a>
-          <a href="#" class="text-white hover:text-green-100 py-2 transition-colors duration-200 font-medium">Tin tức</a>
-          <a href="#" class="text-white hover:text-green-100 py-2 transition-colors duration-200 font-medium">Cẩm nang du lịch</a>
-          <a href="#" class="text-white hover:text-green-100 py-2 transition-colors duration-200 font-medium">Tài liệu</a>
+        <a href="/" class="flex items-center gap-2 transition-transform hover:scale-105"><h1 class="text-2xl font-bold tracking-tight">🌿 Green Travel</h1></a>
+
+        <!-- Hamburger (Mobile) -->
+        <div class="md:hidden">
+          <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')"><i class="fas fa-bars text-xl"></i></button>
+        </div>
+
+        <!-- Navigation (Desktop) -->
+        <nav class="hidden md:flex flex-1 justify-center gap-6 flex-wrap">
+          <a href="/" class="menu-item font-medium w-full sm:w-auto">Trang chủ</a>
+          <a href="/gioithieu" class="menu-item font-medium w-full sm:w-auto">Giới thiệu</a>
+
+          <!-- Dropdown Menu -->
+          <div class="relative w-full sm:w-auto">
+            <button onclick="toggleDropdown()" class="dropdown-button flex items-center gap-2 menu-item font-medium transition-colors hover:text-green-400 focus:outline-none">
+              Cẩm nang du lịch
+              <i class="fas fa-chevron-down text-sm transition-transform duration-300"></i>
+            </button>
+            <div id="dropdown-menu" class="dropdown-menu absolute left-0 mt-2 hidden flex-col bg-white text-green-800 shadow-xl rounded-lg w-64 z-50 overflow-hidden">
+              <a href="/tourism/diadiem/" class="flex items-center gap-2 px-4 py-3 hover:bg-green-50 transition-colors"><i class="fas fa-map-marker-alt text-green-600"></i> Địa điểm du lịch</a>
+              <a href="/tourism/diadiemdacsan/" class="flex items-center gap-2 px-4 py-3 hover:bg-green-50 transition-colors"><i class="fas fa-utensils text-green-600"></i> Đặc sản</a>
+              <a href="/tourism/tourdiadiemdulich/" class="flex items-center gap-2 px-4 py-3 hover:bg-green-50 transition-colors"><i class="fas fa-globe text-green-600"></i> Tour du lịch</a>
+            </div>
+          </div>
+          <a href="#" class="menu-item font-medium w-full sm:w-auto">Tin tức</a>
+          <a href="/members/hoivien/" class="menu-item font-medium w-full sm:w-auto">Hội viên</a>
+          <a href="/support/tailieu-index/" class="menu-item font-medium w-full sm:w-auto">Tài liệu</a>
         </nav>
-    
+
         <!-- Auth -->
-        <div class="flex items-center gap-3">
+        <div class="hidden md:flex items-center gap-3 w-full sm:w-auto">
           {% if user.is_authenticated %}
             <span class="text-green-100 text-sm font-medium">Xin chào, {{ user.username }}</span>
-            <a href="{% url 'custom_logout' %}" class="bg-white text-green-600 px-4 py-1.5 rounded-full font-medium hover:bg-green-100 transition-colors duration-200">Đăng xuất</a>
+            <a href="{% url 'custom_logout' %}" class="bg-white text-green-600 px-4 py-1.5 rounded-full font-medium hover:bg-green-100 transition">Đăng xuất</a>
           {% else %}
-            <a href="{% url 'custom_login' %}" class="bg-white text-green-600 px-4 py-1.5 rounded-full font-medium hover:bg-green-100 transition-colors duration-200">Đăng nhập</a>
+            <a href="{% url 'custom_login' %}" class="bg-white text-green-600 px-4 py-1.5 rounded-full font-medium hover:bg-green-100 transition">Đăng nhập</a>
           {% endif %}
         </div>
       </div>
+
+      <!-- Mobile Menu -->
+      <div id="mobile-menu" class="md:hidden hidden bg-green-700 px-4 pb-4 space-y-2">
+        <a href="/" class="block text-white py-2">Trang chủ</a>
+        <a href="/gioithieu" class="block text-white py-2">Giới thiệu</a>
+        <a href="/tourism/diadiem/" class="block text-white py-2">Địa điểm</a>
+        <a href="/tourism/diadiemdacsan/" class="block text-white py-2">Đặc sản</a>
+        <a href="/tourism/tourdiadiemdulich/" class="block text-white py-2">Tour</a>
+        <a href="/members/hoivien/" class="block text-white py-2">Hội viên</a>
+        <a href="#" class="block text-white py-2">Tin tức</a>
+        <a href="/support/tailieu-index/" class="block text-white py-2">Tài liệu</a>
+        {% if user.is_authenticated %}
+          <a href="{% url 'custom_logout' %}" class="block text-white py-2">Đăng xuất</a>
+        {% else %}
+          <a href="{% url 'custom_login' %}" class="block text-white py-2">Đăng nhập</a>
+        {% endif %}
+      </div>
     </header>
-    
 
     <!-- Main Content -->
     <main class="min-h-screen">
       {% block content %}
+
       {% endblock %}
     </main>
 
     <!-- Footer -->
     <footer class="bg-green-800 text-white py-8">
       <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- About -->
         <div class="space-y-3">
           <h3 class="text-lg font-semibold">Về Green Travel</h3>
-          <p class="text-green-100 text-sm leading-relaxed">
-            Chúng tôi cam kết phát triển du lịch bền vững, giúp du khách khám phá thế giới mà vẫn bảo tồn thiên nhiên cho thế hệ tương lai.
-          </p>
+          <p class="text-green-100 text-sm leading-relaxed">Chúng tôi cam kết phát triển du lịch bền vững, giúp du khách khám phá thế giới mà vẫn bảo tồn thiên nhiên cho thế hệ tương lai.</p>
         </div>
-
-        <!-- Quick Links -->
         <div class="space-y-3">
           <h3 class="text-lg font-semibold">Liên kết nhanh</h3>
           <ul class="space-y-2 text-green-100 text-sm">
-            <li><a href="#" class="hover:text-white transition-colors duration-200">Trang chủ</a></li>
-            <li><a href="#" class="hover:text-white transition-colors duration-200">Điểm đến</a></li>
-            <li><a href="#" class="hover:text-white transition-colors duration-200">Chuyến đi</a></li>
-            <li><a href="#" class="hover:text-white transition-colors duration-200">Liên hệ</a></li>
+            <li>
+              <a href="#" class="hover:text-white">Trang chủ</a>
+            </li>
+            <li>
+              <a href="#" class="hover:text-white">Điểm đến</a>
+            </li>
+            <li>
+              <a href="#" class="hover:text-white">Chuyến đi</a>
+            </li>
+            <li>
+              <a href="#" class="hover:text-white">Liên hệ</a>
+            </li>
           </ul>
         </div>
-
-        <!-- Contact -->
         <div class="space-y-3">
           <h3 class="text-lg font-semibold">Liên hệ</h3>
           <p class="text-green-100 text-sm">Email: info@greentravel.com</p>
           <p class="text-green-100 text-sm">SĐT: +1 (555) 123-4567</p>
           <div class="flex space-x-4 mt-2">
-            <a href="#" class="text-green-100 hover:text-white transition-colors duration-200"><i class="fab fa-facebook-f text-lg"></i></a>
-            <a href="#" class="text-green-100 hover:text-white transition-colors duration-200"><i class="fab fa-twitter text-lg"></i></a>
-            <a href="#" class="text-green-100 hover:text-white transition-colors duration-200"><i class="fab fa-instagram text-lg"></i></a>
+            <a href="#" class="text-green-100 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="text-green-100 hover:text-white"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-green-100 hover:text-white"><i class="fab fa-instagram"></i></a>
           </div>
         </div>
       </div>
     </footer>
+
+    <script src="{% static 'js/index/main.js' %}"></script>
   </body>
 </html>

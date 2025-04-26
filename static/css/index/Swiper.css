@@ -1,0 +1,66 @@
+/* Swiper CSS tối giản */
+.swiper-container {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+.swiper-wrapper {
+    display: flex;
+    transition: transform 0.3s ease;
+}
+.swiper-slide {
+    flex-shrink: 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.swiper-pagination {
+    position: absolute;
+    bottom: 10px;
+    text-align: center;
+    width: 100%;
+}
+.swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+    border-radius: 50%;
+    background: #000;
+    opacity: 0.2;
+    margin: 0 5px;
+    cursor: pointer;
+}
+.swiper-pagination-bullet-active {
+    opacity: 1;
+    background: #007aff;
+}
+.swiper-button-prev,
+.swiper-button-next {
+    position: absolute;
+    top: 50%;
+    width: 27px;
+    height: 44px;
+    margin-top: -22px;
+    z-index: 10;
+    cursor: pointer;
+    background-size: 27px 44px;
+    color: #000;
+}
+.swiper-button-prev {
+    left: 10px;
+}
+.swiper-button-next {
+    right: 10px;
+}
+/* Tùy chỉnh thêm style cho nút prev/next */
+.swiper-button-prev::after,
+.swiper-button-next::after {
+    font-size: 24px;
+    font-weight: bold;
+}
+.swiper-button-prev::after {
+    content: "❮";
+}
+.swiper-button-next::after {
+    content: "❯";
+}
