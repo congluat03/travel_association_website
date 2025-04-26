@@ -97,25 +97,30 @@ def them_sua_doanhnghiep(request, ma_dn=None):
         sdt = request.POST.get('SDT_DN')
         dia_chi = request.POST.get('DIA_CHI')
         ma_nganh = request.POST.get('MA_NGANH')
-        trang_thai_duyet = request.POST.get('TRANG_THAI_DUYET')  # Lấy trạng thái duyệt từ form
-        # Tạo chuỗi dữ liệu để sinh mã QR (có thể là tên, email, số điện thoại...)
+        trang_thai_duyet = request.POST.get('TRANG_THAI_DUYET')
         qr_data = f"{ten_doanhnghiep} - {email} - {sdt}"
 
         if doanhnghiep:
-            # Sửa doanh nghiệp
+            # Nếu có mã QR cũ thì xóa file cũ trước
+            if doanhnghiep.MA_QR:
+                qr_path = doanhnghiep.MA_QR.path
+                if os.path.isfile(qr_path):
+                    os.remove(qr_path)
+
+            # Cập nhật thông tin doanh nghiệp
             doanhnghiep.TEN_DN = ten_doanhnghiep
             doanhnghiep.NGUOI_DAI_DIEN = nguoi_dai_dien
             doanhnghiep.EMAIL_DN = email
             doanhnghiep.SDT_DN = sdt
             doanhnghiep.DIA_CHI = dia_chi
             doanhnghiep.MA_NGANH = NganhNghe.objects.get(MA_NGANH=ma_nganh)
-            doanhnghiep.TRANG_THAI_DUYET = trang_thai_duyet  # Cập nhật trạng thái duyệt
-
-            # Tạo mã QR mới khi sửa
-            qr_code_image = generate_qr_code(qr_data)
-            doanhnghiep.MA_QR.save(f"{ten_doanhnghiep}_qr.png", qr_code_image, save=True)
-
+            doanhnghiep.TRANG_THAI_DUYET = trang_thai_duyet
             doanhnghiep.save()
+
+            # Tạo mã QR mới (dùng MA_DN làm tên file)
+            qr_code_image = generate_qr_code(qr_data)
+            doanhnghiep.MA_QR.save(f"{doanhnghiep.MA_DN}_qr.png", qr_code_image, save=True)
+
         else:
             # Thêm mới doanh nghiệp
             doanhnghiep = DoanhNghiep.objects.create(
@@ -125,30 +130,38 @@ def them_sua_doanhnghiep(request, ma_dn=None):
                 SDT_DN=sdt,
                 DIA_CHI=dia_chi,
                 MA_NGANH=NganhNghe.objects.get(MA_NGANH=ma_nganh),
-                TRANG_THAI_DUYET=trang_thai_duyet  # Cập nhật trạng thái duyệt khi thêm mới
+                TRANG_THAI_DUYET=trang_thai_duyet
             )
 
-            # Tạo mã QR mới khi thêm
+            # Sau khi tạo mới xong, dùng MA_DN để đặt tên file QR
             qr_code_image = generate_qr_code(qr_data)
-            doanhnghiep.MA_QR.save(f"{ten_doanhnghiep}_qr.png", qr_code_image, save=True)
-
-        # Sau khi thêm hoặc sửa, chuyển đến trang quản lý doanh nghiệp
-        return redirect('admin_core:manage_business')
-
+            doanhnghiep.MA_QR.save(f"{doanhnghiep.MA_DN}_qr.png", qr_code_image, save=True)
 
     return redirect('admin_core:manage_business')
 
 def xoa_doanhnghiep(request, ma_dn):
     try:
         doanhnghiep = DoanhNghiep.objects.get(MA_DN=ma_dn)
+
+        # Xóa file QR code nếu tồn tại
+        if doanhnghiep.MA_QR:
+            qr_path = doanhnghiep.MA_QR.path
+            if qr_path and os.path.exists(qr_path):
+                try:
+                    os.remove(qr_path)
+                except Exception as e:
+                    print(f"Không thể xóa file QR: {e}")
+
+        # Xóa doanh nghiệp trong DB
         doanhnghiep.delete()
-        return redirect('admin_core:manage_business')  # hoặc redirect nếu muốn
+
+        return redirect('admin_core:manage_business')
     except DoanhNghiep.DoesNotExist:
-        raise Http404("Doanh nghiệp không tồn tại.")     
+        raise Http404("Doanh nghiệp không tồn tại.")
+
 def profile_doanhnghiep(request, ma_dn):
     dn = get_object_or_404(DoanhNghiep, pk=ma_dn)
     return render(request, 'admin/members/doanhnghiep/profile_doanhnghiep.html', {'dn': dn})
-
 
 # Thành Viên
 def xoa_tai_khoan(request, ma_tk):

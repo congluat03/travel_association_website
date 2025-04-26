@@ -19,8 +19,8 @@
       <div class="border-t border-gray-200 px-8 py-6">
         <dl class="space-y-5 text-left text-gray-700">
           <div class="flex justify-between">
-            <dt class="font-semibold text-lg text-teal-600">Mã ngành</dt>
-            <dd class="text-gray-500">{{ dn.MA_NGANH }}</dd>
+            <dt class="font-semibold text-lg text-teal-600">Ngành nghề</dt>
+            <dd class="text-gray-500">{{ dn.nganh_nghe.TEN_NGANH }}</dd>
           </div>
           <div class="flex justify-between">
             <dt class="font-semibold text-lg text-teal-600">Địa chỉ</dt>
@@ -40,8 +40,15 @@
           </div>
           <div class="flex flex-col">
             <dt class="font-semibold text-lg text-teal-600">Mã QR</dt>
-            <dd><code class="mt-1 whitespace-pre-wrap text-sm text-gray-600">{{ dn.MA_QR }}</code></dd>
+            <dd class="mt-2">
+              {% if dn.MA_QR %}
+                <img src="{{ dn.MA_QR.url }}" alt="QR Code" class="w-32 h-32 mx-auto">
+              {% else %}
+                <span class="text-gray-400 italic">Chưa có mã QR</span>
+              {% endif %}
+            </dd>
           </div>
+          
         </dl>
       </div>
 
