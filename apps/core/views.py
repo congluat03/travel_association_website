@@ -7,6 +7,7 @@ from apps.members.models import TaiKhoan,DoanhNghiep,NganhNghe,HiepHoi,DangKyHoi
 from apps.tourism.models import DiaDiemDuLich
 from apps.news.models import TinTuc
 from apps.support.models import TaiLieu
+from django.contrib import messages
 # Create your views here.
 def home(request):
     return render(request, 'index/index_layout.html', {'title': 'Trang chủ'})
@@ -95,3 +96,22 @@ def gioithieu(request):
     
     # Render trang giới thiệu
     return render(request, 'index/gioithieu/gioithieu.html', context)
+
+def lienhe(request):
+    if request.method == 'POST':
+        ho_ten = request.POST.get('ho_ten', '').strip()
+        email = request.POST.get('email', '').strip()
+        so_dien_thoai = request.POST.get('so_dien_thoai', '').strip()
+        noi_dung = request.POST.get('noi_dung', '').strip()
+        
+        # TODO: Xử lý dữ liệu ở đây (ví dụ: lưu database hoặc gửi email)
+        # print(ho_ten, email, so_dien_thoai, noi_dung)
+
+        if ho_ten and email and noi_dung:
+            messages.success(request, 'Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi trong thời gian sớm nhất.')
+        else:
+            messages.error(request, 'Vui lòng điền đầy đủ thông tin trước khi gửi liên hệ.')
+
+        return redirect('core:lienhe')  # <-- sửa đúng đây nè
+
+    return render(request, 'index/lienhe/lienhe.html')

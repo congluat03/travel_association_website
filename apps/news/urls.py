@@ -1,6 +1,6 @@
 from django.urls import path
 from . import admin_views  # ✅ import đúng file
-
+from . import views
 
 app_name = 'news'
 
@@ -23,5 +23,8 @@ urlpatterns = [
     path('thetag/<int:pk>/', admin_views.thetag_detail),
 
     path('trackingxemtin/', admin_views.trackingxemtin_list, name='trackingxemtin-list'),
-    path('trackingxemtin/<int:pk>/', admin_views.trackingxemtin_detail, name='trackingxemtin-detail'),
+    path('trackingxemtin/<int:pk>/', admin_views.trackingxemtin_detail, name='trackingxemtin-detail'), 
+    # phần index
+    path('tintucsukien/', views.danhsachtintuc, name='danhsachtintucsukien'),
+    path('tintucsukien/<int:ma_tin>/', views.chitiettintuc, name='chitiettintucsukien')
 ]

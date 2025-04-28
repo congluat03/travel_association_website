@@ -1,0 +1,109 @@
+{% extends "index/index_layout.html" %}
+{% load static %}
+
+{% block title %}Tin Tức Việt Nam{% endblock %}
+
+{% block content %}
+<section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <h1 class="text-4xl font-extrabold text-center text-emerald-600 drop-shadow-lg mb-12 tracking-wide">
+    📰 Cập Nhật Tin Tức Việt Nam Mỗi Ngày
+  </h1>
+
+  <!-- FORM TÌM KIẾM -->
+  <form method="get" class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-12 items-end">
+    <div class="md:col-span-4">
+      <label class="block text-sm font-semibold text-gray-700 mb-1">Từ khóa</label>
+      <input type="text" name="q" placeholder="🔍 Nhập từ khóa tìm kiếm..." value="{{ query }}"
+             class="p-3 rounded-xl shadow-md border border-gray-200 w-full focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all">
+    </div>
+
+    <div class="md:col-span-2">
+      <label class="block text-sm font-semibold text-gray-700 mb-1">Chủ đề</label>
+      <select name="tag" class="p-3 rounded-xl shadow-md border border-gray-200 w-full focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all">
+        <option value="">📌 Lọc theo tag</option>
+        {% for tag in tags %}
+          <option value="{{ tag.MA_TAG }}" {% if tag.MA_TAG == selected_tag %}selected{% endif %}>
+            {{ tag.TEN_TAG }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="md:col-span-2">
+      <label class="block text-sm font-semibold text-gray-700 mb-1">Nổi bật</label>
+      <select name="only_highlight" class="p-3 rounded-xl shadow-md border border-gray-200 w-full focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all">
+        <option value="">Tất cả</option>
+        <option value="1" {% if only_highlight == '1' %}selected{% endif %}>🔥 Chỉ tin nổi bật</option>
+        <option value="0" {% if only_highlight == '0' %}selected{% endif %}>📄 Tin bình thường</option>
+      </select>
+    </div>
+
+    <!-- Lọc theo Loại Tin Tức -->
+    <div class="md:col-span-2">
+      <label for="loai_tin_tuc" class="block text-sm font-semibold text-gray-700 mb-1">Loại Tin Tức</label>
+      <select name="loai_tin_tuc" id="loai_tin_tuc" class="p-3 rounded-xl shadow-md border border-gray-200 w-full focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all">
+        <option value="">-- Chọn Loại Tin Tức --</option>
+        {% for loai in loai_tin_tuc_list %}
+          <option value="{{ loai.LOAI_TIN_TUC }}" {% if loai.LOAI_TIN_TUC == loai_tin_tuc %}selected{% endif %}>
+            {{ loai.LOAI_TIN_TUC }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="md:col-span-2 flex justify-center mt-4 md:mt-0">
+      <button type="submit"
+              class="bg-emerald-500 hover:bg-emerald-600 text-white py-3 px-6 rounded-xl font-semibold shadow-lg transition-all duration-300">
+        🔍 Tìm kiếm
+      </button>
+    </div>
+  </form>
+
+  <!-- DANH SÁCH TIN TỨC -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+    {% for tin in page_obj|slice:":10" %}
+      <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition-all">
+        {% include 'index/news/tintuc_card_item.html' %}
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- PHÂN TRANG -->
+  {% if page_obj.has_other_pages %}
+  <div class="flex justify-center mt-12 gap-2">
+    {% with request.GET.q as q %}{% with request.GET.tag as tag %}{% with request.GET.only_highlight as only_highlight %}
+      <!-- Nút Đầu -->
+      {% if page_obj.has_previous %}
+        <a href="?{% if q %}q={{ q|urlencode }}&{% endif %}{% if tag %}tag={{ tag|urlencode }}&{% endif %}{% if only_highlight %}only_highlight={{ only_highlight|urlencode }}&{% endif %}page=1"
+           class="px-4 py-2 rounded-xl border bg-emerald-600 text-white hover:bg-emerald-700 transition-all duration-300 flex items-center gap-2">
+           Đầu
+        </a>
+        <!-- Nút Trước -->
+        <a href="?{% if q %}q={{ q|urlencode }}&{% endif %}{% if tag %}tag={{ tag|urlencode }}&{% endif %}{% if only_highlight %}only_highlight={{ only_highlight|urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}"
+           class="px-4 py-2 rounded-xl border bg-emerald-600 text-white hover:bg-emerald-700 transition-all duration-300 flex items-center gap-2">
+           Trước
+        </a>
+      {% endif %}
+
+      <!-- Trang hiện tại -->
+      <span class="px-4 py-2 rounded-xl bg-emerald-50 text-emerald-700 font-semibold">
+        Trang {{ page_obj.number }}/{{ page_obj.paginator.num_pages }}
+      </span>
+
+      <!-- Nút Tiếp -->
+      {% if page_obj.has_next %}
+        <a href="?{% if q %}q={{ q|urlencode }}&{% endif %}{% if tag %}tag={{ tag|urlencode }}&{% endif %}{% if only_highlight %}only_highlight={{ only_highlight|urlencode }}&{% endif %}page={{ page_obj.next_page_number }}"
+           class="px-4 py-2 rounded-xl border bg-emerald-600 text-white hover:bg-emerald-700 transition-all duration-300 flex items-center gap-2">
+          Tiếp theo
+        </a>
+        <!-- Nút Cuối -->
+        <a href="?{% if q %}q={{ q|urlencode }}&{% endif %}{% if tag %}tag={{ tag|urlencode }}&{% endif %}{% if only_highlight %}only_highlight={{ only_highlight|urlencode }}&{% endif %}page={{ page_obj.paginator.num_pages }}"
+           class="px-4 py-2 rounded-xl border bg-emerald-600 text-white hover:bg-emerald-700 transition-all duration-300 flex items-center gap-2">
+          Cuối
+        </a>
+      {% endif %}
+    {% endwith %}{% endwith %}{% endwith %}
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

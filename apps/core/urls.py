@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views, admin_views
-
+from django.contrib import messages
 app_name = 'core'
 urlpatterns = [
     path('', views.trang_chu, name='home'),
@@ -13,5 +13,5 @@ urlpatterns = [
     path('support/', admin_views.manage_support, name='manage_support'),
     # Phần danh cho index 
     path('gioithieu/', views.gioithieu, name='gioithieu'),
-    
+    path('lienhe/', views.lienhe, name='lienhe'),
 ]
