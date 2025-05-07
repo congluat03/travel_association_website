@@ -11,7 +11,8 @@ from django.contrib.auth.hashers import make_password
 from django.core.files.storage import default_storage
 import os
 import datetime
-
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
 # Doanh Nghiệp
 def them_sua_hiephoi(request, ma_hh=None):
@@ -319,4 +320,16 @@ def xoa_dangkyhiephoi(request, ma_dk_hh):
         return redirect('admin_core:manage_members')  # hoặc redirect nếu muốn
     except DangKyHoiVien.DoesNotExist:
         raise Http404(" hiệp hội đăng kí không tồn tại.")  
-    
+
+
+@csrf_exempt
+def toggle_trang_thai_tai_khoan(request, ma_tk):
+    if request.method == 'POST':
+        try:
+            tk = TaiKhoan.objects.get(pk=ma_tk)
+            tk.TRANG_THAI_TK = not tk.TRANG_THAI_TK
+            tk.save()
+            return JsonResponse({'success': True, 'new_status': tk.TRANG_THAI_TK})
+        except TaiKhoan.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Tài khoản không tồn tại'}, status=404)
+    return JsonResponse({'success': False, 'error': 'Phương thức không hợp lệ'}, status=400)

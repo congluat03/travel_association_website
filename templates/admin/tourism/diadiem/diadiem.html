@@ -9,13 +9,12 @@
   </div>
 
   <!-- Bảng danh sách địa điểm -->
-  <div class="overflow-x-auto rounded-lg shadow border border-gray-200 h-[65vh] overflow-y-auto" >
+  <div class="overflow-x-auto rounded-lg shadow border border-gray-200 h-[65vh] overflow-y-auto">
     <table class="min-w-full text-sm text-gray-800">
       <thead class="bg-green-100 text-gray-700 text-left sticky top-0 z-10">
         <tr>
           <th class="px-2 py-3 border w-12 text-center">#</th>
-          <th class="px-4 py-3 border w-48">Tên địa điểm</th>
-          <th class="px-4 py-3 border w-48">Doanh nghiệp</th>
+          <th class="px-4 py-3 border w-72">Địa điểm và Doanh nghiệp</th>
           <th class="px-4 py-3 border w-[22rem]">Mô tả</th>
           <th class="px-4 py-3 border w-[20rem]">Địa chỉ</th>
           <th class="px-4 py-3 border w-36">Hình ảnh</th>
@@ -28,16 +27,19 @@
         {% for dia_diem in dia_diems %}
         <tr class="hover:bg-gray-50">
           <td class="px-4 py-3 border text-center">{{ dia_diem.MA_DD }}</td>
-          <td class="px-4 py-3 border">{{ dia_diem.TEN_DIA_DIEM }}</td>
-          <td class="px-4 py-3 border">{{ dia_diem.MA_DN.TEN_DN }}</td>
+          <td class="px-4 py-3 border">
+            <div class="flex flex-col">
+              <span class="font-semibold">{{ dia_diem.TEN_DIA_DIEM }}</span>
+              <span class="text-gray-600 text-sm">{{ dia_diem.MA_DN.TEN_DN }}</span>
+            </div>
+          </td>
           <td class="px-4 py-3 border">{{ dia_diem.MO_TA_DD }}</td>
           <td class="px-4 py-3 border">{{ dia_diem.get_full_address }}</td>
           <td class="px-4 py-3 border">
             {% if dia_diem.image_list %}
               <div id="carousel-dd-{{ dia_diem.MA_DD }}" class="relative">
-                <!-- Carousel -->
                 <div class="carousel-container">
-                  <div class="carousel-images" style="display: none;"> <!-- Ẩn ảnh nhưng vẫn giữ trong DOM -->
+                  <div class="carousel-images" style="display: none;">
                     {% for img in dia_diem.image_list %}
                       <img
                         src="{{ img }}"
@@ -48,7 +50,6 @@
                     {% endfor %}
                   </div>
                 </div>
-                <!-- Nút xem ảnh lớn và số lượng ảnh -->
                 <div class="flex items-center justify-between mt-2">
                   <button
                     class="text-blue-600 text-xs hover:underline"
@@ -110,7 +111,7 @@
         </tr>
         {% empty %}
         <tr>
-          <td colspan="8" class="text-center py-3">Không có dữ liệu</td>
+          <td colspan="7" class="text-center py-3">Không có dữ liệu</td>
         </tr>
         {% endfor %}
       </tbody>

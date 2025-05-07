@@ -1,148 +1,113 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quản trị - Green Travel</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        font-family: "Inter", sans-serif;
-      }
-    </style>
-  </head>
-  <body class="bg-gray-100 flex min-h-screen">
-    <!-- Sidebar -->
-    <aside class="w-64 bg-gradient-to-b from-green-600 to-green-500 text-white flex flex-col shadow-xl rounded-r-lg">
-      <!-- Logo -->
-      <div class="px-6 py-5 border-b border-green-400 flex items-center space-x-2">
-        <span class="text-2xl">🌿</span>
-        <h1 class="text-xl font-bold tracking-wide">Green Travel</h1>
-      </div>
-    
-      <!-- Navigation -->
-      <nav class="flex-grow px-4 py-6 space-y-2 text-[15px]">
-        <a href="{% url 'admin_dashboard' %}"
-           class="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200 ease-in-out 
-                  {% if request.path == '/admin/' %}bg-white/20 shadow-inner font-semibold{% else %}hover:bg-green-700{% endif %}">
-          📊 <span>Trang chủ</span>
-        </a>
-    
-        <a href="{% url 'admin_core:manage_members' %}"
-           class="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200 
-                  {% if request.path == '/admin/thanh-vien/' %}bg-white/20 shadow-inner font-semibold{% else %}hover:bg-green-700{% endif %}">
-          👥 <span>Thành viên</span>
-        </a>
-    
-        <a href="{% url 'admin_core:manage_business' %}"
-           class="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200 
-                  {% if request.path == '/admin/doanh-nghiep/' %}bg-white/20 shadow-inner font-semibold{% else %}hover:bg-green-700{% endif %}">
-          🏢 <span>Doanh nghiệp</span>
-        </a>
-    
-        <a href="{% url 'admin_core:manage_tourism' %}"
-           class="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200 
-                  {% if request.path == '/admin/dia-diem/' %}bg-white/20 shadow-inner font-semibold{% else %}hover:bg-green-700{% endif %}">
-          🌍 <span>Địa điểm du lịch</span>
-        </a>
-    
-        <a href="{% url 'admin_core:manage_news' %}"
-           class="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200 
-                  {% if request.path == '/admin/tin-tuc/' %}bg-white/20 shadow-inner font-semibold{% else %}hover:bg-green-700{% endif %}">
-          📰 <span>Tin tức</span>
-        </a>
-    
-        <a href="{% url 'admin_core:manage_support' %}"
-           class="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200 
-                  {% if request.path == '/admin/tai-lieu/' %}bg-white/20 shadow-inner font-semibold{% else %}hover:bg-green-700{% endif %}">
-          📚 <span>Tài liệu</span>
-        </a>
-      </nav>
-    </aside>
-    
-    
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quản trị - Green Travel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    body {
+      font-family: "Inter", sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-gradient-to-b from-green-600 to-green-500 text-white flex flex-col shadow-xl rounded-r-lg">
+    <!-- Logo -->
+    <div class="px-6 py-5 border-b border-green-400 flex items-center space-x-2">
+      <span class="text-2xl">🌿</span>
+      <h1 class="text-xl font-bold tracking-wide">Green Travel</h1>
+    </div>
 
-    <!-- Main content -->
-    <div class="flex-1 flex flex-col bg-gray-100">
-      <!-- Header -->
-      <header
-        class="bg-green-500 text-white p-4 flex justify-end items-center shadow-md relative"
-      >
-        <div class="flex items-center gap-6">
-          <!-- Notification Icon -->
-          <button class="relative text-white hover:text-gray-200">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 
-                       6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 
-                       6 8.388 6 11v3.159c0 .538-.214 1.055-.595 
-                       1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-              />
-            </svg>
-            <span
-              class="absolute -top-1 -right-1 text-xs bg-red-500 text-white rounded-full px-1"
-              >3</span
-            >
+    <!-- Navigation -->
+    <nav class="flex-grow px-4 py-6 space-y-2 text-[15px]">
+      <a href="{% url 'admin_dashboard' %}"
+         class="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200 ease-in-out 
+                {% if request.path == '/admin/' %}bg-white/20 shadow-inner font-semibold{% else %}hover:bg-green-700{% endif %}">
+        📊 <span>Trang chủ</span>
+      </a>
+
+      <a href="{% url 'admin_core:manage_members' %}"
+         class="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200 
+                {% if request.path == '/admin/thanh-vien/' %}bg-white/20 shadow-inner font-semibold{% else %}hover:bg-green-700{% endif %}">
+        👥 <span>Tài Khoản</span>
+      </a>
+
+      {% if user.VAI_TRO == 'admin' %}  <!-- Hiển thị menu doanh nghiệp chỉ khi là admin -->
+      <a href="{% url 'admin_core:manage_business' %}"
+         class="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200 
+                {% if request.path == '/admin/doanh-nghiep/' %}bg-white/20 shadow-inner font-semibold{% else %}hover:bg-green-700{% endif %}">
+        🏢 <span>Doanh nghiệp</span>
+      </a>
+      {% endif %}
+
+      <a href="{% url 'admin_core:manage_tourism' %}"
+         class="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200 
+                {% if request.path == '/admin/dia-diem/' %}bg-white/20 shadow-inner font-semibold{% else %}hover:bg-green-700{% endif %}">
+        🌍 <span>Địa điểm du lịch</span>
+      </a>
+
+      <a href="{% url 'admin_core:manage_news' %}"
+         class="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200 
+                {% if request.path == '/admin/tin-tuc/' %}bg-white/20 shadow-inner font-semibold{% else %}hover:bg-green-700{% endif %}">
+        📰 <span>Tin tức</span>
+      </a>
+
+      <a href="{% url 'admin_core:manage_support' %}"
+         class="flex items-center gap-2 px-4 py-2 rounded-lg transition duration-200 
+                {% if request.path == '/admin/tai-lieu/' %}bg-white/20 shadow-inner font-semibold{% else %}hover:bg-green-700{% endif %}">
+        📚 <span>Tài liệu</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <div class="flex-1 flex flex-col bg-gray-100">
+    <header class="bg-green-500 text-white p-4 flex justify-end items-center shadow-md relative">
+      <div class="flex items-center gap-6">
+        <button class="relative text-white hover:text-gray-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+          <span class="absolute -top-1 -right-1 text-xs bg-red-500 text-white rounded-full px-1">3</span>
+        </button>
+
+        <div class="relative w-full sm:w-auto">
+          <button onclick="toggleUserDropdown()" class="dropdown-button flex items-center gap-2 font-medium focus:outline-none">
+            <div class="w-8 h-8 aspect-[3/4] rounded-xl overflow-hidden border border-gray-300 shadow-md relative">
+              <img src="{% if user.HINH_TK %}{{ user.HINH_TK.url }}{% else %}{% static 'images/user-avatar.png' %}{% endif %}" alt="avatar" class="w-full h-full object-cover" />
+            </div>
+            <span class="hidden md:inline">Admin</span>
+            <i class="fas fa-chevron-down text-sm transition-transform duration-300"></i>
           </button>
 
-          <!-- Avatar & Dropdown -->
-          <div class="relative group">
-            <div class="flex items-center gap-2 cursor-pointer">
-              <img
-                src="{% static 'images/user-avatar.png' %}"
-                alt="avatar"
-                class="w-8 h-8 rounded-full object-cover border-2 border-white shadow"
-              />
-              <span class="hidden md:inline font-medium">Admin</span>
-            </div>
-            <!-- Dropdown Menu -->
-            <div
-              class="absolute right-0 mt-2 w-40 bg-white text-gray-800 rounded shadow-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition duration-200 z-50"
-            >
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100"
-                >Hồ sơ cá nhân</a
-              >
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100"
-                >Đổi mật khẩu</a
-              >
-              <a href="{% url 'custom_logout' %}" class="block px-4 py-2 hover:bg-gray-100 border-t"
-                >Đăng xuất</a
-              >
-            </div>
+          <div id="user-dropdown-menu" class="dropdown-menu absolute right-0 mt-2 hidden flex-col bg-white text-gray-800 shadow-xl rounded-lg w-40 z-50 overflow-hidden">
+            <a href="{% url 'profile' %}" class="block px-4 py-2 hover:bg-gray-100">Hồ sơ cá nhân</a>
+            <a href="#" class="block px-4 py-2 hover:bg-gray-100">Đổi mật khẩu</a>
+            <a href="{% url 'custom_logout' %}" class="block px-4 py-2 hover:bg-gray-100 border-t">Đăng xuất</a>
           </div>
         </div>
-      </header>
+      </div>
+    </header>
 
-      <!-- Main Content Area -->
-      <main class="flex-1 p-8">
-        <div class="bg-white rounded-xl shadow-md p-6 max-w-7xl mx-auto h-full">
-          {% block content %}
-          <!-- Nội dung từng trang sẽ chèn ở đây -->
-          {% endblock %}
-        </div>
-      </main>
-    </div>
-    <script src="{% static 'js/admin/member.js' %}"></script>
-    <script src="{% static 'js/admin/admin.js' %}"></script>
-    <script src="{% static 'js/admin/tourism.js' %}"></script>
-    <script src="{% static 'js/admin/new.js' %}"></script>
-    <script src="{% static 'js/admin/support.js' %}"></script>
-    <script src="{% static 'js/admin/imagePreview.js' %}"></script>
-    <script src="{% static 'js/admin/tour.js' %}"></script>
-    
-  </body>
-</html>
+    <main class="flex-1 p-8">
+      <div class="bg-white rounded-xl shadow-md p-6 max-w-7xl mx-auto h-full">
+        {% block content %}
+        {% endblock %}
+      </div>
+    </main>
+  </div>
+
+  <script src="{% static 'js/admin/member.js' %}"></script>
+  <script src="{% static 'js/admin/admin.js' %}"></script>
+  <script src="{% static 'js/admin/tourism.js' %}"></script>
+  <script src="{% static 'js/admin/new.js' %}"></script>
+  <script src="{% static 'js/admin/support.js' %}"></script>
+  <script src="{% static 'js/admin/imagePreview.js' %}"></script>
+  <script src="{% static 'js/admin/tour.js' %}"></script>

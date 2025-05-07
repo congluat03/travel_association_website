@@ -12,6 +12,7 @@ urlpatterns = [
 
     path('admin/', viewsCore.admin_dashboard, name='admin_dashboard'),
     path('staff/', viewsCore.admin_dashboard, name='staff_dashboard'),
+    path('profile/', viewsCore.profile_view, name='profile'),
     # Quản trị phân hệ
     path('admin/core/', include(('apps.core.urls', 'core'), namespace='admin_core')),
     path('admin/members/', include(('apps.members.urls', 'members'), namespace='admin_members')),

@@ -1,4 +1,5 @@
 from pyexpat.errors import messages
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
@@ -7,6 +8,7 @@ from apps.members.models import TaiKhoan,DoanhNghiep,NganhNghe,HiepHoi,DangKyHoi
 from apps.tourism.models import DiaDiemDuLich
 from apps.news.models import TinTuc
 from apps.support.models import TaiLieu
+from django.contrib import messages
 # Create your views here.
 def home(request):
     return render(request, 'index/index_layout.html', {'title': 'Trang chủ'})
@@ -23,11 +25,12 @@ def custom_login(request):
                     request.session['user_id'] = user.MA_TK
                     request.session['username'] = user.TEN_DANG_NHAP
                     request.session['vai_tro'] = user.VAI_TRO
-
+                    
                     # Điều hướng dựa trên vai trò
                     if user.VAI_TRO == 'admin':
                         return redirect('admin_dashboard')
                     elif user.VAI_TRO == 'nhanvien':
+                        
                         return redirect('staff_dashboard')
                     else:
                         return redirect('user_home')
@@ -61,8 +64,6 @@ def register_view(request):
 
     return render(request, 'auth/register.html')
 
-
-
 def trang_chu(request):
     # Lấy 6 địa điểm đầu tiên
     dia_diem = DiaDiemDuLich.objects.all()[:3]
@@ -85,7 +86,6 @@ def trang_chu(request):
     }
     return render(request, 'index/home/home.html', context)
 
-
 def gioithieu(request):
     # Lấy tất cả thông tin từ bảng DoanhNghiep
     doanh_nghiep = DoanhNghiep.objects.all()
@@ -94,4 +94,23 @@ def gioithieu(request):
     context = {'doanh_nghiep': doanh_nghiep}
     
     # Render trang giới thiệu
-    return render(request, 'index/gioithieu/gioithieu.html', context)
+    return render(request, 'index/introduce/introduce.html', context)
+
+def lienhe(request):
+     if request.method == 'POST':
+         ho_ten = request.POST.get('ho_ten', '').strip()
+         email = request.POST.get('email', '').strip()
+         so_dien_thoai = request.POST.get('so_dien_thoai', '').strip()
+         noi_dung = request.POST.get('noi_dung', '').strip()
+         
+         # TODO: Xử lý dữ liệu ở đây (ví dụ: lưu database hoặc gửi email)
+         # print(ho_ten, email, so_dien_thoai, noi_dung)
+ 
+         if ho_ten and email and noi_dung:
+             messages.success(request, 'Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi trong thời gian sớm nhất.')
+         else:
+             messages.error(request, 'Vui lòng điền đầy đủ thông tin trước khi gửi liên hệ.')
+ 
+         return redirect('core:contact')  # <-- sửa đúng đây nè
+ 
+     return render(request, 'index/contact/contact.html')

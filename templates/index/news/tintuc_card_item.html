@@ -1,0 +1,38 @@
+<div class="{% if tin.NOI_BAT %} hover:bg-yellow-100 shadow-lg hover:shadow-yellow-400{% else %} hover:bg-green-100 shadow-lg hover:shadow-green-400{% endif %}
+    rounded-2xl overflow-hidden transform hover:scale-105 transition-all duration-300 flex flex-col border {% if tin.NOI_BAT %}border-yellow-200{% else %}border-green-200{% endif %}">
+
+  <div class="relative w-full h-36 overflow-hidden">
+    {% if tin.URL_HINH %}
+      <img src="{{ tin.URL_HINH }}" alt="{{ tin.TIEU_DE }}" class="w-full h-full object-cover brightness-90">
+    {% else %}
+      <div class="w-full h-36 bg-green-300 flex items-center justify-center text-white text-3xl font-bold">
+        📰
+      </div>
+    {% endif %}
+
+    {% if tin.TIN_NOI_BAT %}
+      <!-- Chỉ hiện badge nếu là tin nổi bật -->
+      <span class="absolute top-2 right-2 bg-yellow-400 text-white text-xs font-semibold py-1 px-2 rounded-full">
+        Nổi bật
+      </span>
+    {% endif %}
+  </div>
+
+  <div class="p-4 flex flex-col flex-grow {% if tin.NOI_BAT %}text-yellow-800{% else %}text-green-800{% endif %}">
+    <h2 class="font-bold mb-2 text-base line-clamp-2 h-12">
+      {{ tin.TIEU_DE }}
+    </h2>
+
+    <div class="flex items-center space-x-2 text-xs text-gray-600 mb-3">
+      <i class="far fa-calendar-alt text-emerald-500"></i>
+      <span>{{ tin.NGAY_DANG|date:"d/m/Y" }}</span>
+    </div>
+
+    <div class="flex items-end ml-auto flex-grow">
+      <a href="/news/tintucsukien/{{ tin.MA_TIN }}/"
+         class="mt-3 {% if tin.NOI_BAT %}text-yellow-600 hover:text-yellow-800{% else %}text-green-600 hover:text-green-800{% endif %} font-semibold text-xs transition duration-200 underline">
+        Xem chi tiết →
+      </a>
+    </div>
+  </div>
+</div>

@@ -13,13 +13,38 @@ from .decorators import login_required_custom
 
 @login_required_custom
 def admin_dashboard(request):
-    return render(request, 'admin/dashboard.html')
+    user = request.user_info  # Lấy thông tin người dùng từ request.user_info
 
+    # Lấy số lượng các đối tượng từ các bảng khác
+    num_members = DoanhNghiep.objects.count()
+    num_news = TinTuc.objects.count()
+    num_destinations = DiaDiemDuLich.objects.count()
+    num_guides = DacSan.objects.count()
+    num_tours = TourDuLich.objects.count()
+
+    # Truyền dữ liệu vào template
+    context = {
+        'user': user,
+        'num_members': num_members,
+        'num_news': num_news,
+        'num_destinations': num_destinations,
+        'num_guides': num_guides,
+        'num_tours': num_tours,
+    }
+
+    # Render trang quản trị với dữ liệu thống kê và thông tin người dùng
+    return render(request, 'admin/dashboard.html', context)
+@login_required_custom
 def staff_dashboard(request):
     return render(request, 'admin/dashboard.html')
+@login_required_custom
+def profile_view(request):
+    user = request.user_info  # Lấy thông tin người dùng từ request.user_info
+    return render(request, 'auth/profile.html', {'user': user})
 
-# @login_required
+@login_required_custom
 def manage_members(request):
+    user = request.user_info  # Lấy thông tin người dùng từ request.user_info
     taikhoan = TaiKhoan.objects.select_related('MA_DN').all()
     # Lấy danh sách đăng ký hội viên
     dangkyhoivien = DangKyHoiVien.objects.all()
@@ -29,11 +54,13 @@ def manage_members(request):
     return render(request, 'admin/members/members.html', {
         'taikhoan': taikhoan,
         'dangkyhoivien': dangkyhoivien,  # Truyền danh sách tài liệu vào context
-        'doanhnghiep': doanhnghiep  # Truyền danh sách tài liệu vào context
+        'doanhnghiep': doanhnghiep,  # Truyền danh sách tài liệu vào context
+        'user': user
     })
 
-# @login_required
+@login_required_custom
 def manage_business(request):
+    user = request.user_info  # Lấy thông tin người dùng từ request.user_info
     # Lấy danh sách tài khoản và liên kết doanh nghiệp
     taikhoan = TaiKhoan.objects.select_related('MA_DN').all()
     
@@ -54,11 +81,13 @@ def manage_business(request):
         'doanhnghiep': doanhnghiep,
         'nganhnghe': nganhnghe,
         'hiepHoi': hiepHoi,
-        'dangkyhoivien': dangkyhoivien
+        'dangkyhoivien': dangkyhoivien,
+        'user': user
     })
 
-# @login_required
+@login_required_custom
 def manage_news(request):
+    user = request.user_info  # Lấy thông tin người dùng từ request.user_info
     # Lấy tất cả thẻ tag, tin tức và tài khoản từ cơ sở dữ liệu
     tags = TheTag.objects.all()
     news_list = TinTuc.objects.all()
@@ -69,17 +98,21 @@ def manage_news(request):
         'tags': tags,
         'news_list': news_list,
         'tai_khoans': tai_khoans,  # Truyền dữ liệu tài khoản vào template
+        'user': user
     })
 
+@login_required_custom
 def manage_support(request):
+    user = request.user_info  # Lấy thông tin người dùng từ request.user_info
     doanhnghieps = DoanhNghiep.objects.all()
     tailieus = TaiLieu.objects.all()  # Lấy tất cả tài liệu
     return render(request, 'admin/support/support.html', {
         'doanhnghieps': doanhnghieps,
-        'tailieus': tailieus  # Truyền danh sách tài liệu vào context
+        'tailieus': tailieus,  # Truyền danh sách tài liệu vào context
+        'user': user
     })
 
-# @login_required
+# @login_required_custom
 def get_image_list(folder_name):
     folder_path = os.path.join(settings.MEDIA_ROOT, folder_name)
     image_list = []
@@ -93,7 +126,9 @@ def get_image_list(folder_name):
     
     return image_list
 
+@login_required_custom
 def manage_tourism(request):
+    user = request.user_info  # Lấy thông tin người dùng từ request.user_info
     # Lấy danh sách địa điểm du lịch, doanh nghiệp, đặc sản, tours và schedules
     dia_diems = DiaDiemDuLich.objects.all()
     doanhnghiep_list = DoanhNghiep.objects.all()
@@ -126,5 +161,6 @@ def manage_tourism(request):
             'dac_sans': dac_sans,
             'tours': tours,
             'schedules': schedules,
+            'user': user
         }
     )

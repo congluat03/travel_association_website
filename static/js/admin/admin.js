@@ -25,3 +25,17 @@ function showTab(tabId, btn = null) {
     }
   }
 }
+function toggleUserDropdown() {
+  const menu = document.getElementById("user-dropdown-menu");
+  menu.classList.toggle("hidden");
+}
+
+// Đóng dropdown nếu click ra ngoài
+document.addEventListener("click", function (event) {
+  const dropdown = document.getElementById("user-dropdown-menu");
+  const button = document.querySelector(".dropdown-button");
+
+  if (!dropdown.contains(event.target) && !button.contains(event.target)) {
+    dropdown.classList.add("hidden");
+  }
+});

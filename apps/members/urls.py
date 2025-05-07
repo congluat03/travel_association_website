@@ -9,6 +9,7 @@ urlpatterns = [
     path('taikhoan/them/', admin_views.them_sua_taikhoan, name='them_tai_khoan'),
     path('taikhoan/sua/<int:id>/', admin_views.them_sua_taikhoan, name='sua_tai_khoan'),
     path('taikhoan/xoa/<int:ma_tk>/', admin_views.xoa_tai_khoan, name='xoa_tai_khoan'),
+    path('toggle-trang-thai/<int:ma_tk>/', admin_views.toggle_trang_thai_tai_khoan, name='toggle_trang_thai'),
 
     # Doanh nghiệp
     path('doanhnghiep/them/', admin_views.them_sua_doanhnghiep, name='them_doanh_nghiep'),

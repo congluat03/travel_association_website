@@ -1,0 +1,112 @@
+{% extends "admin/admin_layout.html" %}
+{% load static %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-10">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+    <!-- Cột bên trái: ảnh và chức năng -->
+    <div class="space-y-6">
+      <!-- Hình đại diện -->
+      <div class="w-fit aspect-[3/4] rounded-xl overflow-hidden border border-gray-300 shadow-md relative">
+        <img src="{% if user.HINH_TK %}{{ user.HINH_TK.url }}{% else %}{% static 'images/user-avatar.png' %}{% endif %}" 
+             alt="Hình ảnh tài khoản" 
+             class="w-full h-full object-cover rounded-xl">
+        <!-- Nút xóa ảnh -->
+        <button class="absolute top-2 right-2 bg-white/80 hover:bg-white text-red-500 rounded-full p-1 shadow-md transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Upload ảnh -->
+      <label for="upload-photo" class="block w-full text-center bg-white border border-gray-300 rounded-lg py-2 text-sm text-gray-600 cursor-pointer hover:bg-gray-100 shadow">
+        Upload ảnh mới
+        <input type="file" id="upload-photo" class="hidden">
+      </label>
+
+      <!-- Đổi mật khẩu -->
+      <div class="space-y-4 border-t pt-6">
+        <h3 class="text-lg font-semibold text-gray-700">Đổi mật khẩu</h3>
+        <div>
+          <label class="text-sm font-medium text-gray-600">Mật khẩu cũ</label>
+          <input type="password" class="mt-1 w-full p-2 border border-gray-300 rounded-lg">
+        </div>
+        <div>
+          <label class="text-sm font-medium text-gray-600">Mật khẩu mới</label>
+          <input type="password" class="mt-1 w-full p-2 border border-gray-300 rounded-lg">
+        </div>
+        <div class="text-right">
+          <button class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition">
+            Cập nhật mật khẩu
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cột bên phải: thông tin người dùng -->
+    <div class="md:col-span-2 space-y-8">
+      <!-- Thông tin hồ sơ -->
+      <section>
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Thông tin hồ sơ</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="text-sm font-medium text-gray-600">Tên đăng nhập</label>
+            <input type="text" value="{{ user.TEN_DANG_NHAP }}" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly>
+          </div>
+          <div>
+            <label class="text-sm font-medium text-gray-600">Vai trò</label>
+            <input type="text" value="{{ user.VAI_TRO }}" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly>
+          </div>
+          <div>
+            <label class="text-sm font-medium text-gray-600">Tên đầy đủ</label>
+            <input type="text" value="{% if user.MA_DN.NGUOI_DAI_DIEN %}{{ user.MA_DN.NGUOI_DAI_DIEN }}{% else %}N/A{% endif %}" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly>
+          </div>
+          <div>
+            <label class="text-sm font-medium text-gray-600">Hiển thị tên công khai</label>
+            <input type="text" value="Có" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly>
+          </div>
+        </div>
+      </section>
+
+      <!-- Thông tin liên hệ -->
+      <section>
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Thông tin liên hệ</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div><label class="text-sm">Email</label><input type="email" value="{{ user.EMAIL_TK }}" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly></div>
+          <div><label class="text-sm">Số điện thoại</label><input type="text" value="{{ user.MA_DN.SDT_DN }}" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly></div>
+          <div><label class="text-sm">Địa chỉ</label><input type="text" value="{{ user.MA_DN.DIA_CHI }}" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly></div>
+          <div><label class="text-sm">Website</label><input type="text" value="{% if user.MA_DN.EMAIL_DN %}http://{{ user.MA_DN.EMAIL_DN|cut:'@' }}{% else %}N/A{% endif %}" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly></div>
+          <div><label class="text-sm">WhatsApp</label><input type="text" value="https://wa.me/{{ user.MA_DN.SDT_DN }}" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly></div>
+          <div><label class="text-sm">Telegram</label><input type="text" value="https://t.me/{{ user.MA_DN.SDT_DN }}" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly></div>
+        </div>
+      </section>
+
+      <!-- Thông tin doanh nghiệp -->
+      <section>
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Thông tin doanh nghiệp</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div><label class="text-sm">Tên doanh nghiệp</label><input type="text" value="{{ user.MA_DN.TEN_DN }}" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly></div>
+          <div><label class="text-sm">Ngành nghề</label><input type="text" value="{{ user.MA_DN.MA_NGANH.TEN_NGANH }}" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly></div>
+          <div><label class="text-sm">Ngày đăng ký</label><input type="text" value="{{ user.NGAY_DANG_KY_TK }}" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly></div>
+          <div><label class="text-sm">Trạng thái tài khoản</label><input type="text" value="{{ user.TRANG_THAI_TK|yesno:'Hoạt động,Khóa' }}" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly></div>
+        </div>
+      </section>
+
+      <!-- Giới thiệu -->
+      <section>
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Giới thiệu</h3>
+        <textarea class="w-full p-3 border rounded-lg bg-gray-50" rows="4" readonly>
+{{ user.MA_DN.TEN_DN }} là doanh nghiệp hoạt động trong ngành {{ user.MA_DN.MA_NGANH.TEN_NGANH }}, có địa chỉ tại {{ user.MA_DN.DIA_CHI }}. Để biết thêm chi tiết, vui lòng liên hệ qua email {{ user.EMAIL_TK }}.
+        </textarea>
+      </section>
+
+      <!-- Nút chỉnh sửa -->
+      <div class="text-right">
+        <a href="#" class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+          Chỉnh sửa hồ sơ
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -162,3 +162,24 @@ function closeTaiKhoanModal() {
 }
 
 
+function toggleTrangThai(ma_tk) {
+  fetch(`/admin/members/toggle-trang-thai/${ma_tk}/`, {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': '{{ csrf_token }}',
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(response => {
+    if (!response.ok) throw new Error('Lỗi khi thay đổi trạng thái');
+    return response.json();
+  })
+  .then(data => {
+    if (data.success) {
+      location.reload(); // reload lại bảng để cập nhật trạng thái
+    }
+  })
+  .catch(error => alert(error));
+}
+
+

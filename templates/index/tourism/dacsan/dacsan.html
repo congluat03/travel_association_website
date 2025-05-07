@@ -16,28 +16,27 @@
   
 
   <!-- FORM TÌM KIẾM -->
-  <form method="get" class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-12 items-center">
-    <div class="md:col-span-6">
-      <input type="text" name="q" placeholder="🌿 Tìm kiếm đặc sản..." value="{{ query }}"
-             class="p-3 rounded-2xl shadow-sm border border-gray-300 w-full focus:outline-none focus:ring-2 focus:ring-green-500">
-    </div>
-
-    <div class="md:col-span-2">
-      <select name="province" class="p-3 rounded-2xl shadow-sm border border-gray-300 w-full focus:outline-none focus:ring-2 focus:ring-green-500">
-        <option value="">🌍 Tất cả tỉnh thành</option>
-        {% for province in provinces %}
-          <option value="{{ province }}" {% if province == selected_province %}selected{% endif %}>{{ province }}</option>
-        {% endfor %}
-      </select>
-    </div>
-
-    <div class="md:col-span-2 flex justify-center">
-      <button type="submit"
-              class="bg-green-500 hover:bg-green-600 text-white py-3 px-6 rounded-2xl font-semibold shadow transition duration-300">
-        Tìm kiếm
-      </button>
-    </div>
+  <form method="get" class="flex flex-col md:flex-row gap-4 mb-12 items-center">
+    <!-- Ô tìm kiếm -->
+    <input type="text" name="q" placeholder="🌿 Tìm kiếm đặc sản..." value="{{ query }}"
+           class="flex-1 bg-white/50 backdrop-blur border border-gray-300 rounded-xl px-4 py-2 focus:ring-emerald-600">
+  
+    <!-- Chọn tỉnh thành -->
+    <select name="province"
+            class="bg-white/50 backdrop-blur border border-gray-300 rounded-xl px-4 py-2 focus:ring-emerald-600">
+      <option value="">🌍 Tất cả tỉnh thành</option>
+      {% for province in provinces %}
+        <option value="{{ province }}" {% if province == selected_province %}selected{% endif %}>{{ province }}</option>
+      {% endfor %}
+    </select>
+  
+    <!-- Nút tìm kiếm -->
+    <button type="submit"
+            class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-xl shadow transition duration-300">
+      🔍
+    </button>
   </form>
+  
 
   <!-- DANH SÁCH ĐẶC SẢN -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">

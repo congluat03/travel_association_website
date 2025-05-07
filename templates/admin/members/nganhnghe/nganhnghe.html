@@ -5,7 +5,7 @@
       <h2 class="text-2xl font-bold text-green-500">💼 Danh sách ngành nghề</h2>
       <button
         onclick="openNganhModal()"
-        class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700 shadow"
+        class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 shadow"
       >
         ➕ Thêm ngành nghề
       </button>
@@ -14,7 +14,7 @@
     <!-- Table -->
     <div class="overflow-x-auto rounded-lg shadow border border-gray-200 h-[65vh] overflow-y-auto">
       <table class="min-w-full text-sm text-gray-800">
-        <thead class="bg-indigo-100 text-gray-700 text-left sticky top-0 z-10">
+        <thead class="bg-green-100 text-gray-700 text-left sticky top-0 z-10">
           <tr>
             <th class="px-4 py-3 border text-center">STT</th>
             <th class="px-4 py-3 border">Tên ngành nghề</th>
@@ -67,28 +67,6 @@
       </table>
     </div>
   </div>
-  <script>
-//     function openNganhModal(data = null) {
-//       const modal = document.getElementById("nganhModal");
-//       const form = document.getElementById("nganhForm");
-  
-//       if (data) {
-//         form.MA_NGANH.value = data.ma_nganh || "";
-//         form.TEN_NGANH.value = data.ten_nganh || "";
-//         // form.action = `/admin_members/sua_nganh_nghe/${data.ma_nganh}/`; // URL sửa
-//       } else {
-//         form.reset();
-//         // form.action = "{% url 'admin_members:them_nganh_nghe' %}"; // URL thêm
-//       }
-  
-//       modal.classList.remove("hidden");
-//     }
-  
-//     function closeNganhModal() {
-//       document.getElementById("nganhModal").classList.add("hidden");
-//     }
-//   </script>
-  
   
   <!-- Modal form thêm/sửa ngành nghề -->
   {% include "admin/members/nganhnghe/themsuanganhnghe.html" %}

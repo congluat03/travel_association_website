@@ -1,32 +1,7 @@
 {% extends "admin/admin_layout.html" %}
 {% block content %}
-<div class="container mx-auto px-4 pt-6">
-  <!-- Tabs dạng hình chữ nhật đều -->
-  <div class="grid grid-cols-2 gap-2 mb-6 border-b border-gray-200"> <!-- Sửa lại cấu trúc tab -->
-    <button
-      id="taikhoan-btn"
-      class="tab-btn w-full px-6 py-3 text-white bg-green-600 font-semibold text-center rounded-t-md transition duration-300"
-      onclick="showTab('taikhoan', this)"
-    >
-      👤 Tài khoản
-    </button>
-    <button
-      id="dangkihiephoi-btn"
-      class="tab-btn w-full px-6 py-3 text-gray-700 bg-gray-100 hover:bg-green-100 font-semibold text-center rounded-t-md transition duration-300"
-      onclick="showTab('dangkihiephoi', this)"
-    >
-      ✍️ Đăng ký hội viên
-    </button>
-  </div>
-
-  <!-- Nội dung các tab -->
-  <div id="dangkihiephoi" class="tab-content hidden bg-white p-6 rounded-lg shadow">
-    {% include "admin/members/dangkihiephoi/dangkihiephoi.html" %}
-  </div>
-  <div id="taikhoan" class="tab-content block bg-white p-6 rounded-lg shadow">
-    {% include "admin/members/nguoidung/nguoidung.html" %}
-  </div>
-
+<div class="mb-10">
+  {% include "admin/members/nguoidung/nguoidung.html" %}
 
 </div>
 {% endblock %}

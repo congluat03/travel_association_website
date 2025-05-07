@@ -52,13 +52,34 @@
           </td>
           <td class="px-4 py-3 border">{{ taikhoan.MA_DN.TEN_DN|default:"-" }}</td>
           <td class="px-4 py-3 border">{{ taikhoan.VAI_TRO }}</td>
-          <td class="px-4 py-3 border">
-            {% if taikhoan.TRANG_THAI_TK %}
-            <span class="text-green-500 font-semibold">Hoạt động</span>
-            {% else %}
-            <span class="text-red-500 font-semibold">Khóa</span>
-            {% endif %}
+          <td class="px-4 py-3 border text-center">
+            <button
+              onclick="toggleTrangThai({{ taikhoan.MA_TK }})"
+              class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ease-in-out shadow-sm ring-1 ring-inset
+                     {% if taikhoan.TRANG_THAI_TK %}
+                       bg-green-100 text-green-700 hover:bg-green-200 hover:ring-green-300
+                     {% else %}
+                       bg-red-100 text-red-600 hover:bg-red-200 hover:ring-red-300
+                     {% endif %}
+                     cursor-pointer hover:scale-105"
+              title="Nhấn để chuyển trạng thái tài khoản"
+            >
+              {% if taikhoan.TRANG_THAI_TK %}
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 animate-pulse text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                Hoạt động
+              {% else %}
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 animate-pulse text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                Khóa
+              {% endif %}
+            </button>
           </td>
+          
+          
+          
           <td class="px-4 py-3 border text-center">
             <div class="flex flex-col items-center space-y-2">
               <!-- Sửa -->
