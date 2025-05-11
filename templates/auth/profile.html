@@ -23,24 +23,6 @@
         Upload ảnh mới
         <input type="file" id="upload-photo" class="hidden">
       </label>
-
-      <!-- Đổi mật khẩu -->
-      <div class="space-y-4 border-t pt-6">
-        <h3 class="text-lg font-semibold text-gray-700">Đổi mật khẩu</h3>
-        <div>
-          <label class="text-sm font-medium text-gray-600">Mật khẩu cũ</label>
-          <input type="password" class="mt-1 w-full p-2 border border-gray-300 rounded-lg">
-        </div>
-        <div>
-          <label class="text-sm font-medium text-gray-600">Mật khẩu mới</label>
-          <input type="password" class="mt-1 w-full p-2 border border-gray-300 rounded-lg">
-        </div>
-        <div class="text-right">
-          <button class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition">
-            Cập nhật mật khẩu
-          </button>
-        </div>
-      </div>
     </div>
 
     <!-- Cột bên phải: thông tin người dùng -->
@@ -58,15 +40,16 @@
             <input type="text" value="{{ user.VAI_TRO }}" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly>
           </div>
           <div>
-            <label class="text-sm font-medium text-gray-600">Tên đầy đủ</label>
-            <input type="text" value="{% if user.MA_DN.NGUOI_DAI_DIEN %}{{ user.MA_DN.NGUOI_DAI_DIEN }}{% else %}N/A{% endif %}" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly>
+            <label class="text-sm font-medium text-gray-600">Ngày đăng ký tài khoản</label>
+            <input type="text" value="{% if user.NGAY_DANG_KY_TK %}{{ user.NGAY_DANG_KY_TK|date:'d/m/Y' }}{% else %}N/A{% endif %}" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly>
           </div>
           <div>
-            <label class="text-sm font-medium text-gray-600">Hiển thị tên công khai</label>
-            <input type="text" value="Có" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly>
+            <label class="text-sm font-medium text-gray-600">Trạng thái hoạt động</label>
+            <input type="text" value="{% if user.TRANG_THAI_TK %}Hoạt động{% else %}Khóa{% endif %}" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly>
           </div>
         </div>
       </section>
+
 
       <!-- Thông tin liên hệ -->
       <section>
@@ -87,7 +70,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div><label class="text-sm">Tên doanh nghiệp</label><input type="text" value="{{ user.MA_DN.TEN_DN }}" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly></div>
           <div><label class="text-sm">Ngành nghề</label><input type="text" value="{{ user.MA_DN.MA_NGANH.TEN_NGANH }}" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly></div>
-          <div><label class="text-sm">Ngày đăng ký</label><input type="text" value="{{ user.NGAY_DANG_KY_TK }}" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly></div>
+          <div><label class="text-sm">Ngày đăng ký</label><input type="text" value="{{ user.NGAY_DANG_KY_TK|date:'d/m/Y' }}" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly></div>
           <div><label class="text-sm">Trạng thái tài khoản</label><input type="text" value="{{ user.TRANG_THAI_TK|yesno:'Hoạt động,Khóa' }}" class="mt-1 w-full p-2 border rounded-lg bg-gray-50" readonly></div>
         </div>
       </section>
@@ -95,8 +78,8 @@
       <!-- Giới thiệu -->
       <section>
         <h3 class="text-xl font-semibold text-gray-800 mb-4">Giới thiệu</h3>
-        <textarea class="w-full p-3 border rounded-lg bg-gray-50" rows="4" readonly>
-{{ user.MA_DN.TEN_DN }} là doanh nghiệp hoạt động trong ngành {{ user.MA_DN.MA_NGANH.TEN_NGANH }}, có địa chỉ tại {{ user.MA_DN.DIA_CHI }}. Để biết thêm chi tiết, vui lòng liên hệ qua email {{ user.EMAIL_TK }}.
+        <textarea class="w-full p-3 border rounded-lg bg-gray-50" rows="4" readonly> 
+          {{ user.MA_DN.TEN_DN }} là doanh nghiệp hoạt động trong ngành {{ user.MA_DN.MA_NGANH.TEN_NGANH }}, có địa chỉ tại {{ user.MA_DN.DIA_CHI }}. Để biết thêm chi tiết, vui lòng liên hệ qua email {{ user.EMAIL_TK }}.
         </textarea>
       </section>
 

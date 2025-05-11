@@ -28,7 +28,7 @@
     <tbody>
       {% for tour in tours %}
       <tr class="hover:bg-gray-50 transition duration-150">
-        <td class="px-4 py-3 border text-center font-medium">{{ tour.MA_TOUR }}</td>
+        <td class="px-4 py-3 border text-center font-medium">{{ forloop.counter }}</td>
 
         <td class="px-4 py-3 border">
           <div class="font-semibold text-base text-center">{{ tour.TEN_TOUR }}</div>

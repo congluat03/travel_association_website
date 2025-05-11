@@ -46,12 +46,11 @@
           <input
             type="password"
             name="MAT_KHAU"
-            value="{% if taikhoan %}{{ taikhoan.MAT_KHAU }}{% endif %}"
+            value=""
             class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-green-600 focus:border-green-600"
             placeholder="Nhập mật khẩu"
-            required />
+            {% if not taikhoan %}required{% endif %} />
         </div>
-
         <!-- Vai trò (dropdown) -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Vai trò</label>

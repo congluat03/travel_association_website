@@ -25,7 +25,7 @@
             <tbody>
                 {% for tag in tags %}
                 <tr class="hover:bg-gray-50">
-                    <td class="px-4 py-3 border text-center">{{ tag.MA_TAG }}</td>
+                    <td class="px-4 py-3 border text-center">{{ forloop.counter }}</td>
                     <td class="px-4 py-3 border">{{ tag.TEN_TAG }}</td>
                     <td class="px-4 py-3 border">{{ tag.MO_TA_TAG }}</td> <!-- Hiển thị mô tả -->
                     <td class="px-4 py-3 border text-center">

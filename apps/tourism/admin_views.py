@@ -15,103 +15,6 @@ import os
 from django.conf import settings
 from django.core.files.storage import default_storage
 # Generic functions
-def get_object_or_404(model, pk):
-    try:
-        return model.objects.get(pk=pk)
-    except model.DoesNotExist:
-        return None
-
-def handle_get_list(model, serializer_class):
-    data = model.objects.all()
-    serializer = serializer_class(data, many=True)
-    return Response(serializer.data)
-
-def handle_post_create(model, serializer_class, request):
-    serializer = serializer_class(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-def handle_put_update(obj, serializer_class, request):
-    serializer = serializer_class(obj, data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-def handle_patch_update(obj, serializer_class, request):
-    # Xử lý với PATCH: Cập nhật một phần
-    serializer = serializer_class(obj, data=request.data, partial=True)  # partial=True để cập nhật một phần
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-def handle_delete(obj):
-    obj.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
-
-# Tạo view list_create_view cho GET và POST
-def list_create_view(request, model, serializer_class):
-    if request.method == 'GET':
-        return handle_get_list(model, serializer_class)
-    elif request.method == 'POST':
-        return handle_post_create(model, serializer_class, request)
-
-# Tạo view retrieve_update_delete_view cho GET, PUT, PATCH và DELETE
-def retrieve_update_delete_view(request, pk, model, serializer_class):
-    obj = get_object_or_404(model, pk)
-    if not obj:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = serializer_class(obj)
-        return Response(serializer.data)
-    elif request.method == 'PUT':
-        return handle_put_update(obj, serializer_class, request)
-    elif request.method == 'PATCH':
-        return handle_patch_update(obj, serializer_class, request)  # Thêm xử lý PATCH
-    elif request.method == 'DELETE':
-        return handle_delete(obj)
-
-# DiaDiemDuLich
-@api_view(['GET', 'POST'])
-def diadiemdulich_list(request):
-    return list_create_view(request, DiaDiemDuLich, DiaDiemDuLichSerializer)
-
-@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])  # Thêm PATCH vào đây
-def diadiemdulich_detail(request, pk):
-    return retrieve_update_delete_view(request, pk, DiaDiemDuLich, DiaDiemDuLichSerializer)
-
-# DacSan
-@api_view(['GET', 'POST'])
-def dacsan_list(request):
-    return list_create_view(request, DacSan, DacSanSerializer)
-
-@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])  # Thêm PATCH vào đây
-def dacsan_detail(request, pk):
-    return retrieve_update_delete_view(request, pk, DacSan, DacSanSerializer)
-
-# TourDuLich
-@api_view(['GET', 'POST'])
-def tourdulich_list(request):
-    return list_create_view(request, TourDuLich, TourDuLichSerializer)
-
-@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])  # Thêm PATCH vào đây
-def tourdulich_detail(request, pk):
-    return retrieve_update_delete_view(request, pk, TourDuLich, TourDuLichSerializer)
-
-# ThuocTour
-@api_view(['GET', 'POST'])
-def thuoctour_list(request):
-    return list_create_view(request, ThuocTour, ThuocTourSerializer)
-
-@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])  # Thêm PATCH vào đây
-def thuoctour_detail(request, pk):
-    return retrieve_update_delete_view(request, pk, ThuocTour, ThuocTourSerializer)
-
-
 def them_sua_diadiem(request, id=None):
     dia_diem = None
     if id:
@@ -393,8 +296,6 @@ def them_sua_tour(request, ma_tour=None):
 
     return redirect('admin_core:manage_tourism')
 
-
-
 def xoa_tour(request, ma_tour):
     try:
         # Tìm đối tượng TourDuLich theo MA_TOUR
@@ -417,10 +318,6 @@ def xoa_tour(request, ma_tour):
         # Nếu không tìm thấy đối tượng TourDuLich, trả về lỗi 404
         raise Http404("Tour không tồn tại.")
     
-
-
-
-
     
 def them_sua_lich_trinh(request, ma_tour=None, ma_lich_trinh=None):
     thuoc_tour = ThuocTour.objects.filter(pk=ma_lich_trinh).first() if ma_lich_trinh else None
@@ -441,7 +338,7 @@ def them_sua_lich_trinh(request, ma_tour=None, ma_lich_trinh=None):
         if not thuoc_tour:
             if ThuocTour.objects.filter(MA_TOUR=tour, MA_DD=dia_diem).exists():
                 messages.error(request, "Địa điểm này đã có trong tour.")
-                return admin_views.manage_tourism(request)
+                return redirect('admin_core:manage_tourism')
 
             ThuocTour.objects.create(
                 MA_TOUR=tour,
@@ -454,7 +351,7 @@ def them_sua_lich_trinh(request, ma_tour=None, ma_lich_trinh=None):
             # Kiểm tra trùng khi cập nhật (bỏ qua chính nó)
             if ThuocTour.objects.filter(MA_TOUR=tour, MA_DD=dia_diem).exclude(pk=thuoc_tour.pk).exists():
                 messages.error(request, "Địa điểm này đã có trong tour.")
-                return admin_views.manage_tourism(request)
+                return redirect('admin_core:manage_tourism')
 
             thuoc_tour.MA_TOUR = tour
             thuoc_tour.MA_DD = dia_diem
@@ -463,23 +360,20 @@ def them_sua_lich_trinh(request, ma_tour=None, ma_lich_trinh=None):
             thuoc_tour.save()
             messages.success(request, "Cập nhật lịch trình thành công.")
 
-        return admin_views.manage_tourism(request)
+        return redirect('admin_core:manage_tourism')
 
-    return admin_views.manage_tourism(request)
+    return redirect('admin_core:manage_tourism')
 
-def xoa_lich_trinh(request, ma_tour, ma_lich_trinh):
-    try:
-        # Lấy tour theo mã
-        tour = TourDuLich.objects.get(MA_TOUR=ma_tour)
-        
+def xoa_lich_trinh(request, ma_lich_trinh):
+    try:       
         # Lấy lịch trình theo mã
-        thuoc_tour = ThuocTour.objects.get(MA_DD=ma_lich_trinh)
+        thuoc_tour = ThuocTour.objects.get(MA_TUOCTOUR=ma_lich_trinh)
         
         # Xóa lịch trình
         thuoc_tour.delete()
 
         # Sau khi xóa, chuyển hướng về trang quản lý lịch trình của tour
-        return admin_views.manage_tourism(request)
+        return redirect('admin_core:manage_tourism')
 
     except TourDuLich.DoesNotExist:
         raise Http404("Tour không tồn tại.")

@@ -32,7 +32,7 @@
             <tbody>
                 {% for tl in tailieus %}
                 <tr class="hover:bg-gray-50">
-                    <td class="px-4 py-3 border text-center">{{ tl.MA_TL }}</td>
+                    <td class="px-4 py-3 border text-center">{{ forloop.counter }}</td>
                     <td class="px-4 py-3 border">{{ tl.TIEU_DE_TL }}</td>
                     <td class="px-4 py-3 border">{{ tl.MO_TA_TL|truncatechars:80 }}</td>
                     <td class="px-4 py-3 border">{{ tl.LOAI_TAI_LIEU }}</td>

@@ -33,7 +33,7 @@
       <tbody>
         {% for news in news_list %}
         <tr class="hover:bg-gray-50">
-          <td class="px-4 py-3 border text-center">{{ news.MA_TIN }}</td>
+          <td class="px-4 py-3 border text-center">{{ forloop.counter }}</td>
 
           <!-- Tiêu đề + Tài khoản + Ngày đăng -->
           <td class="px-4 py-3 border align-top">

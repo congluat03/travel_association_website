@@ -88,7 +88,8 @@ def trang_chu(request):
 
 def gioithieu(request):
     # Lấy tất cả thông tin từ bảng DoanhNghiep
-    doanh_nghiep = DoanhNghiep.objects.all()
+    doanh_nghiep = DoanhNghiep.objects.order_by('-MA_DN')[:3]
+
     
     # Chuyển dữ liệu vào context
     context = {'doanh_nghiep': doanh_nghiep}

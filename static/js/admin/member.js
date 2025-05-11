@@ -122,7 +122,7 @@ function openTaiKhoanModal(data = null) {
     // Gán giá trị vào form
     form.TEN_DANG_NHAP.value = data.ten_dang_nhap || "";
     form.EMAIL_TK.value = data.email || "";
-    form.MAT_KHAU.value = data.mat_khau || "";
+    form.MAT_KHAU.value = '' || "";
     form.VAI_TRO.value = data.vai_tro || "";
     form.TRANG_THAI_TK.value = (data.trang_thai === true || data.trang_thai === 'True') ? '1' : '0';
     form.MA_DN.value = data.ma_dn || "";

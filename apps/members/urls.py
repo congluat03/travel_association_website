@@ -10,7 +10,7 @@ urlpatterns = [
     path('taikhoan/sua/<int:id>/', admin_views.them_sua_taikhoan, name='sua_tai_khoan'),
     path('taikhoan/xoa/<int:ma_tk>/', admin_views.xoa_tai_khoan, name='xoa_tai_khoan'),
     path('toggle-trang-thai/<int:ma_tk>/', admin_views.toggle_trang_thai_tai_khoan, name='toggle_trang_thai'),
-
+    path('doi-mat-khau/', admin_views.doi_mat_khau_view, name='doi_mat_khau'),
     # Doanh nghiệp
     path('doanhnghiep/them/', admin_views.them_sua_doanhnghiep, name='them_doanh_nghiep'),
     path('doanhnghiep/sua/<int:ma_dn>/', admin_views.them_sua_doanhnghiep, name='sua_doanh_nghiep'),
@@ -36,6 +36,9 @@ urlpatterns = [
 
     path('hoivien/dangky/', views.dangky_hoivien_user, name='dangky_hoivien_user'),
     path('hoivien/dangky/them', views.dang_ky_hoi_vien, name='dang_ky_hoi_vien'),
+
+
+
 
     
 

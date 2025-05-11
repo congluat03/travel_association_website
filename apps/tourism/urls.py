@@ -19,23 +19,8 @@ urlpatterns = [
 
     path('lichtrinh/them/', admin_views.them_sua_lich_trinh, name='them_lich_trinh'),
     path('lichtrinh/sua/<int:ma_tour>/<int:ma_lich_trinh>/', admin_views.them_sua_lich_trinh, name='sua_lich_trinh'),
-    path('lichtrinh/xoa/<int:ma_tour>/<int:ma_lich_trinh>/', admin_views.xoa_lich_trinh, name='xoa_lich_trinh'),
+    path('lichtrinh/xoa/<int:ma_lich_trinh>/', admin_views.xoa_lich_trinh, name='xoa_lich_trinh'),
 
-
-    path('diadiemdulich/', admin_views.diadiemdulich_list, name='diadiemdulich-list'),
-    path('diadiemdulich/<int:pk>/', admin_views.diadiemdulich_detail, name='diadiemdulich-detail'),
-
-    # Đặc sản
-    path('dacsan/', admin_views.dacsan_list, name='dacsan-list'),
-    path('dacsan/<int:pk>/', admin_views.dacsan_detail, name='dacsan-detail'),
-
-    # Tour du lịch
-    path('tourdulich/', admin_views.tourdulich_list, name='tourdulich-list'),
-    path('tourdulich/<int:pk>/', admin_views.tourdulich_detail, name='tourdulich-detail'),
-
-    # Thuộc tour
-    path('thuoctour/', admin_views.thuoctour_list, name='thuoctour-list'),
-    path('thuoctour/<int:pk>/', admin_views.thuoctour_detail, name='thuoctour-detail'),
     # phần index 
 
     path('diadiem/', views.danhsachdiadiem, name='danhsachdiadiem'),

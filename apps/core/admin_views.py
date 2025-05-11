@@ -10,6 +10,7 @@ from apps.members.models import DoanhNghiep, TaiKhoan
 from apps.support.models import TaiLieu
 from apps.members.models import TaiKhoan,DoanhNghiep,NganhNghe,HiepHoi,DangKyHoiVien
 from .decorators import login_required_custom
+from collections import defaultdict
 
 @login_required_custom
 def admin_dashboard(request):
@@ -45,11 +46,11 @@ def profile_view(request):
 @login_required_custom
 def manage_members(request):
     user = request.user_info  # Lấy thông tin người dùng từ request.user_info
-    taikhoan = TaiKhoan.objects.select_related('MA_DN').all()
+    taikhoan = TaiKhoan.objects.select_related('MA_DN').all().order_by('-MA_TK')
     # Lấy danh sách đăng ký hội viên
-    dangkyhoivien = DangKyHoiVien.objects.all()
+    dangkyhoivien = DangKyHoiVien.objects.all().order_by('-MA_DK_HH')
 
-    doanhnghiep = DoanhNghiep.objects.all()
+    doanhnghiep = DoanhNghiep.objects.all().order_by('-MA_DN')
     
     return render(request, 'admin/members/members.html', {
         'taikhoan': taikhoan,
@@ -62,19 +63,19 @@ def manage_members(request):
 def manage_business(request):
     user = request.user_info  # Lấy thông tin người dùng từ request.user_info
     # Lấy danh sách tài khoản và liên kết doanh nghiệp
-    taikhoan = TaiKhoan.objects.select_related('MA_DN').all()
+    taikhoan = TaiKhoan.objects.select_related('MA_DN').all().order_by('-MA_TK')
     
     # Lấy tất cả doanh nghiệp
-    doanhnghiep = DoanhNghiep.objects.all()
+    doanhnghiep = DoanhNghiep.objects.all().order_by('-MA_DN')
     
     # Lấy danh sách hiệp hội
-    hiepHoi = HiepHoi.objects.all()
+    hiepHoi = HiepHoi.objects.all().order_by('-MA_HH')
     
     # Lấy danh sách ngành nghề
-    nganhnghe = NganhNghe.objects.all()
+    nganhnghe = NganhNghe.objects.all().order_by('-MA_NGANH')
 
     # Lấy danh sách đăng ký hội viên
-    dangkyhoivien = DangKyHoiVien.objects.all()
+    dangkyhoivien = DangKyHoiVien.objects.all().order_by('-MA_DK_HH')
 
     return render(request, 'admin/members/business.html', {
         'taikhoan': taikhoan,
@@ -89,9 +90,9 @@ def manage_business(request):
 def manage_news(request):
     user = request.user_info  # Lấy thông tin người dùng từ request.user_info
     # Lấy tất cả thẻ tag, tin tức và tài khoản từ cơ sở dữ liệu
-    tags = TheTag.objects.all()
-    news_list = TinTuc.objects.all()
-    tai_khoans = TaiKhoan.objects.all()  # Lấy dữ liệu tài khoản
+    tags = TheTag.objects.all().order_by('-MA_TAG')
+    news_list = TinTuc.objects.all().order_by('-MA_TIN')
+    tai_khoans = TaiKhoan.objects.all().order_by('-MA_TK')  # Lấy dữ liệu tài khoản
 
     # Truyền dữ liệu vào template
     return render(request, 'admin/news/news.html', {
@@ -104,8 +105,8 @@ def manage_news(request):
 @login_required_custom
 def manage_support(request):
     user = request.user_info  # Lấy thông tin người dùng từ request.user_info
-    doanhnghieps = DoanhNghiep.objects.all()
-    tailieus = TaiLieu.objects.all()  # Lấy tất cả tài liệu
+    doanhnghieps = DoanhNghiep.objects.all().order_by('-MA_DN')
+    tailieus = TaiLieu.objects.all().order_by('-MA_TL')  # Lấy tất cả tài liệu
     return render(request, 'admin/support/support.html', {
         'doanhnghieps': doanhnghieps,
         'tailieus': tailieus,  # Truyền danh sách tài liệu vào context
@@ -130,11 +131,17 @@ def get_image_list(folder_name):
 def manage_tourism(request):
     user = request.user_info  # Lấy thông tin người dùng từ request.user_info
     # Lấy danh sách địa điểm du lịch, doanh nghiệp, đặc sản, tours và schedules
-    dia_diems = DiaDiemDuLich.objects.all()
-    doanhnghiep_list = DoanhNghiep.objects.all()
-    dac_sans = DacSan.objects.select_related('MA_DD').all()
-    tours = TourDuLich.objects.prefetch_related('thuoctour_set__MA_DD').all()
-    schedules = ThuocTour.objects.select_related('MA_TOUR', 'MA_DD').all().order_by('THOI_GIAN_DI')
+    dia_diems = DiaDiemDuLich.objects.all().order_by('-MA_DD')
+    doanhnghiep_list = DoanhNghiep.objects.all().order_by('-MA_DN')
+    dac_sans = DacSan.objects.select_related('MA_DD').all().order_by('-MA_DS')
+    tours = TourDuLich.objects.prefetch_related('thuoctour_set__MA_DD').order_by('-MA_TOUR')
+    # Lấy dữ liệu và sắp xếp giảm dần theo MA_TOUR, rồi theo thời gian đi (nếu muốn)
+    schedules = ThuocTour.objects.select_related('MA_TOUR', 'MA_DD').all().order_by('-MA_TOUR__MA_TOUR', 'THOI_GIAN_DI')
+
+    # Nhóm lịch trình theo từng tour
+    grouped_schedules = defaultdict(list)
+    for s in schedules:
+        grouped_schedules[s.MA_TOUR].append(s)
 
     # Lấy ảnh đặc sản
     for ds in dac_sans:
@@ -160,7 +167,7 @@ def manage_tourism(request):
             'doanhnghiep_list': doanhnghiep_list,
             'dac_sans': dac_sans,
             'tours': tours,
-            'schedules': schedules,
+            'grouped_schedules': dict(grouped_schedules),
             'user': user
         }
     )

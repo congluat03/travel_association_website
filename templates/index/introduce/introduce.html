@@ -51,9 +51,9 @@
     {% for doanh_nghiep_item in doanh_nghiep %}
       <div class="bg-white shadow-md rounded-xl p-6 transition-transform transform hover:scale-105 hover:shadow-lg">
         {% if doanh_nghiep_item.hinh_anh %}
-          <img src="{{ doanh_nghiep_item.hinh_anh.url }}" alt="{{ doanh_nghiep_item.TEN_DN }}" class="w-full h-40 object-cover rounded-md mb-4">
+          <img src="{% static 'images/default-avatar.jpg' %}" alt="{{ doanh_nghiep_item.TEN_DN }}" class="w-full h-40 object-cover rounded-md mb-4">
         {% else %}
-          <img src="{% static 'images/default-business-image.jpg' %}" alt="Doanh nghiệp" class="w-full h-40 object-cover rounded-md mb-4">
+          <img src="{% static 'images/default-avatar.jpg' %}" alt="Doanh nghiệp" class="w-full h-40 object-cover rounded-md mb-4">
         {% endif %}
 
         <h3 class="text-xl font-semibold text-green-600 mb-2">{{ doanh_nghiep_item.TEN_DN }}</h3>

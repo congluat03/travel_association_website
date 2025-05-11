@@ -13,6 +13,8 @@ import os
 import datetime
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from django.contrib import messages
+from .decorators import login_required_custom
 
 # Doanh Nghiệp
 def them_sua_hiephoi(request, ma_hh=None):
@@ -259,6 +261,33 @@ def them_sua_taikhoan(request, id=None):
 
     return redirect('admin_core:manage_members')
 
+@login_required_custom
+def doi_mat_khau_view(request):
+    user_account = request.user_info  # Thông tin user đã được xác thực bởi decorator
+
+    if request.method == 'POST':
+        current_password = request.POST.get('current_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        # Kiểm tra mật khẩu hiện tại
+        if not user_account.check_mat_khau(current_password):
+            messages.error(request, 'Mật khẩu hiện tại không đúng.')
+            return redirect('admin_members:doi_mat_khau')
+
+        # Kiểm tra mật khẩu mới và xác nhận mật khẩu
+        if new_password != confirm_password:
+            messages.error(request, 'Mật khẩu mới và xác nhận mật khẩu không khớp.')
+            return redirect('admin_members:doi_mat_khau')
+
+        # Cập nhật mật khẩu mới
+        user_account.set_mat_khau(new_password)
+        user_account.save()
+
+        messages.success(request, 'Mật khẩu đã được cập nhật thành công.')
+        return redirect('admin_members:doi_mat_khau')  # hoặc chuyển hướng sang trang khác
+
+    return render(request, 'auth/ChangePassword.html', {'user': user_account})
 def them_sua_dangkyhoivien(request, ma_dk_hh=None):
     dangky = DangKyHoiVien.objects.filter(pk=ma_dk_hh).first() if ma_dk_hh else None
 

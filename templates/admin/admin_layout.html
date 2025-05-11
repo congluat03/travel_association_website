@@ -11,6 +11,8 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
     rel="stylesheet"
   />
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
   <style>
     body {
       font-family: "Inter", sans-serif;
@@ -84,13 +86,13 @@
             <div class="w-8 h-8 aspect-[3/4] rounded-xl overflow-hidden border border-gray-300 shadow-md relative">
               <img src="{% if user.HINH_TK %}{{ user.HINH_TK.url }}{% else %}{% static 'images/user-avatar.png' %}{% endif %}" alt="avatar" class="w-full h-full object-cover" />
             </div>
-            <span class="hidden md:inline">Admin</span>
+            <span class="hidden md:inline">{% if user.TEN_DANG_NHAP %}{{ user.TEN_DANG_NHAP }}{% else %}Admin{% endif %}</span>
             <i class="fas fa-chevron-down text-sm transition-transform duration-300"></i>
           </button>
 
           <div id="user-dropdown-menu" class="dropdown-menu absolute right-0 mt-2 hidden flex-col bg-white text-gray-800 shadow-xl rounded-lg w-40 z-50 overflow-hidden">
             <a href="{% url 'profile' %}" class="block px-4 py-2 hover:bg-gray-100">Hồ sơ cá nhân</a>
-            <a href="#" class="block px-4 py-2 hover:bg-gray-100">Đổi mật khẩu</a>
+            <a href="{% url 'admin_members:doi_mat_khau' %}" class="block px-4 py-2 hover:bg-gray-100">Đổi mật khẩu</a>
             <a href="{% url 'custom_logout' %}" class="block px-4 py-2 hover:bg-gray-100 border-t">Đăng xuất</a>
           </div>
         </div>

@@ -29,7 +29,7 @@
     <tbody>
       {% for dac_san in dac_sans %}
       <tr class="hover:bg-gray-50">
-        <td class="px-4 py-3 border text-center">{{ dac_san.MA_DS }}</td>
+        <td class="px-4 py-3 border text-center">{{ forloop.counter }}</td>
         <td class="px-4 py-3 border">{{ dac_san.TEN_DAC_SAN }}</td>
         <td class="px-4 py-3 border">{{ dac_san.MA_DD.TEN_DIA_DIEM }}</td>
         <td class="px-4 py-3 border text-justify">{{ dac_san.MO_TA_DS }}</td>
