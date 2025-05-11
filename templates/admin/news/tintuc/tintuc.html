@@ -18,12 +18,12 @@
       <thead class="bg-green-100 text-gray-700 text-left sticky top-0 z-10">
         <tr>
           <th class="px-4 py-3 border text-center">#</th>
-          <th class="px-4 py-3 border">Tiêu Đề</th>
-          <th class="px-4 py-3 border">Ngày Đăng</th>
+          <th class="px-4 py-3 border">Tin tức</th>
+          <th class="px-4 py-3 border">Nội dung</th>
           <th class="px-4 py-3 border">Loại</th>
           <th class="px-4 py-3 border text-center">Nổi Bật</th>
           <th class="px-4 py-3 border">Thẻ Tag</th>
-          <th class="px-4 py-3 border">Tài Khoản</th> <!-- Cột Tài Khoản -->
+        
           <th class="px-4 py-3 border text-center">Lượt Xem</th>
           <th class="px-4 py-3 border text-center">Hành Động</th>
         </tr>
@@ -34,9 +34,32 @@
         {% for news in news_list %}
         <tr class="hover:bg-gray-50">
           <td class="px-4 py-3 border text-center">{{ news.MA_TIN }}</td>
-          <td class="px-4 py-3 border">{{ news.TIEU_DE }}</td>
-          <td class="px-4 py-3 border">{{ news.NGAY_DANG|date:"d/m/Y" }}</td>
 
+          <!-- Tiêu đề + Tài khoản + Ngày đăng -->
+          <td class="px-4 py-3 border align-top">
+            <div class="space-y-1">
+              <!-- Tiêu đề -->
+              <div class="text-base font-semibold text-gray-800 leading-snug">
+                {{ news.TIEU_DE }}
+              </div>
+
+              <!-- Tác giả -->
+              <div class="text-xs text-gray-500 flex items-center space-x-1">
+                <span>Tác giả: </span>
+                <span class="font-medium">{{ news.MA_TK.TEN_DANG_NHAP }}</span>
+              </div>
+
+              <!-- Ngày đăng -->
+              <div class="text-xs text-gray-500 flex items-center space-x-1">
+                <span>Ngày đăng: </span>
+                <span>{{ news.NGAY_DANG|date:"d/m/Y" }}</span>
+              </div>
+            </div>
+          </td>
+           <!-- Nội dung -->
+          <td class="px-4 py-3 border text-sm text-gray-700">
+            {{ news.NOI_DUNG_CHI_TIET|truncatechars:100 }}
+          </td>
           <td class="px-4 py-3 border">{{ news.LOAI_TIN_TUC }}</td>
 
           <!-- Nổi bật -->
@@ -55,10 +78,7 @@
             {% endfor %}
           </td>
 
-          <!-- Tài khoản -->
-          <td class="px-4 py-3 border">
-            {{ news.MA_TK.TEN_DANG_NHAP }}  <!-- Hiển thị tên tài khoản từ MA_TK -->
-          </td>
+         
 
           <!-- Lượt xem -->
           <td class="px-4 py-3 border text-center">{{ news.SO_LUOT_XEM }}</td>
@@ -103,7 +123,7 @@
         </tr>
         {% empty %}
         <tr>
-          <td colspan="9" class="text-center py-3 italic text-gray-500">
+          <td colspan="8" class="text-center py-3 italic text-gray-500">
             Không có tin tức nào được tìm thấy.
           </td>
         </tr>

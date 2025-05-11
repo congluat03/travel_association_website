@@ -333,3 +333,17 @@ def toggle_trang_thai_tai_khoan(request, ma_tk):
         except TaiKhoan.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Tài khoản không tồn tại'}, status=404)
     return JsonResponse({'success': False, 'error': 'Phương thức không hợp lệ'}, status=400)
+
+@csrf_exempt
+def toggle_tinh_trang_hiep_hoi(request, MA_DK_HH):
+    # return JsonResponse({'success': True, 'new_status': MA_DK_HH})
+    if request.method == 'POST':
+        try:
+            dk = DangKyHoiVien.objects.get(pk=MA_DK_HH)
+            # Chuyển trạng thái từ '0' (Chưa duyệt) sang '1' (Duyệt) và ngược lại
+            dk.TINH_TRANG = not dk.TINH_TRANG
+            dk.save()
+            return JsonResponse({'success': True, 'new_status': dk.TINH_TRANG})
+        except DangKyHoiVien.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Đăng ký hội viên không tồn tại'}, status=404)
+    return JsonResponse({'success': False, 'error': 'Phương thức không hợp lệ'}, status=400)

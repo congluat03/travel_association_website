@@ -14,7 +14,6 @@ function openHiepHoiModal(data = null) {
   }
 
   modal.classList.remove("hidden");
-  alert(form.action);
 }
 
 
@@ -36,7 +35,6 @@ function openNganhModal(data = null) {
   }
 
   modal.classList.remove("hidden");
-  alert(form.action); // chỉ để test, có thể bỏ nếu không cần
 }
 
 function closeNganhModal() {
@@ -181,5 +179,26 @@ function toggleTrangThai(ma_tk) {
   })
   .catch(error => alert(error));
 }
+
+function toggleTinhTrangDangKyHien(maDkHh) {
+  fetch(`/admin/members/toggle-trang-thai-hiep-hoi/${maDkHh}/`, {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': '{{ csrf_token }}', // CSRF Token trong Django template
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(response => {
+    if (!response.ok) throw new Error('Lỗi khi thay đổi trạng thái');
+    return response.json();
+  })
+  .then(data => {
+    if (data.success) {
+      location.reload(); // reload lại bảng để cập nhật trạng thái
+    }
+  })
+  .catch(error => alert(error));
+}
+
 
 
