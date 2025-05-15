@@ -374,53 +374,60 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-green-800 text-white py-6 md:py-8">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-        <div class="space-y-2">
-          <h3 class="text-base md:text-lg lg:text-xl font-semibold">Về Green Travel</h3>
-          <p class="text-green-100 text-xs md:text-sm lg:text-base leading-relaxed">
-            Chúng tôi cam kết phát triển du lịch bền vững, giúp du khách khám
-            phá thế giới mà vẫn bảo tồn thiên nhiên cho thế hệ tương lai.
-          </p>
-        </div>
-        <div class="space-y-2">
-          <h3 class="text-base md:text-lg lg:text-xl font-semibold">Liên kết nhanh</h3>
-          <ul class="space-y-1 text-green-100 text-xs md:text-sm lg:text-base">
-            <li>
-              <a href="#" class="hover:text-white">Trang chủ</a>
-            </li>
-            <li>
-              <a href="#" class="hover:text-white">Điểm đến</a>
-            </li>
-            <li>
-              <a href="#" class="hover:text-white">Chuyến đi</a>
-            </li>
-            <li>
-              <a href="#" class="hover:text-white">Liên hệ</a>
-            </li>
-          </ul>
-        </div>
-        <div class="space-y-2">
-          <h3 class="text-base md:text-lg lg:text-xl font-semibold">Liên hệ</h3>
-          <p class="text-green-100 text-xs md:text-sm lg:text-base">Email: info@greentravel.com</p>
-          <p class="text-green-100 text-xs md:text-sm lg:text-base">SĐT: +1 (555) 123-4567</p>
-          <div class="flex space-x-3 mt-2">
-            <a href="#" class="text-green-100 hover:text-white text-base md:text-lg">
-              <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="#" class="text-green-100 hover:text-white text-base md:text-lg">
-              <i class="fab fa-twitter"></i>
-            </a>
-            <a href="#" class="text-green-100 hover:text-white text-base md:text-lg">
-              <i class="fab fa-instagram"></i>
-            </a>
-          </div>
-        </div>
+   <footer class="bg-green-800 text-white py-6 md:py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-start">
+    
+    <div class="space-y-2 flex flex-col justify-start">
+      <h3 class="text-base md:text-lg lg:text-xl font-semibold">Về Green Travel</h3>
+      <p class="text-green-100 text-xs md:text-sm lg:text-base leading-relaxed">
+        Chúng tôi cam kết phát triển du lịch bền vững, giúp du khách khám
+        phá thế giới mà vẫn bảo tồn thiên nhiên cho thế hệ tương lai.
+      </p>
+    </div>
+    
+    <div class="space-y-2 flex flex-col justify-start">
+      <h3 class="text-base md:text-lg lg:text-xl font-semibold text-white">Liên kết nhanh</h3>
+      <ul class="grid grid-cols-2 gap-x-6 gap-y-2 text-green-100 text-xs md:text-sm lg:text-base">
+        <li><a href="/" class="hover:text-white">Trang chủ</a></li>
+        <li><a href="/introduce" class="hover:text-white">Giới thiệu</a></li>
+        <li><a href="/tourism/diadiem/" class="hover:text-white">Địa điểm du lịch</a></li>
+        <li><a href="/tourism/diadiemdacsan/" class="hover:text-white">Đặc sản</a></li>
+        <li><a href="/tourism/tourdiadiemdulich/" class="hover:text-white">Tour du lịch</a></li>
+        <li><a href="/news/tintucsukien" class="hover:text-white">Tin tức</a></li>
+        <li><a href="/members/hoivien/" class="hover:text-white">Hội viên</a></li>
+        <li><a href="/support/tailieu-index/" class="hover:text-white">Tài liệu</a></li>
+        <li><a href="/contact/" class="hover:text-white">Liên hệ</a></li>
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'custom_logout' %}" class="hover:text-white">Đăng xuất</a></li>
+        {% else %}
+        <li><a href="{% url 'custom_login' %}" class="hover:text-white">Đăng nhập</a></li>
+        {% endif %}
+      </ul>
+    </div>
+    
+    <div class="space-y-2 flex flex-col justify-start">
+      <h3 class="text-base md:text-lg lg:text-xl font-semibold">Liên hệ</h3>
+      <p class="text-green-100 text-xs md:text-sm lg:text-base">Email: info@greentravel.com</p>
+      <p class="text-green-100 text-xs md:text-sm lg:text-base">SĐT: +1 (555) 123-4567</p>
+      <div class="flex space-x-3 mt-2">
+        <a href="#" class="text-green-100 hover:text-white text-base md:text-lg">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="#" class="text-green-100 hover:text-white text-base md:text-lg">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="#" class="text-green-100 hover:text-white text-base md:text-lg">
+          <i class="fab fa-instagram"></i>
+        </a>
       </div>
-      <div class="text-center mt-4 text-green-100 text-sm">
-        © Về Green Travel
-      </div>
-    </footer>
+    </div>
+    
+  </div>
+  <div class="text-center mt-4 text-green-100 text-sm">
+    © Về Green Travel
+  </div>
+</footer>
+
 
     <script src="{% static 'js/index/main.js' %}"></script>
     <script src="{% static 'js/index/tourism.js' %}"></script>

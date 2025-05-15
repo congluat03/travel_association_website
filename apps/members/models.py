@@ -82,7 +82,7 @@ class DoanhNghiep(models.Model):
 
     def save(self, *args, **kwargs):
         # Sử dụng địa chỉ IP thay cho localhost (127.0.0.1)
-        ip_address = '192.168.200.135'  # Thay thế địa chỉ IP của máy tính của bạn tại đây
+        ip_address = '192.168.0.102'  # Thay thế địa chỉ IP của máy tính của bạn tại đây
         url = f"http://{ip_address}:8000/members/hoivien/{self.MA_DN}/"
         
         # Khởi tạo QR Code

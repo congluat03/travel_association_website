@@ -29,11 +29,10 @@ def custom_login(request):
                     # Điều hướng dựa trên vai trò
                     if user.VAI_TRO == 'admin':
                         return redirect('admin_dashboard')
-                    elif user.VAI_TRO == 'nhanvien':
-                        
-                        return redirect('staff_dashboard')
+                    elif user.VAI_TRO == 'nhanvien':                       
+                        return redirect('admin_dashboard')
                     else:
-                        return redirect('user_home')
+                        return redirect('admin_dashboard')
                 else:
                     messages.error(request, 'Tài khoản đã bị khóa.')
             else:

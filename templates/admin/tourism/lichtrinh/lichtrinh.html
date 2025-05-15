@@ -8,82 +8,81 @@
         </button>
     </div>
 
-    <div class="space-y-4">
-    {% for tour, schedules in grouped_schedules.items %}
-        <div class="border border-gray-300 rounded-lg shadow-sm">
-        <!-- Nút mở rộng / thu gọn -->
-        <button type="button"
-            class="w-full bg-white hover:bg-gray-100 px-5 py-3 text-left font-semibold text-gray-800 rounded-lg flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-gray-400 border-b border-gray-300 transition-all duration-300"
-            onclick="toggleSchedules('schedule-{{ tour.MA_TOUR }}')">
-            <span class="text-lg">{{ tour.TEN_TOUR }}</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-800 transition-transform duration-300 transform"
-                :class="{'rotate-180': isOpen}" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M19 9l-7 7-7-7"></path>
-            </svg>
-        </button>
+    <div class="overflow-x-auto rounded-xl shadow-lg border overflow-y-auto max-h-[600px]">
+        {% for tour, schedules in grouped_schedules.items %}
+            <div class="border border-gray-300 rounded-lg shadow-sm">
+            <!-- Nút mở rộng / thu gọn -->
+            <button type="button"
+                class="w-full bg-white hover:bg-gray-100 px-5 py-3 text-left font-semibold text-gray-800 rounded-lg flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-gray-400 border-b border-gray-300 transition-all duration-300"
+                onclick="toggleSchedules('schedule-{{ tour.MA_TOUR }}')">
+                <span class="text-lg">{{ tour.TEN_TOUR }}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-800 transition-transform duration-300 transform"
+                    :class="{'rotate-180': isOpen}" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
 
-
-            <!-- Bảng lịch trình -->
-            <div id="schedule-{{ tour.MA_TOUR }}" class="hidden px-4 pb-4">
-                <table class="min-w-full text-sm text-gray-800 border mt-2">
-                    <thead class="bg-gray-100 text-left">
-                        <tr>
-                            <th class="px-4 py-2 border">#</th>
-                            <th class="px-4 py-2 border">Địa điểm</th>
-                            <th class="px-4 py-2 border">Thời gian bắt đầu</th>
-                            <th class="px-4 py-2 border">Thời gian kết thúc</th>
-                            <th class="px-4 py-2 border">Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for item in schedules %}
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-2 border text-center">{{ forloop.counter }}</td> <!-- Số thứ tự -->
-                                <td class="px-4 py-2 border">{{ item.MA_DD.TEN_DIA_DIEM }}</td>
-                                <td class="px-4 py-2 border">{{ item.THOI_GIAN_DI|date:"d/m/Y H:i" }}</td>
-                                <td class="px-4 py-2 border">{{ item.THOI_GIAN_DEN|date:"d/m/Y H:i" }}</td>
-                                <td class="px-4 py-2 border text-center">
-                                    <div class="flex flex-col items-center space-y-1">
-                                        <button
-                                            class="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500 text-xs w-20"
-                                            onclick="openScheduleModal({
-                                                ma_tuoctour: '{{ item.MA_TUOCTOUR }}',
-                                                ma_tour: '{{ item.MA_TOUR.MA_TOUR }}',
-                                                ma_dd: '{{ item.MA_DD.MA_DD }}',
-                                                thoi_gian_di: '{{ item.THOI_GIAN_DI|date:"Y-m-d\\TH:i" }}',
-                                                thoi_gian_den: '{{ item.THOI_GIAN_DEN|date:"Y-m-d\\TH:i" }}',
-                                            })">
-                                            ✏️ Sửa
-                                        </button>
-
-                                        {% if item.MA_TUOCTOUR and item.MA_TOUR.MA_TOUR %}
-                                        <form
-                                            action="{% url 'admin_tourism:xoa_lich_trinh' item.MA_TUOCTOUR %}"
-                                            method="POST"
-                                            onsubmit="return confirm('Bạn có chắc muốn xóa lịch trình này?')">
-                                            {% csrf_token %}
-                                            <button
-                                                type="submit"
-                                                class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-xs w-20">
-                                                🗑️ Xóa
-                                            </button>
-                                        </form>
-                                        {% else %}
-                                        <p class="text-xs text-red-500">Thiếu dữ liệu</p>
-                                        {% endif %}
-                                    </div>
-                                </td>
+                <!-- Bảng lịch trình -->
+                <div id="schedule-{{ tour.MA_TOUR }}" class="hidden px-4 pb-4">
+                    <table class="min-w-full text-sm text-gray-800 border mt-2">
+                        <thead class="bg-gray-100 text-left">
+                            <tr>
+                                <th class="px-4 py-2 border">#</th>
+                                <th class="px-4 py-2 border">Địa điểm</th>
+                                <th class="px-4 py-2 border">Thời gian bắt đầu</th>
+                                <th class="px-4 py-2 border">Thời gian kết thúc</th>
+                                <th class="px-4 py-2 border">Hành động</th>
                             </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {% for item in schedules %}
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 border text-center">{{ forloop.counter }}</td> <!-- Số thứ tự -->
+                                    <td class="px-4 py-2 border">{{ item.MA_DD.TEN_DIA_DIEM }}</td>
+                                    <td class="px-4 py-2 border">{{ item.THOI_GIAN_DI|date:"d/m/Y H:i" }}</td>
+                                    <td class="px-4 py-2 border">{{ item.THOI_GIAN_DEN|date:"d/m/Y H:i" }}</td>
+                                    <td class="px-4 py-2 border text-center">
+                                        <div class="flex flex-col items-center space-y-1">
+                                            <button
+                                                class="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500 text-xs w-20"
+                                                onclick="openScheduleModal({
+                                                    ma_tuoctour: '{{ item.MA_TUOCTOUR }}',
+                                                    ma_tour: '{{ item.MA_TOUR.MA_TOUR }}',
+                                                    ma_dd: '{{ item.MA_DD.MA_DD }}',
+                                                    thoi_gian_di: '{{ item.THOI_GIAN_DI|date:"Y-m-d\\TH:i" }}',
+                                                    thoi_gian_den: '{{ item.THOI_GIAN_DEN|date:"Y-m-d\\TH:i" }}',
+                                                })">
+                                                ✏️ Sửa
+                                            </button>
+
+                                            {% if item.MA_TUOCTOUR and item.MA_TOUR.MA_TOUR %}
+                                            <form
+                                                action="{% url 'admin_tourism:xoa_lich_trinh' item.MA_TUOCTOUR %}"
+                                                method="POST"
+                                                onsubmit="return confirm('Bạn có chắc muốn xóa lịch trình này?')">
+                                                {% csrf_token %}
+                                                <button
+                                                    type="submit"
+                                                    class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-xs w-20">
+                                                    🗑️ Xóa
+                                                </button>
+                                            </form>
+                                            {% else %}
+                                            <p class="text-xs text-red-500">Thiếu dữ liệu</p>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-    {% empty %}
-        <p class="text-gray-500">Không có lịch trình nào.</p>
-    {% endfor %}
-</div>
+        {% empty %}
+            <p class="text-gray-500">Không có lịch trình nào.</p>
+        {% endfor %}
+    </div>
 
 </div>
 
