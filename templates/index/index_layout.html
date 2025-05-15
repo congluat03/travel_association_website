@@ -11,165 +11,381 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
-    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/index/Swiper.css' %}" />
     <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
-  </head>
-  <body class="bg-green-50 font-sans text-gray-800 antialiased">
-    <!-- Header -->
-    <header class="bg-green-600 text-white sticky top-0 z-50 shadow-lg">
-      <div
-        class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center"
-      >
-        <!-- Logo -->
-        <a
-          href="/"
-          class="flex items-center gap-2 transition-transform hover:scale-105"
-          ><h1 class="text-2xl font-bold tracking-tight">🌿 Green Travel</h1></a
-        >
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/index/Swiper.css' %}" />
+    <style>
+      /* Tùy chỉnh toàn bộ giao diện */
+      body {
+        font-family: "Roboto", sans-serif;
+        background-color: #ecfdf5;
+        color: #1e293b;
+        margin: 0;
+        padding: 0;
+      }
 
-        <!-- Hamburger (Mobile) -->
-        <div class="md:hidden">
-          <button
-            onclick="document.getElementById('mobile-menu').classList.toggle('hidden')"
-          >
-            <i class="fas fa-bars text-xl"></i>
-          </button>
+      /* Header */
+      header {
+        background-color: #15803d;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      }
+
+      .nav-container {
+        max-width: 7xl;
+        margin: 0 auto;
+        padding: 0.5rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .logo-container img {
+        width: 40px;
+        height: auto;
+        border: 1px solid #ffffff;
+        border-radius: 50%;
+        transition: transform 0.3s ease;
+      }
+
+      .logo-container img:hover {
+        transform: scale(1.1);
+      }
+
+      .logo-container h1 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #ffffff;
+        margin: 0;
+      }
+
+      .menu-items {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        flex-grow: 1;
+        justify-content: center;
+      }
+
+      .menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        color: #d1fae5;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 0.25rem 0.5rem;
+        transition: color 0.3s ease, background-color 0.3s ease;
+        position: relative;
+      }
+
+      .menu-item:hover {
+        color: #ffffff;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 0.375rem;
+      }
+
+      .dropdown {
+        position: relative;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #ffffff;
+        min-width: 160px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        border-radius: 0.375rem;
+        z-index: 50;
+        top: 100%;
+        left: 0;
+        padding: 0.25rem 0;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      .dropdown:hover .dropdown-content {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .dropdown-content a {
+        color: #15803d;
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        font-size: 0.875rem;
+        transition: background-color 0.3s ease;
+      }
+
+      .dropdown-content a:hover {
+        background-color: #ecfdf5;
+        color: #065f46;
+      }
+
+      .auth-contact {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .auth-btn {
+        background-color: #d1fae5;
+        color: #15803d;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .auth-btn:hover {
+        background-color: #a7f3d0;
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Responsive */
+      @media (max-width: 1024px) {
+        .menu-items {
+          display: none;
+        }
+        .auth-contact {
+          display: none;
+        }
+        .mobile-menu-btn {
+          display: block;
+        }
+      }
+
+      @media (min-width: 1025px) {
+        .mobile-menu-btn {
+          display: none;
+        }
+        .mobile-menu {
+          display: none;
+        }
+        .menu-items {
+          gap: 2rem;
+        }
+      }
+
+      /* Mobile Menu */
+      .mobile-menu-btn {
+        background: none;
+        border: none;
+        color: #d1fae5;
+        font-size: 1.25rem;
+        cursor: pointer;
+      }
+
+      .mobile-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: #15803d;
+        padding: 1rem;
+        display: none;
+        flex-direction: column;
+        gap: 0.5rem;
+        z-index: 40;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      .mobile-menu.active {
+        display: flex;
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .mobile-menu a {
+        color: #d1fae5;
+        text-decoration: none;
+        font-size: 1rem;
+        padding: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: background-color 0.3s ease;
+      }
+
+      .mobile-menu a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 0.375rem;
+      }
+
+      .mobile-dropdown {
+        padding-left: 1rem;
+        display: none;
+      }
+
+      .mobile-dropdown.active {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <div class="nav-container">
+        <!-- Logo -->
+        <div class="logo-container">
+          <img src="{% static 'images/green-logo.jpg' %}" alt="Green Travel Logo" />
+          <h1>Green Travel</h1>
         </div>
 
-        <!-- Navigation (Desktop) -->
-        <nav class="hidden md:flex flex-1 justify-center gap-6 flex-wrap">
-          <a href="/" class="menu-item font-medium w-full sm:w-auto"
-            >Trang chủ</a
-          >
-          <a href="/introduce" class="menu-item font-medium w-full sm:w-auto"
-            >Giới thiệu</a
-          >
-
-          <!-- Dropdown Menu -->
-          <div class="relative w-full sm:w-auto">
-            <button
-              onclick="toggleDropdown()"
-              class="dropdown-button flex items-center gap-2 menu-item font-medium transition-colors hover:text-green-400 focus:outline-none"
-            >
-              Cẩm nang du lịch
-              <i
-                class="fas fa-chevron-down text-sm transition-transform duration-300"
-              ></i>
-            </button>
-            <div
-              id="dropdown-menu"
-              class="dropdown-menu absolute left-0 mt-2 hidden flex-col bg-white text-green-800 shadow-xl rounded-lg w-64 z-50 overflow-hidden"
-            >
-              <a
-                href="/tourism/diadiem/"
-                class="flex items-center gap-2 px-4 py-3 hover:bg-green-50 transition-colors"
-                ><i class="fas fa-map-marker-alt text-green-600"></i> Địa điểm
-                du lịch</a
-              >
-              <a
-                href="/tourism/diadiemdacsan/"
-                class="flex items-center gap-2 px-4 py-3 hover:bg-green-50 transition-colors"
-                ><i class="fas fa-utensils text-green-600"></i> Đặc sản</a
-              >
-              <a
-                href="/tourism/tourdiadiemdulich/"
-                class="flex items-center gap-2 px-4 py-3 hover:bg-green-50 transition-colors"
-                ><i class="fas fa-globe text-green-600"></i> Tour du lịch</a
-              >
+        <!-- Menu Items -->
+        <div class="menu-items">
+          <a href="/" class="menu-item">
+            <i class="fas fa-home"></i> Trang chủ
+          </a>
+          <a href="/introduce" class="menu-item">
+            <i class="fas fa-info-circle"></i> Giới thiệu
+          </a>
+          <div class="dropdown">
+            <a href="#" class="menu-item">
+              <i class="fas fa-book-open"></i> Cẩm nang du lịch
+              <i class="fas fa-chevron-down"></i>
+            </a>
+            <div class="dropdown-content">
+              <a href="/tourism/diadiem/">
+                <i class="fas fa-map-marker-alt"></i> Địa điểm du lịch
+              </a>
+              <a href="/tourism/diadiemdacsan/">
+                <i class="fas fa-utensils"></i> Đặc sản
+              </a>
+              <a href="/tourism/tourdiadiemdulich/">
+                <i class="fas fa-globe"></i> Tour du lịch
+              </a>
             </div>
           </div>
-          <a
-            href="/news/tintucsukien"
-            class="hover:text-green-100 font-medium transition"
-            >Tin tức</a
-          >
-          <a
-            href="/members/hoivien/"
-            class="menu-item font-medium w-full sm:w-auto"
-            >Hội viên</a
-          >
-          <a
-            href="/support/tailieu-index/"
-            class="menu-item font-medium w-full sm:w-auto"
-            >Tài liệu</a
-          >
-          <a href="/contact/" class="menu-item font-medium w-full sm:w-auto"
-            >Liên Hệ</a
-          >
-        </nav>
+          <a href="/news/tintucsukien" class="menu-item">
+            <i class="fas fa-newspaper"></i> Tin tức
+          </a>
+          <a href="/members/hoivien/" class="menu-item">
+            <i class="fas fa-users"></i> Hội viên
+          </a>
+          <a href="/support/tailieu-index/" class="menu-item">
+            <i class="fas fa-file-alt"></i> Tài liệu
+          </a>
+        </div>
 
-        <!-- Auth -->
-        <div class="hidden md:flex items-center gap-3 w-full sm:w-auto">
+        <!-- Auth and Contact -->
+        <div class="auth-contact">
+          <a href="/contact/" class="menu-item">
+            <i class="fas fa-envelope"></i> Liên hệ
+          </a>
           {% if user.is_authenticated %}
-          <span class="text-green-100 text-sm font-medium"
-            >Xin chào, {{ user.username }}</span
-          >
-          <a
-            href="{% url 'custom_logout' %}"
-            class="bg-white text-green-600 px-4 py-1.5 rounded-full font-medium hover:bg-green-100 transition"
-            >Đăng xuất</a
-          >
+          <a href="{% url 'custom_logout' %}" class="auth-btn">
+            <i class="fas fa-sign-out-alt"></i> Đăng xuất
+          </a>
           {% else %}
-          <a
-            href="{% url 'custom_login' %}"
-            class="bg-white text-green-600 px-4 py-1.5 rounded-full font-medium hover:bg-green-100 transition"
-            >Đăng nhập</a
-          >
+          <a href="{% url 'custom_login' %}" class="auth-btn">
+            <i class="fas fa-sign-in-alt"></i> Đăng nhập
+          </a>
           {% endif %}
         </div>
+
+        <!-- Mobile Menu Button -->
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+          <i class="fas fa-bars"></i>
+        </button>
       </div>
 
       <!-- Mobile Menu -->
-      <div
-        id="mobile-menu"
-        class="md:hidden hidden bg-green-700 px-4 pb-4 space-y-2"
-      >
-        <a href="/" class="block text-white py-2">Trang chủ</a>
-        <a href="/introduce" class="block text-white py-2">Giới thiệu</a>
-        <a href="/tourism/diadiem/" class="block text-white py-2">Địa điểm</a>
-        <a href="/tourism/diadiemdacsan/" class="block text-white py-2"
-          >Đặc sản</a
-        >
-        <a href="/tourism/tourdiadiemdulich/" class="block text-white py-2"
-          >Tour</a
-        >
-        <a href="/members/hoivien/" class="block text-white py-2">Hội viên</a>
-        <a href="#" class="block text-white py-2">Tin tức</a>
-        <a href="/support/tailieu-index/" class="block text-white py-2"
-          >Tài liệu</a
-        >
+      <div id="mobile-menu" class="mobile-menu">
+        <a href="/" class="mobile-menu-item">
+          <i class="fas fa-home"></i> Trang chủ
+        </a>
+        <a href="/introduce" class="mobile-menu-item">
+          <i class="fas fa-info-circle"></i> Giới thiệu
+        </a>
+        <div class="dropdown-mobile">
+          <a href="#" class="mobile-menu-item" onclick="toggleMobileDropdown(event)">
+            <i class="fas fa-book-open"></i> Cẩm nang du lịch
+            <i class="fas fa-chevron-down"></i>
+          </a>
+          <div id="mobile-dropdown" class="mobile-dropdown">
+            <a href="/tourism/diadiem/" class="mobile-menu-item">
+              <i class="fas fa-map-marker-alt"></i> Địa điểm du lịch
+            </a>
+            <a href="/tourism/diadiemdacsan/" class="mobile-menu-item">
+              <i class="fas fa-utensils"></i> Đặc sản
+            </a>
+            <a href="/tourism/tourdiadiemdulich/" class="mobile-menu-item">
+              <i class="fas fa-globe"></i> Tour du lịch
+            </a>
+          </div>
+        </div>
+        <a href="/news/tintucsukien" class="mobile-menu-item">
+          <i class="fas fa-newspaper"></i> Tin tức
+        </a>
+        <a href="/members/hoivien/" class="mobile-menu-item">
+          <i class="fas fa-users"></i> Hội viên
+        </a>
+        <a href="/support/tailieu-index/" class="mobile-menu-item">
+          <i class="fas fa-file-alt"></i> Tài liệu
+        </a>
+        <a href="/contact/" class="mobile-menu-item">
+          <i class="fas fa-envelope"></i> Liên hệ
+        </a>
         {% if user.is_authenticated %}
-        <a href="{% url 'custom_logout' %}" class="block text-white py-2"
-          >Đăng xuất</a
-        >
+        <a href="{% url 'custom_logout' %}" class="mobile-menu-item">
+          <i class="fas fa-sign-out-alt"></i> Đăng xuất
+        </a>
         {% else %}
-        <a href="{% url 'custom_login' %}" class="block text-white py-2"
-          >Đăng nhập</a
-        >
+        <a href="{% url 'custom_login' %}" class="mobile-menu-item">
+          <i class="fas fa-sign-in-alt"></i> Đăng nhập
+        </a>
         {% endif %}
       </div>
     </header>
 
+    <!-- Banner Block (for pages like home.html) -->
+{% block banner %}
+    {% endblock %}
+
     <!-- Main Content -->
-    <main class="min-h-screen">{% block content %} {% endblock %}</main>
+    <main class="min-h-screen px-4 sm:px-6 lg:px-8 py-6">
+      {% block content %}
+      {% endblock %}
+    </main>
 
     <!-- Footer -->
-    <footer class="bg-green-800 text-white py-8">
-      <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="space-y-3">
-          <h3 class="text-lg font-semibold">Về Green Travel</h3>
-          <p class="text-green-100 text-sm leading-relaxed">
+    <footer class="bg-green-800 text-white py-6 md:py-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+        <div class="space-y-2">
+          <h3 class="text-base md:text-lg lg:text-xl font-semibold">Về Green Travel</h3>
+          <p class="text-green-100 text-xs md:text-sm lg:text-base leading-relaxed">
             Chúng tôi cam kết phát triển du lịch bền vững, giúp du khách khám
             phá thế giới mà vẫn bảo tồn thiên nhiên cho thế hệ tương lai.
           </p>
         </div>
-        <div class="space-y-3">
-          <h3 class="text-lg font-semibold">Liên kết nhanh</h3>
-          <ul class="space-y-2 text-green-100 text-sm">
+        <div class="space-y-2">
+          <h3 class="text-base md:text-lg lg:text-xl font-semibold">Liên kết nhanh</h3>
+          <ul class="space-y-1 text-green-100 text-xs md:text-sm lg:text-base">
             <li>
               <a href="#" class="hover:text-white">Trang chủ</a>
             </li>
@@ -184,26 +400,41 @@
             </li>
           </ul>
         </div>
-        <div class="space-y-3">
-          <h3 class="text-lg font-semibold">Liên hệ</h3>
-          <p class="text-green-100 text-sm">Email: info@greentravel.com</p>
-          <p class="text-green-100 text-sm">SĐT: +1 (555) 123-4567</p>
-          <div class="flex space-x-4 mt-2">
-            <a href="#" class="text-green-100 hover:text-white"
-              ><i class="fab fa-facebook-f"></i
-            ></a>
-            <a href="#" class="text-green-100 hover:text-white"
-              ><i class="fab fa-twitter"></i
-            ></a>
-            <a href="#" class="text-green-100 hover:text-white"
-              ><i class="fab fa-instagram"></i
-            ></a>
+        <div class="space-y-2">
+          <h3 class="text-base md:text-lg lg:text-xl font-semibold">Liên hệ</h3>
+          <p class="text-green-100 text-xs md:text-sm lg:text-base">Email: info@greentravel.com</p>
+          <p class="text-green-100 text-xs md:text-sm lg:text-base">SĐT: +1 (555) 123-4567</p>
+          <div class="flex space-x-3 mt-2">
+            <a href="#" class="text-green-100 hover:text-white text-base md:text-lg">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="text-green-100 hover:text-white text-base md:text-lg">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="text-green-100 hover:text-white text-base md:text-lg">
+              <i class="fab fa-instagram"></i>
+            </a>
           </div>
         </div>
+      </div>
+      <div class="text-center mt-4 text-green-100 text-sm">
+        © Về Green Travel
       </div>
     </footer>
 
     <script src="{% static 'js/index/main.js' %}"></script>
     <script src="{% static 'js/index/tourism.js' %}"></script>
+    <script>
+      function toggleMobileMenu() {
+        const mobileMenu = document.getElementById("mobile-menu");
+        mobileMenu.classList.toggle("active");
+      }
+
+      function toggleMobileDropdown(event) {
+        event.preventDefault();
+        const mobileDropdown = document.getElementById("mobile-dropdown");
+        mobileDropdown.classList.toggle("active");
+      }
+    </script>
   </body>
 </html>

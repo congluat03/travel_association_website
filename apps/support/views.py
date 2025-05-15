@@ -10,7 +10,7 @@ def danh_sach_tailieu(request):
     loai = request.GET.get('loai', '').strip()
 
     # --- dựng queryset ---
-    qs = TaiLieu.objects.all()
+    qs = TaiLieu.objects.all().order_by('-NGAY_CAP_NHAT')
 
     if q:
         qs = qs.filter(

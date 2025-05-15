@@ -20,28 +20,27 @@
 {% endblock %}
 
 {% block content %}
-<section class="max-w-7xl mx-auto px-6 py-16 bg-gradient-to-b from-emerald-50 to-white relative">
-
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 bg-gradient-to-b from-emerald-50 to-white relative">
   <!-- Tiêu đề -->
-  <div class="text-center mb-14">
-    <h1 class="text-5xl md:text-6xl font-extrabold text-emerald-800 tracking-tight drop-shadow-lg animate-fade-in">
+  <div class="text-center mb-10 sm:mb-14">
+    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-emerald-800 tracking-tight drop-shadow-lg animate-fade-in">
       {{ tin.TIEU_DE }}
     </h1>
   </div>
 
   <!-- Nội dung chi tiết -->
-  <div class="bg-white p-10 rounded-3xl shadow-2xl mb-16 border border-emerald-100">
-    <div class="flex flex-wrap items-center justify-between mb-8">
-      <h2 class="text-2xl font-bold text-emerald-800 flex items-center gap-2">
+  <div class="bg-white p-6 sm:p-8 lg:p-10 rounded-3xl shadow-2xl mb-12 sm:mb-16 border border-emerald-100">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8 gap-4">
+      <h2 class="text-xl sm:text-2xl font-bold text-emerald-800 flex items-center gap-2">
         <i class="fas fa-book-open text-emerald-600"></i> Nội dung
       </h2>
 
       {% if tags %}
-      <div class="flex items-center gap-2">
-        <p class="text-gray-600 text-sm">Thẻ:</p>
+      <div class="flex flex-wrap items-center gap-2">
+        <p class="text-gray-600 text-sm whitespace-nowrap">Thẻ:</p>
         <div class="flex flex-wrap gap-2">
           {% for tag in tags %}
-          <span class="bg-emerald-100 text-emerald-800 px-3 py-1.5 rounded-full text-sm hover:bg-emerald-200 transition transform hover:scale-105 cursor-pointer">
+          <span class="bg-emerald-100 text-emerald-800 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm hover:bg-emerald-200 transition transform hover:scale-105 cursor-pointer">
             {{ tag.TEN_TAG }}
           </span>
           {% endfor %}
@@ -50,21 +49,20 @@
       {% endif %}
     </div>
 
-    <div class="prose prose-lg max-w-none text-justify text-gray-700">
+    <div class="prose prose-sm sm:prose-lg max-w-none text-justify text-gray-700">
       {{ tin.NOI_DUNG_CHI_TIET|safe }}
     </div>
   </div>
 
   <!-- Thông tin bổ sung -->
-  <div class="bg-emerald-50 p-10 rounded-3xl shadow-lg mb-16">
-    <div class="flex flex-col md:flex-row gap-10">
-
+  <div class="bg-emerald-50 p-6 sm:p-8 lg:p-10 rounded-3xl shadow-lg mb-12 sm:mb-16">
+    <div class="flex flex-col md:flex-row gap-6 sm:gap-8 lg:gap-10">
       <!-- Thông tin bài viết -->
       <div class="flex-1">
-        <h2 class="text-2xl font-bold text-emerald-800 mb-6 flex items-center gap-2">
+        <h2 class="text-xl sm:text-2xl font-bold text-emerald-800 mb-4 sm:mb-6 flex items-center gap-2">
           <i class="fas fa-info-circle text-emerald-600"></i> Thông tin bài viết
         </h2>
-        <ul class="space-y-4 text-gray-600 text-base">
+        <ul class="space-y-3 sm:space-y-4 text-gray-600 text-sm sm:text-base">
           <li class="flex items-center gap-3">
             <i class="far fa-calendar-alt text-emerald-500"></i> Ngày đăng: {{ tin.NGAY_DANG|date:"d/m/Y" }}
           </li>
@@ -82,30 +80,32 @@
 
       <!-- Tác giả -->
       <div class="md:w-1/3">
-        <h3 class="text-xl font-semibold text-emerald-800 mb-4 flex items-center gap-2">
+        <h3 class="text-lg sm:text-xl font-semibold text-emerald-800 mb-3 sm:mb-4 flex items-center gap-2">
           <i class="fas fa-user text-emerald-600"></i> Tác giả
         </h3>
-        <div class="bg-white p-6 rounded-xl shadow-md flex items-center gap-4">
+        <div class="bg-white p-4 sm:p-6 rounded-xl shadow-md flex items-center gap-3 sm:gap-4">
           {% if tin.MA_TK.HINH_TK %}
-          <img src="{{ tin.MA_TK.HINH_TK.url }}" alt="Tác giả" class="w-14 h-14 rounded-full object-cover shadow">
+          <img src="{{ tin.MA_TK.HINH_TK.url }}" alt="Tác giả" class="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover shadow">
+          {% else %}
+          <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-emerald-200 flex items-center justify-center text-emerald-600 text-lg font-semibold">
+            {{ tin.MA_TK.TEN_DANG_NHAP|first }}
+          </div>
           {% endif %}
           <div>
-            <p class="text-lg font-semibold text-gray-800">{{ tin.MA_TK.TEN_DANG_NHAP }}</p>
-            <p class="text-gray-500 text-sm">Tác giả bài viết</p>
+            <p class="text-base sm:text-lg font-semibold text-gray-800">{{ tin.MA_TK.TEN_DANG_NHAP }}</p>
+            <p class="text-gray-500 text-xs sm:text-sm">Tác giả bài viết</p>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 
   <!-- Nút quay lại -->
   <div class="text-center">
-    <a href="/news/tintucsukien" class="inline-flex items-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white py-4 px-12 rounded-full font-semibold shadow-lg transform hover:scale-105 transition">
+    <a href="/news/tintucsukien" class="inline-flex items-center gap-2 sm:gap-3 bg-emerald-600 hover:bg-emerald-700 text-white py-3 sm:py-4 px-8 sm:px-12 rounded-full font-semibold shadow-lg transform hover:scale-105 transition">
       <i class="fas fa-arrow-left"></i> Quay lại
     </a>
   </div>
-
 </section>
 {% endblock %}
 

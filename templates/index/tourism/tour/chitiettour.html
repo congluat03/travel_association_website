@@ -3,102 +3,164 @@
 
 {% block title %}Chi tiết Tour - {{ tour.TEN_TOUR }}{% endblock %}
 
+{% block extra_css %}
+<style>
+  .swiper-container {
+    height: 22rem; /* Kích thước vừa phải */
+    background: url('https://www.transparenttextures.com/patterns/leaf.png'); /* Hiệu ứng nền lá cây nhẹ */
+    background-size: cover;
+  }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 2px solid #d1fae5;
+    padding-bottom: 0.5rem;
+  }
+  .card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.15);
+  }
+  .info-box {
+    background-color: #ecfdf5;
+    border-left: 4px solid #10b981;
+    position: relative;
+  }
+  .info-box::before {
+    content: "🌿";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    opacity: 0.3;
+  }
+  .timeline-card {
+    background: linear-gradient(145deg, #fff, #ecfdf5);
+    border-left: 4px dashed #34d399; /* Viền nét đứt để tạo cảm giác tự nhiên */
+  }
+  .green-theme-btn {
+    background: linear-gradient(to right, #10b981, #34d399);
+  }
+  .green-theme-btn:hover {
+    background: linear-gradient(to right, #059669, #10b981);
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-<section class="max-w-screen-xl mx-auto px-6 sm:px-8 lg:px-10 py-16 bg-white">
-    <!-- Tiêu đề -->
-    <h1 class="text-4xl font-extrabold text-green-600 text-center mb-12 tracking-tight drop-shadow-md">
-        {{ tour.TEN_TOUR }}
-    </h1>
-
-    <!-- Swiper ảnh -->
-    <div class="swiper-container rounded-xl shadow-lg overflow-hidden mb-12">
-        <div class="swiper-wrapper">
-            {% if images %}
-                {% for img in images %}
-                    <div class="swiper-slide">
-                        <img src="{{ img }}" alt="{{ tour.TEN_TOUR }}" class="w-full h-96 object-cover hover:scale-105 transition-transform duration-300 rounded-lg shadow-md">
-                    </div>
-                {% endfor %}
-            {% else %}
-                <div class="swiper-slide">
-                    <div class="w-full h-96 bg-gray-100 flex items-center justify-center text-gray-500 text-sm rounded-xl">
-                        Không có hình ảnh
-                    </div>
-                </div>
-            {% endif %}
-        </div>
-        <div class="swiper-pagination mt-4"></div>
-        <div class="swiper-button-prev text-green-500"></div>
-        <div class="swiper-button-next text-green-500"></div>
-    </div>
-
-    <!-- Thông tin tour -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
-        <div>
-            <h2 class="text-2xl font-semibold text-green-800 mb-6">📝 Mô tả tour</h2>
-            <p class="text-green-900 text-lg leading-relaxed bg-green-100 p-4 rounded-md max-h-48 overflow-y-auto">
-                {{ tour.MO_TA_TOUR|default:"Chưa có mô tả." }}
-            </p>
-        </div>
-        
-
-        <div>
-            <h2 class="text-2xl font-semibold text-green-800 mb-6">📅 Thông tin về Tour</h2>
-            <ul class="text-green-700 text-lg space-y-4">
-                <li><strong>💵 Giá:</strong> {{ tour.GIA_TOUR|floatformat:2 }} VND</li>
-                <li><strong>🕒 Thời gian:</strong> {{ tour.THOI_GIAN_DI_CHUYEN }}</li>
-
-            <!-- Hiển thị thời gian đi và đến từ bảng ThuocTour -->
-            <div class="flex flex-col gap-6">
-                {% for tt in thuoc_tour %}
-                    {% if tt.THOI_GIAN_DI and tt.THOI_GIAN_DEN %}
-                        <li class="flex items-center gap-2">
-                            🚕
-                            <strong>Thời gian:</strong>
-                            {% if tt.THOI_GIAN_DI|date:"d/m/Y" == tt.THOI_GIAN_DEN|date:"d/m/Y" %}
-                                <!-- Nếu cùng ngày thì chỉ hiển thị giờ -->
-                                {{ tt.THOI_GIAN_DI|date:"d/m/Y H:i" }} - {{ tt.THOI_GIAN_DEN|date:"H:i" }}
-                            {% else %}
-                                <!-- Nếu khác ngày thì hiển thị cả ngày và giờ -->
-                                {{ tt.THOI_GIAN_DI|date:"d/m/Y H:i" }} - {{ tt.THOI_GIAN_DEN|date:"d/m/Y H:i" }}
-                            {% endif %}
-                        </li>
-                    {% endif %}
-                {% endfor %}
-            </div>
-            
+<section class="max-w-screen-xl mx-auto px-6 sm:px-8 lg:px-10 py-16 bg-emerald-50 rounded-2xl shadow-sm">
   
-            </div>
+  <!-- Tiêu đề -->
+  <div class="text-center mb-10">
+    <h1 class="text-4xl font-extrabold text-emerald-600 mb-3 tracking-tight drop-shadow-md">
+      {{ tour.TEN_TOUR }}
+    </h1>
+    <p class="text-emerald-700 text-sm font-medium flex items-center justify-center gap-2">
+      <i class="fas fa-leaf text-emerald-500"></i> 
+      Tour Du Lịch Xanh - Hành Trình Bền Vững
+    </p>
+  </div>
 
-            </ul>
+  <!-- Swiper ảnh -->
+  <div class="swiper-container rounded-xl shadow-lg overflow-hidden mb-12">
+    <div class="swiper-wrapper">
+      {% if images %}
+        {% for img in images %}
+          <div class="swiper-slide">
+            <img src="{{ img }}" alt="{{ tour.TEN_TOUR }}"
+                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-300 rounded-lg shadow-md">
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="swiper-slide">
+          <div class="w-full h-full bg-emerald-100 flex items-center justify-center text-emerald-500 text-sm rounded-xl">
+            Không có hình ảnh
+          </div>
         </div>
+      {% endif %}
+    </div>
+    <div class="swiper-pagination mt-4"></div>
+    <div class="swiper-button-prev text-emerald-500"></div>
+    <div class="swiper-button-next text-emerald-500"></div>
+  </div>
+
+  <!-- Thông tin tour -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-14">
+    <!-- Mô tả tour -->
+    <div class="info-box p-6 rounded-lg">
+      <h2 class="text-2xl font-semibold text-emerald-800 mb-4 section-title">
+        <i class="fas fa-info-circle text-emerald-500"></i> Mô tả tour
+      </h2>
+      <p class="text-emerald-900 text-base leading-relaxed max-h-60 overflow-y-auto">
+        {{ tour.MO_TA_TOUR|default:"Chưa có mô tả." }}
+      </p>
     </div>
 
-    <!-- Các địa điểm liên quan -->
-    {% if related_dd_list %}
-        <div class="mt-14">
-            <h2 class="text-2xl font-semibold text-green-800 mb-6 flex items-center gap-2">
-                <i class="fas fa-map-marked-alt text-green-500 hover:text-green-700 transition-colors duration-300"></i>
-                🗺️ Các địa điểm liên quan
-            </h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                {% for related_dd in related_dd_list %}
-                    {% include "index/tourism/diadiem/diadiem_card_item.html" with dd=related_dd %}
-                {% endfor %}
-            </div>
+    <!-- Thông tin về Tour -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-emerald-100">
+      <h2 class="text-2xl font-semibold text-emerald-800 mb-4 section-title">
+        <i class="fas fa-calendar-alt text-emerald-500"></i> Thông tin về Tour
+      </h2>
+      <ul class="text-emerald-700 text-base space-y-3">
+        <li><strong>💵 Giá:</strong> {{ tour.gia_trieu }} triệu VNĐ</li>
+        <li><strong>🕒 Thời gian:</strong> {{ tour.THOI_GIAN_DI_CHUYEN }}</li>
+      </ul>
+      <div class="mt-6">
+        <h3 class="text-lg font-semibold text-emerald-800 mb-3">🌍 Lịch trình xanh</h3>
+        <div class="max-h-80 overflow-y-auto space-y-4">
+          {% for tt in thuoc_tour %}
+            {% if tt.THOI_GIAN_DI and tt.THOI_GIAN_DEN %}
+              {% if tt.THOI_GIAN_DI < tt.THOI_GIAN_DEN %}
+                <div class="timeline-card flex items-center gap-4 p-4 rounded-lg shadow-sm card-hover transition duration-300">
+                  <span class="text-2xl">🌿</span>
+                  <div class="flex flex-col">
+                    <strong class="font-semibold text-lg text-emerald-700">{{ tt.MA_DD.TEN_DIA_DIEM }}</strong>
+                    <span class="text-sm text-emerald-600">
+                      <strong>Thời gian:</strong>
+                      {% if tt.THOI_GIAN_DI|date:"d/m/Y H:i" == tt.THOI_GIAN_DEN|date:"d/m/Y H:i" %}
+                        {{ tt.THOI_GIAN_DI|date:"d/m/Y H:i" }}
+                      {% elif tt.THOI_GIAN_DI|date:"d/m/Y" == tt.THOI_GIAN_DEN|date:"d/m/Y" %}
+                        {{ tt.THOI_GIAN_DI|date:"d/m/Y H:i" }} - {{ tt.THOI_GIAN_DEN|date:"H:i" }}
+                      {% else %}
+                        {{ tt.THOI_GIAN_DI|date:"d/m/Y H:i" }} - {{ tt.THOI_GIAN_DEN|date:"d/m/Y H:i" }}
+                      {% endif %}
+                    </span>
+                  </div>
+                </div>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
         </div>
-    {% else %}
-        <div class="mt-12 text-center">
-            <p class="text-lg text-gray-600">Không có địa điểm liên quan.</p>
-        </div>
-    {% endif %}
-
-    <!-- Nút quay lại -->
-    <div class="mt-14 text-center">
-        <a href="/tourism/tourdiadiemdulich/" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-full font-semibold shadow-md transition-all duration-300">
-            <i class="fas fa-arrow-left text-white hover:text-green-200 transition-colors duration-300"></i>
-            Quay lại danh sách tour
-        </a>
+      </div>
     </div>
+  </div>
+
+  <!-- Các địa điểm liên quan -->
+  {% if related_dd_list %}
+    <div class="mt-14">
+      <h2 class="text-2xl font-semibold text-emerald-800 mb-6 section-title">
+        <i class="fas fa-map-marked-alt text-emerald-500"></i> Các địa điểm liên quan
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        {% for related_dd in related_dd_list %}
+          {% include "index/tourism/diadiem/diadiem_card_item.html" with dd=related_dd %}
+        {% endfor %}
+      </div>
+    </div>
+  {% else %}
+    <div class="mt-12 text-center">
+      <p class="text-lg text-emerald-600 bg-emerald-100 py-4 rounded-lg">
+        Không có địa điểm liên quan.
+      </p>
+    </div>
+  {% endif %}
+
+  <!-- Nút quay lại -->
+  <div class="mt-14 text-center">
+    <a href="/tourism/tourdiadiemdulich/"
+       class="inline-flex items-center gap-2 green-theme-btn text-white py-3 px-8 rounded-full font-semibold shadow-lg transition-all duration-300">
+      <i class="fas fa-arrow-left"></i> Quay lại danh sách tour
+    </a>
+  </div>
 </section>
 {% endblock %}

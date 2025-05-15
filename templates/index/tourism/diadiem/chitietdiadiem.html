@@ -6,35 +6,49 @@
 {% block extra_css %}
 <style>
   .swiper-container {
-    height: 24rem; /* Đặt chiều cao nhất quán */
+    height: 20rem; /* Giảm chiều cao của swiper */
+  }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 2px solid #e5f5e9;
+    padding-bottom: 0.5rem;
+  }
+  .card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 128, 0, 0.1);
+  }
+  .description-box {
+    background-color: #f7faf6;
+    border-left: 4px solid #34d399;
   }
 </style>
 {% endblock %}
 
 {% block content %}
-<section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-white">
+<section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-gray-50 rounded-2xl shadow-sm">
 
-  <!-- Tiêu đề -->
-  <h1 class="text-4xl font-extrabold text-green-700 text-center mb-2 tracking-tight drop-shadow-md">
-    {{ dd.TEN_DIA_DIEM }}
-  </h1>
-
-  <!-- Doanh nghiệp quản lý -->
-  {% if dd.MA_DN %}
-    <p class="text-center text-gray-600 text-sm mb-6">
-      Quản lý bởi: <span class="font-semibold text-green-800">{{ dd.MA_DN.TEN_DN }}</span>
-    </p>
-  {% endif %}
+  <!-- Header: Tiêu đề & Doanh nghiệp -->
+  <div class="text-center mb-10">
+    <h1 class="text-4xl font-extrabold text-green-700 mb-3 tracking-tight drop-shadow-md">
+      {{ dd.TEN_DIA_DIEM }}
+    </h1>
+    {% if dd.MA_DN %}
+      <p class="text-gray-600 text-sm">
+        Quản lý bởi: <span class="font-semibold text-green-800">{{ dd.MA_DN.TEN_DN }}</span>
+      </p>
+    {% endif %}
+  </div>
 
   <!-- Swiper ảnh -->
-  <div class="swiper-container mb-12 rounded-3xl shadow-lg overflow-hidden">
+  <div class="swiper-container mb-12 rounded-3xl shadow-xl overflow-hidden">
     <div class="swiper-wrapper">
       {% if images %}
         {% for img in images %}
           <div class="swiper-slide">
             <img src="{{ img }}" alt="{{ dd.TEN_DIA_DIEM }}"
-            class="w-full h-full max-h-96 object-cover transition-transform duration-300 hover:scale-105">
-       
+                 class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
           </div>
         {% endfor %}
       {% else %}
@@ -43,61 +57,68 @@
         </div>
       {% endif %}
     </div>
-    <div class="swiper-pagination mt-3"></div>
+    <div class="swiper-pagination mt-4"></div>
     <div class="swiper-button-prev text-green-500"></div>
     <div class="swiper-button-next text-green-500"></div>
   </div>
 
-  <!-- Mô tả & Địa chỉ -->
-  <div class="grid md:grid-cols-2 gap-10">
+  <!-- Thông tin chính: Mô tả & Địa chỉ -->
+  <div class="grid md:grid-cols-2 gap-8 mb-14">
     <!-- Mô tả -->
-    <div>
-      <h2 class="text-2xl font-semibold text-green-800 mb-2">📝 Mô tả</h2>
-      <div class="bg-green-50 text-green-900 p-4 rounded-lg max-h-48 overflow-y-auto leading-relaxed">
+    <div class="description-box p-6 rounded-lg">
+      <h2 class="text-2xl font-semibold text-green-800 mb-3 section-title">
+        <i class="fas fa-info-circle text-green-500"></i> Mô tả
+      </h2>
+      <p class="text-green-900 leading-relaxed max-h-60 overflow-y-auto">
         {% if dd.MO_TA_DD %}
           {{ dd.MO_TA_DD }}
         {% else %}
           Mô tả chưa có.
         {% endif %}
-      </div>
+      </p>
     </div>
 
     <!-- Địa chỉ -->
-    <div>
-      <h2 class="text-2xl font-semibold text-green-800 mb-2">📍 Địa chỉ</h2>
-      <p class="text-green-700 text-base mb-2">{{ dd.get_full_address }}</p>
-      <a href="{{ dd.get_google_map_url }}" target="_blank" class="inline-flex items-center gap-2 text-green-600 hover:text-green-800 font-medium mt-2 transition">
-        <i class="fas fa-map-marker-alt"></i> Xem trên Google Maps
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-green-100">
+      <h2 class="text-2xl font-semibold text-green-800 mb-3 section-title">
+        <i class="fas fa-map-marker-alt text-green-500"></i> Địa chỉ
+      </h2>
+      <p class="text-green-700 text-base mb-3">{{ dd.get_full_address }}</p>
+      <a href="{{ dd.get_google_map_url }}" target="_blank"
+         class="inline-flex items-center gap-2 text-green-600 hover:text-green-800 font-medium transition">
+        Xem trên Google Maps <i class="fas fa-external-link-alt"></i>
       </a>
     </div>
   </div>
 
   <!-- Đặc sản -->
   {% if dacsan_list %}
-  <div class="mt-14">
-    <h2 class="text-2xl font-semibold text-green-800 mb-4 flex items-center gap-2">
-      <i class="fas fa-utensils text-green-500"></i> Đặc sản địa phương
-    </h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {% for ds in dacsan_list %}
-      <div class="bg-green-50 border border-green-100 rounded-xl shadow-sm hover:shadow-lg transition">
-        {% if ds.HINH_DS %}
-          <img src="{{ ds.HINH_DS.url }}" alt="{{ ds.TEN_DAC_SAN }}"
-               class="w-full h-36 object-cover rounded-t-xl hover:scale-105 transition-transform duration-300">
-        {% endif %}
-        <div class="p-3">
-          <h3 class="text-base font-bold text-green-700 truncate">{{ ds.TEN_DAC_SAN }}</h3>
-          <p class="text-sm text-green-600 mt-1 line-clamp-2">{{ ds.MO_TA_DS|truncatewords:20 }}</p>
-        </div>
+    <div class="mb-14">
+      <h2 class="text-2xl font-semibold text-green-800 mb-6 section-title">
+        <i class="fas fa-utensils text-green-500"></i> Đặc sản địa phương
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for ds in dacsan_list %}
+          <div class="bg-white border border-green-100 rounded-xl card-hover transition duration-300">
+            {% if ds.HINH_DS %}
+              <img src="{{ ds.HINH_DS.url }}" alt="{{ ds.TEN_DAC_SAN }}"
+                   class="w-full h-32 object-cover rounded-t-xl">
+            {% endif %}
+            <div class="p-4">
+              <h3 class="text-lg font-bold text-green-700 truncate">{{ ds.TEN_DAC_SAN }}</h3>
+              <p class="text-sm text-green-600 mt-2 line-clamp-3">
+                {{ ds.MO_TA_DS|truncatewords:30 }}
+              </p>
+            </div>
+          </div>
+        {% endfor %}
       </div>
-      {% endfor %}
     </div>
-  </div>
   {% endif %}
 
   <!-- Tour liên quan -->
-  <div class="mt-14">
-    <h2 class="text-2xl font-semibold text-green-800 mb-4 flex items-center gap-2">
+  <div class="mb-14">
+    <h2 class="text-2xl font-semibold text-green-800 mb-6 section-title">
       <i class="fas fa-route text-green-500"></i> Các tour liên quan
     </h2>
     {% if tour_list %}
@@ -107,27 +128,30 @@
         {% endfor %}
       </div>
     {% else %}
-      <p class="text-center text-gray-600 text-base">Hiện chưa có tour nào liên quan.</p>
+      <p class="text-center text-gray-600 text-base bg-green-50 py-4 rounded-lg">
+        Hiện chưa có tour nào liên quan.
+      </p>
     {% endif %}
   </div>
 
   <!-- Địa điểm liên quan -->
   {% if related_dd_list %}
-  <div class="mt-14">
-    <h2 class="text-2xl font-semibold text-green-800 mb-4 flex items-center gap-2">
-      <i class="fas fa-location-arrow text-green-500"></i> Gợi ý địa điểm khác
-    </h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {% for related_dd in related_dd_list %}
-        {% include "index/tourism/diadiem/diadiem_card_item.html" with dd=related_dd %}
-      {% endfor %}
+    <div class="mb-14">
+      <h2 class="text-2xl font-semibold text-green-800 mb-6 section-title">
+        <i class="fas fa-location-arrow text-green-500"></i> Gợi ý địa điểm khác
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {% for related_dd in related_dd_list %}
+          {% include "index/tourism/diadiem/diadiem_card_item.html" with dd=related_dd %}
+        {% endfor %}
+      </div>
     </div>
-  </div>
   {% endif %}
 
-  <!-- Quay lại -->
-  <div class="mt-16 text-center">
-    <a href="/tourism/diadiem/" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-full font-semibold shadow transition">
+  <!-- Nút quay lại -->
+  <div class="text-center mt-12">
+    <a href="/tourism/diadiem/"
+       class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white py-3 px-8 rounded-full font-semibold shadow-lg transition duration-300">
       <i class="fas fa-arrow-left"></i> Quay lại danh sách địa điểm
     </a>
   </div>

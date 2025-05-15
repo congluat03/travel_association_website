@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from apps.members.models import TaiKhoan,DoanhNghiep,NganhNghe,HiepHoi,DangKyHoiVien
-from apps.tourism.models import DiaDiemDuLich
+from apps.tourism.models import DiaDiemDuLich, TourDuLich
 from apps.news.models import TinTuc
 from apps.support.models import TaiLieu
 from django.contrib import messages
@@ -65,7 +65,7 @@ def register_view(request):
     return render(request, 'auth/register.html')
 
 def trang_chu(request):
-    # Lấy 6 địa điểm đầu tiên
+    # Lấy 3 địa điểm đầu tiên
     dia_diem = DiaDiemDuLich.objects.all()[:3]
     
     # Lấy 5 tin tức mới nhất, ưu tiên tin nổi bật
@@ -76,14 +76,31 @@ def trang_chu(request):
     
     # Lấy 3 đăng ký hội viên đã duyệt
     dang_ky_hoi_vien = DangKyHoiVien.objects.filter(TINH_TRANG=1)[:3]
+    
+    # Lấy các vị trí địa lý
     khu_list = DiaDiemDuLich.objects.values_list('VI_TRI', flat=True).distinct()
     
+    # Lấy tất cả các tour
+    tours = TourDuLich.objects.order_by('-MA_TOUR')[:3]
+
+
+    # Tính giá theo triệu và làm tròn, bỏ phần ".0" nếu là số nguyên
+    for tour in tours:
+        tour.gia_trieu = round(tour.GIA_TOUR / 1_000_000, 1)
+        # Kiểm tra nếu giá trị là số nguyên bằng cách so sánh với giá trị làm tròn
+        if tour.gia_trieu == int(tour.gia_trieu):
+            tour.gia_trieu = int(tour.gia_trieu)  # Nếu là số nguyên, bỏ phần ".0"
+    
+    # Trả về context với các đối tượng
     context = {
         'dia_diem': dia_diem,
         'tin_tuc': tin_tuc,
         'tai_lieu': tai_lieu,
         'dang_ky_hoi_vien': dang_ky_hoi_vien,
+        'tours': tours,
+        'khu_list': khu_list,  # Thêm danh sách khu vực vào context nếu cần
     }
+    
     return render(request, 'index/home/home.html', context)
 
 def gioithieu(request):

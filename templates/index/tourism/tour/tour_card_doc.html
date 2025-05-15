@@ -1,4 +1,4 @@
-<div class="bg-green-50 border border-green-100 rounded-3xl shadow-md overflow-hidden flex flex-col transition duration-300 hover:shadow-xl max-w-xs mx-auto">
+<div class=" border-green-100 rounded-3xl shadow-md overflow-hidden flex flex-col transition duration-300 hover:shadow-xl max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg w-full mx-auto">
     <!-- Hình ảnh -->
     <div class="w-full h-48 overflow-hidden flex-shrink-0 rounded-t-3xl">
         {% if tour.HINH_TOUR %}
@@ -16,21 +16,11 @@
     <div class="p-4 flex flex-col justify-between flex-1">
         <!-- Tên tour -->
         <h2 class="text-xl font-semibold text-green-800 flex items-center gap-2 mb-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-600" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.5-2.5 6.74-5 9.88C9.5 15.74 7 11.5 7 9z"/>
-                <circle cx="12" cy="9" r="2.5"/>
-            </svg>
+          
             {{ tour.TEN_TOUR }}
         </h2>
 
-        <!-- Mô tả -->
-        <p class="text-sm text-green-900 mb-2">
-            {% if tour.MO_TA_TOUR %}
-                {{ tour.MO_TA_TOUR|truncatewords:20 }}
-            {% else %}
-                Tour hấp dẫn với trải nghiệm tuyệt vời.
-            {% endif %}
-        </p>
+
 
         <!-- Giá & Thời gian -->
         <div class="text-sm text-green-700 mb-3 space-y-1">
@@ -39,7 +29,7 @@
         </div>
 
         <!-- Hành động -->
-        <div class="flex justify-center mt-4">
+        <div class="flex justify-end mt-4">
             <a href="/tourism/tourdiadiemdulich/{{ tour.MA_TOUR }}/"
             class="inline-flex items-center gap-2 text-green-700 hover:text-green-900 font-semibold text-sm transition-all">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -4,6 +4,8 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 import qrcode
 from io import BytesIO
 import os
+import sys
+from PIL import Image
 # Hàm tạo đường dẫn lưu hình ảnh tài khoản
 def account_image_upload_path(instance, filename):
     # Lưu ảnh vào: taikhoan/<MA_TK>/<filename>
@@ -62,7 +64,7 @@ class DoanhNghiep(models.Model):
         NganhNghe, 
         on_delete=models.CASCADE, 
         related_name="doanh_nghieps", 
-        db_column='ma_nganh'  
+        db_column='ma_nganh'
     )
     TEN_DN = models.CharField(max_length=255)
     DIA_CHI = models.TextField(blank=True)
@@ -70,27 +72,50 @@ class DoanhNghiep(models.Model):
     EMAIL_DN = models.EmailField(null=True, blank=True)
     MA_QR = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
     NGUOI_DAI_DIEN = models.CharField(max_length=255, null=True, blank=True)
-    
-    # Thay đổi kiểu TRANG_THAI_DUYET sang IntegerField
     TRANG_THAI_DUYET = models.IntegerField(
-        choices=[(0, 'Chưa Duyệt'), (1, 'Duyệt')],  # Sử dụng số 0 và 1
-        default=0  # Mặc định là Chưa Duyệt (0)
+        choices=[(0, 'Chưa Duyệt'), (1, 'Duyệt')], 
+        default=0
     )
-
+    
     def __str__(self):
         return self.TEN_DN
 
     def save(self, *args, **kwargs):
-        # Tạo mã QR tự động khi tạo hoặc cập nhật doanh nghiệp
-        if not self.MA_QR:
-            url = f"http://127.0.0.1:8000/profile/{self.MA_DN}/"  # hoặc dùng reverse nếu trong Django
-            qr_code = qrcode.make(url)
-            buffer = BytesIO()
-            qr_code.save(buffer, format="PNG")
-            buffer.seek(0)
-            self.MA_QR = InMemoryUploadedFile(
-                buffer, None, f"{self.MA_DN}_qr.png", 'image/png', buffer.tell(), None
-            )
+        # Sử dụng địa chỉ IP thay cho localhost (127.0.0.1)
+        ip_address = '192.168.200.135'  # Thay thế địa chỉ IP của máy tính của bạn tại đây
+        url = f"http://{ip_address}:8000/members/hoivien/{self.MA_DN}/"
+        
+        # Khởi tạo QR Code
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(url)
+        qr.make(fit=True)
+
+        # Tạo hình ảnh QR Code
+        img = qr.make_image(fill="black", back_color="white")
+
+        # Lưu vào bộ nhớ tạm
+        buffer = BytesIO()
+        img.save(buffer, format="PNG")
+        buffer.seek(0)
+
+        # Đặt tên file QR Code
+        file_name = f"{self.MA_DN}_qr.png"
+
+        # Tạo file InMemoryUploadedFile để lưu vào ImageField
+        self.MA_QR = InMemoryUploadedFile(
+            buffer,
+            None,
+            file_name,
+            'image/png',
+            sys.getsizeof(buffer),
+            None
+        )
+
         super().save(*args, **kwargs)
 
     class Meta:

@@ -5,77 +5,134 @@
 
 {% block content %}
 <section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-
+  <!-- Tiêu đề và mô tả -->
   <div class="max-w-3xl mx-auto text-center mb-12">
-    <h1 class="text-4xl font-extrabold text-emerald-700 tracking-tight">
+    <h1 class="text-4xl font-extrabold text-emerald-700 tracking-tight animate__animated animate__fadeIn">
       📰 Cập Nhật Tin Tức Du Lịch Mỗi Ngày
     </h1>
-    <p class="mt-4 text-lg text-gray-600">
+    <p class="mt-4 text-lg text-gray-600 animate__animated animate__fadeIn" style="animation-delay: 0.2s;">
       Cập nhật liên tục các tin tức du lịch mới nhất, điểm đến hấp dẫn và xu hướng khám phá đang được quan tâm.
     </p>
   </div>
-  <!-- FORM TÌM KIẾM -->
-  <form method="get" class="flex flex-col md:flex-row flex-wrap gap-4 mb-12">
-    <!-- Từ khóa -->
-    <div class="flex-1 min-w-[250px]">
-      <input type="text" name="q" placeholder="🔍 Nhập từ khóa tìm kiếm..." value="{{ query }}"
-             class="w-full bg-white/50 backdrop-blur border border-gray-300 rounded-xl px-4 py-2 focus:ring-emerald-600 focus:outline-none">
-    </div>
-  
-    <!-- Chủ đề -->
-    <div class="min-w-[200px]">
-      <select name="tag"
-              class="w-full bg-white/50 backdrop-blur border border-gray-300 rounded-xl px-3 py-2 focus:ring-emerald-600 focus:outline-none">
-        <option value="">📌 Lọc theo tag</option>
-        {% for tag in tags %}
-          <option value="{{ tag.MA_TAG }}" {% if tag.MA_TAG == selected_tag %}selected{% endif %}>
-            {{ tag.TEN_TAG }}
-          </option>
-        {% endfor %}
-      </select>
-    </div>
 
-    <!-- Nổi bật -->
-    <div class="min-w-[200px]">
-      <select name="only_highlight"
-              class="w-full bg-white/50 backdrop-blur border border-gray-300 rounded-xl px-3 py-2 focus:ring-emerald-600 focus:outline-none">
-        <option value="">Tất cả</option>
-        <option value="1" {% if only_highlight == '1' %}selected{% endif %}>🔥 Chỉ tin nổi bật</option>
-        <option value="0" {% if only_highlight == '0' %}selected{% endif %}>📄 Tin bình thường</option>
-      </select>
-    </div>
-  
-    <!-- Loại tin tức -->
-    <div class="min-w-[200px]">
-      <select name="loai_tin_tuc"
-              class="w-full bg-white/50 backdrop-blur border border-gray-300 rounded-xl px-3 py-2 focus:ring-emerald-600 focus:outline-none">
-        <option value="">-- Chọn Loại Tin Tức --</option>
-        {% for loai in loai_tin_tuc_list %}
-          <option value="{{ loai.LOAI_TIN_TUC }}" {% if loai.LOAI_TIN_TUC == loai_tin_tuc %}selected{% endif %}>
-            {{ loai.LOAI_TIN_TUC }}
-          </option>
-        {% endfor %}
-      </select>
-    </div>
-  
-    <!-- Nút tìm kiếm -->
-    <div>
-      <button type="submit"
-              class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-xl shadow">
-        🔍
-      </button>
-    </div>
-  </form>
-  
-
-  <!-- DANH SÁCH TIN TỨC -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-    {% for tin in page_obj|slice:":10" %}
-      <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition-all">
-        {% include 'index/news/tintuc_card_item.html' %}
+  <!-- Form tìm kiếm (Sticky) -->
+  <div class="top-16 z-30 bg-white/90 backdrop-blur-md shadow-md rounded-xl p-4 mb-8">
+    <form method="get" class="flex flex-col md:flex-row flex-wrap gap-4">
+      <!-- Từ khóa -->
+      <div class="flex-1 min-w-[250px]">
+        <input type="text" name="q" placeholder="🔍 Nhập từ khóa tìm kiếm..." value="{{ query }}"
+               class="w-full bg-white/50 border border-gray-300 rounded-xl px-4 py-2 focus:ring-emerald-600 focus:outline-none">
       </div>
-    {% endfor %}
+      <!-- Chủ đề -->
+      <div class="min-w-[200px]">
+        <select name="tag"
+                class="w-full bg-white/50 border border-gray-300 rounded-xl px-3 py-2 focus:ring-emerald-600 focus:outline-none">
+          <option value="">📌 Lọc theo tag</option>
+          {% for tag in tags %}
+            <option value="{{ tag.MA_TAG }}" {% if tag.MA_TAG == selected_tag %}selected{% endif %}>
+              {{ tag.TEN_TAG }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <!-- Nổi bật -->
+      <div class="min-w-[200px]">
+        <select name="only_highlight"
+                class="w-full bg-white/50 border border-gray-300 rounded-xl px-3 py-2 focus:ring-emerald-600 focus:outline-none">
+          <option value="">Tất cả</option>
+          <option value="1" {% if only_highlight == '1' %}selected{% endif %}>🔥 Chỉ tin nổi bật</option>
+          <option value="0" {% if only_highlight == '0' %}selected{% endif %}>📄 Tin bình thường</option>
+        </select>
+      </div>
+      <!-- Loại tin tức -->
+      <div class="min-w-[200px]">
+        <select name="loai_tin_tuc"
+                class="w-full bg-white/50 border border-gray-300 rounded-xl px-3 py-2 focus:ring-emerald-600 focus:outline-none">
+          <option value="">-- Chọn Loại Tin Tức --</option>
+          {% for loai in loai_tin_tuc_list %}
+            <option value="{{ loai.LOAI_TIN_TUC }}" {% if loai.LOAI_TIN_TUC == loai_tin_tuc %}selected{% endif %}>
+              {{ loai.LOAI_TIN_TUC }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <!-- Nút tìm kiếm -->
+      <div>
+        <button type="submit"
+                class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-xl shadow transition-transform duration-300 hover:scale-105">
+          🔍 Tìm kiếm
+        </button>
+      </div>
+    </form>
   </div>
+  
+  <!-- Nội dung chính -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+  <!-- Cột trái: Tin nổi bật và danh sách tin -->
+  <div class="lg:col-span-2">
+    <!-- Tin nổi bật -->
+    {% if page_obj|length > 0 %}
+      <div class="mb-8">
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition-all">
+          {% with tin=page_obj|first %}
+            <div class="relative">
+              {% include 'index/news/tintuc_card_item.html' with tin=tin %}
+                <span class="absolute top-4 right-4 bg-yellow-400 text-white text-xs font-semibold py-1 px-2 rounded-full shadow-md">
+                  Nổi bật
+                </span>
+            </div>
+          {% endwith %}
+        </div>
+      </div>
+
+      <!-- Danh sách tin khác -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {% for tin in page_obj|slice:"1:8" %}
+          {% if forloop.counter0 > 0 %} <!-- Bỏ qua tin đầu tiên (tin nổi bật) -->
+            <div class="bg-white shadow-md rounded-xl overflow-hidden hover:shadow-xl transition-all">
+              {% include 'index/news/tintuc_card_item.html' with tin=tin %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-gray-600 text-center">Hiện tại chưa có tin tức nào để hiển thị.</p>
+    {% endif %}
+  </div>
+
+  <!-- Cột phải: Tag và Tin mới nhất -->
+  <div class="lg:col-span-1">
+    <!-- Tag phổ biến -->
+    <div class="bg-white shadow-md rounded-xl p-6 mb-6">
+      <h3 class="text-lg font-semibold text-emerald-600 mb-4">📌 Tag Phổ Biến</h3>
+      <div class="flex flex-wrap gap-2">
+        {% for tag in tags|slice:":10" %}
+          <a href="?tag={{ tag.MA_TAG }}"
+             class="inline-block bg-emerald-50 hover:bg-emerald-100 text-emerald-600 text-sm font-medium px-3 py-1 rounded-full transition-all duration-300">
+            {{ tag.TEN_TAG }}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Tin mới nhất -->
+    <div class="bg-white shadow-md rounded-xl p-6">
+      <h3 class="text-lg font-semibold text-emerald-600 mb-4">🕒 Tin Mới Nhất</h3>
+      <ul class="space-y-4">
+        {% for tin in page_obj|slice:":5" %}
+          <li class="border-b border-gray-200 pb-2">
+            <a href="/news/tintucsukien/{{ tin.MA_TIN }}/" class="flex items-start gap-2 text-gray-800 hover:text-emerald-600 transition-colors duration-200">
+              <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span class="text-sm line-clamp-2">{{ tin.TIEU_DE }} ({{ tin.NGAY_DANG|date:"d/m/Y" }})</span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
 
   <!-- PHÂN TRANG -->
   {% if page_obj.has_other_pages %}

@@ -38,8 +38,6 @@ class DiaDiemDuLich(models.Model):
         return f"https://www.google.com/maps?q={address.replace(' ', '+')}"
 
 
-
-
 def dacsan_image_upload_path(instance, filename):
     # Tạo đường dẫn lưu hình: dacsan/<MA_DS>/<filename>
     return os.path.join('dacsan', str(instance.MA_DS), filename)

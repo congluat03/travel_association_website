@@ -4,63 +4,53 @@
 {% block title %}Chi tiết Doanh nghiệp{% endblock %}
 
 {% block content %}
-<section class="py-16 px-4 sm:px-6 bg-green-50">
-  <div class="max-w-4xl mx-auto">
-    <!-- Profile Card -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+<section class="py-16 px-4 sm:px-8 bg-gradient-to-b from-gray-100 to-green-50 min-h-screen">
+  <div class="max-w-xl mx-auto">
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden transform transition-all duration-300 hover:shadow-2xl">
       
-      <!-- Header Section -->
-      <div class="px-8 py-6 text-center bg-gradient-to-r from-green-400 to-teal-400 text-white">
-        <h2 class="text-4xl font-extrabold text-gray-900">{{ dn.TEN_DN }}</h2>
-        <p class="mt-2 text-gray-200 text-lg">{{ dn.MO_TA_DN|default:"Giới thiệu doanh nghiệp..." }}</p>
+      <!-- Header -->
+      <div class="px-8 py-6 bg-gradient-to-r from-green-600 to-green-400 text-white text-center">
+        <h2 class="text-2xl font-bold">{{ dn.TEN_DN }}</h2>
+        <p class="mt-2 text-base text-green-100">
+          {% if dn.MO_TA_DN %}
+            {{ dn.MO_TA_DN }}
+          {% else %}
+            Doanh nghiệp chưa cập nhật thông tin giới thiệu.
+          {% endif %}
+        </p>
       </div>
 
-      <!-- Information Section -->
-      <div class="border-t border-gray-200 px-8 py-6">
-        <dl class="space-y-5 text-left text-gray-700">
-          <div class="flex justify-between">
-            <dt class="font-semibold text-lg text-teal-600">Ngành nghề</dt>
-            <dd class="text-gray-500">{{ dn.nganh_nghe.TEN_NGANH }}</dd>
-          </div>
-          <div class="flex justify-between">
-            <dt class="font-semibold text-lg text-teal-600">Địa chỉ</dt>
-            <dd class="text-gray-500">{{ dn.DIA_CHI }}</dd>
-          </div>
-          <div class="flex justify-between">
-            <dt class="font-semibold text-lg text-teal-600">Số ĐT</dt>
-            <dd class="text-gray-500">{{ dn.SDT_DN }}</dd>
-          </div>
-          <div class="flex justify-between">
-            <dt class="font-semibold text-lg text-teal-600">Email</dt>
-            <dd class="text-gray-500">{{ dn.EMAIL_DN }}</dd>
-          </div>
-          <div class="flex justify-between">
-            <dt class="font-semibold text-lg text-teal-600">Người đại diện</dt>
-            <dd class="text-gray-500">{{ dn.NGUOI_DAI_DIEN }}</dd>
-          </div>
-          <div class="flex flex-col">
-            <dt class="font-semibold text-lg text-teal-600">Mã QR</dt>
-            <dd class="mt-2">
-              {% if dn.MA_QR %}
-                <img src="{{ dn.MA_QR.url }}" alt="QR Code" class="w-32 h-32 mx-auto">
-              {% else %}
-                <span class="text-gray-400 italic">Chưa có mã QR</span>
-              {% endif %}
-            </dd>
-          </div>
-          
-        </dl>
+      <!-- Thông tin doanh nghiệp -->
+      <div class="p-8 space-y-4">
+        <div class="p-4 bg-green-50/50 rounded-xl border border-green-100">
+          <dt class="font-medium text-base text-green-700">Ngành nghề</dt>
+          <dd class="text-gray-600 text-sm">{{ dn.nganh_nghe.TEN_NGANH }}</dd>
+        </div>
+        <div class="p-4 bg-green-50/50 rounded-xl border border-green-100">
+          <dt class="font-medium text-base text-green-700">Địa chỉ</dt>
+          <dd class="text-gray-600 text-sm">{{ dn.DIA_CHI }}</dd>
+        </div>
+        <div class="p-4 bg-green-50/50 rounded-xl border border-green-100">
+          <dt class="font-medium text-base text-green-700">Số ĐT</dt>
+          <dd class="text-gray-600 text-sm">{{ dn.SDT_DN }}</dd>
+        </div>
+        <div class="p-4 bg-green-50/50 rounded-xl border border-green-100">
+          <dt class="font-medium text-base text-green-700">Email</dt>
+          <dd class="text-gray-600 text-sm">{{ dn.EMAIL_DN }}</dd>
+        </div>
+        <div class="p-4 bg-green-50/50 rounded-xl border border-green-100">
+          <dt class="font-medium text-base text-green-700">Người đại diện</dt>
+          <dd class="text-gray-600 text-sm">{{ dn.NGUOI_DAI_DIEN }}</dd>
+        </div>
       </div>
 
-      <!-- Return Button -->
-      <div class="mt-6 pb-8 text-center">
-        <a
-          href="/members/hoivien/"
-          class="inline-block bg-teal-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-teal-700 transition duration-300 ease-in-out transform hover:scale-105"
-        >
-          Trở về danh sách
-        </a>
-      </div>
+
+    <!-- Nút trở về -->
+    <div class="mt-2 text-center mb-2 ">
+      <a href="/members/hoivien/"
+        class="inline-block bg-gradient-to-r from-green-500 to-green-400 text-white px-8 py-2.5 rounded-full text-base font-medium hover:bg-green-600 transition duration-200">
+        Trở về danh sách
+      </a>
     </div>
   </div>
 </section>

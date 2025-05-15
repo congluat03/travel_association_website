@@ -1,0 +1,42 @@
+<a href="/support/tailieu-index/chitettailieu/{{ tl.MA_TL }}/"
+   class="group relative border border-white/20 bg-white/30 backdrop-blur rounded-3xl p-6 shadow-lg
+          hover:-translate-y-1 hover:shadow-2xl transition transform flex flex-col">
+
+  <!-- Icon theo loại tài liệu -->
+  <div class="h-32 flex items-center justify-center mb-4 text-emerald-600 text-6xl">
+    {% with tl.LOAI_TAI_LIEU|lower as loai %}
+      {% if loai == "pdf" %}
+        <i class="fas fa-file-pdf"></i>
+      {% elif loai == "doc" or loai == "docx" %}
+        <i class="fas fa-file-word"></i>
+      {% elif loai == "xls" or loai == "xlsx" %}
+        <i class="fas fa-file-excel"></i>
+      {% elif loai == "ppt" or loai == "pptx" %}
+        <i class="fas fa-file-powerpoint"></i>
+      {% elif loai == "jpg" or loai == "jpeg" or loai == "png" %}
+        <i class="fas fa-file-image"></i>
+      {% elif loai == "zip" or loai == "rar" %}
+        <i class="fas fa-file-archive"></i>
+      {% else %}
+        <i class="fas fa-file-alt"></i>
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <!-- Nội dung -->
+  <h2 class="font-semibold text-lg line-clamp-2">{{ tl.TIEU_DE_TL }}</h2>
+  <p class="text-xs text-gray-500 mb-2">{{ tl.MA_DN.TEN_DN }}</p>
+  <p class="text-sm text-gray-700 flex-1 line-clamp-3 overflow-y-auto max-h-20">
+    {{ tl.MO_TA_TL }}
+  </p>
+
+  <!-- Chips -->
+  <div class="flex gap-2 mt-4">
+    <span class="text-xs px-2 py-1 bg-emerald-600/10 text-emerald-700 rounded-full">
+      {{ tl.LOAI_TAI_LIEU }}
+    </span>
+    <span class="text-xs px-2 py-1 bg-gray-600/10 text-gray-700 rounded-full">
+      {{ tl.NGAY_CAP_NHAT|date:"d/m/Y" }}
+    </span>
+  </div>
+</a>

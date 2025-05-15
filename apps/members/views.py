@@ -18,7 +18,7 @@ def home(request):
 
 def hoivien(request):
     # Lọc doanh nghiệp đã duyệt
-    doanh_nghiep = DoanhNghiep.objects.filter(TRANG_THAI_DUYET=1)
+    doanh_nghiep = DoanhNghiep.objects.filter(dang_ky_hv__TINH_TRANG=1).distinct().order_by('MA_DN')
 
     # Lấy toàn bộ danh sách ngành nghề
     cac_nganh = NganhNghe.objects.values_list('TEN_NGANH', flat=True).distinct()

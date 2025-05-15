@@ -1,0 +1,12 @@
+<!-- admin/thong_bao_dang_ky.html -->
+<ul class="space-y-3">
+  {% for dk in thong_bao_moi %}
+    <li class="bg-white p-3 rounded-md shadow-sm text-sm text-gray-700 border-l-4 border-blue-500">
+      <span class="font-semibold">{{ dk.MA_DN.TEN_DN }}</span> đã đăng ký vào 
+      <span class="text-blue-600">{{ dk.MA_HH.TEN_HH }}</span> 
+      (ngày <strong>{{ dk.NGAY_DANG_KY|date:"d/m/Y" }}</strong>)
+    </li>
+  {% empty %}
+    <li class="text-sm text-gray-500">Không có thông báo mới.</li>
+  {% endfor %}
+</ul>

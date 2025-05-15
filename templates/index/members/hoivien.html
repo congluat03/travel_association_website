@@ -4,72 +4,130 @@
 {% block content %}
 <section class="py-16 px-4 sm:px-6 bg-green-50">
   <div class="max-w-7xl mx-auto">
-      <!-- Tiêu đề lớn với icon -->
-      <div class="text-center mb-12">
-        <h1 class="text-4xl font-extrabold text-green-700 tracking-tight">
-          🏢 Danh sách Doanh nghiệp Hội viên
-        </h1>
-        <p class="mt-2 text-gray-600">Khám phá các doanh nghiệp đang tham gia vào hệ sinh thái du lịch bền vững.</p>
-      </div>
+    <!-- Tiêu đề lớn với icon -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-extrabold text-green-700 tracking-tight">
+        🏢 Danh sách Doanh nghiệp Hội viên
+      </h1>
+      <p class="mt-2 text-gray-600">Khám phá các doanh nghiệp đang tham gia vào hệ sinh thái du lịch bền vững.</p>
+    </div>
 
     <!-- Form tìm kiếm & bộ lọc -->
-    <form method="get" class="flex flex-col sm:flex-row gap-4 mb-10 items-center">
+    <form method="get" class="flex flex-col lg:flex-row gap-4 mb-10 items-center">
       <!-- Tìm kiếm doanh nghiệp -->
       <input name="search" value="{{ request.GET.search }}" placeholder="Tìm kiếm doanh nghiệp..."
-             class="flex-1 bg-white/50 backdrop-blur border border-gray-300 rounded-xl px-4 py-2 focus:ring-green-600">
-      
+             class="flex-1 bg-white/50 backdrop-blur border border-gray-300 rounded-xl px-4 py-2 w-full lg:w-80 focus:ring-green-600">
+
       <!-- Lọc ngành nghề -->
       <select name="nganh"
-              class="bg-white/50 backdrop-blur border border-gray-300 rounded-xl px-3 py-2 focus:ring-green-600">
+              class="bg-white/50 backdrop-blur border border-gray-300 rounded-xl px-3 py-2 w-full lg:w-60 focus:ring-green-600">
         <option value="">-- Tất cả ngành --</option>
         {% for ng in cac_nganh %}
-          <option value="{{ ng }}" {% if request.GET.nganh == ng %}selected{% endif %}>
-            {{ ng }}
-          </option>
+          <option value="{{ ng }}" {% if request.GET.nganh == ng %}selected{% endif %}>{{ ng }}</option>
         {% endfor %}
       </select>
 
-      <!-- Nút tìm kiếm -->
-      <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-xl shadow">
-        🔍 Tìm
-      </button>
+      <!-- Nút tìm kiếm & đăng ký hội viên -->
+      <div class="flex flex-col sm:flex-row sm:justify-between gap-4 sm:gap-6 w-full lg:w-auto">
+        <!-- Nút tìm kiếm -->
+        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl shadow w-full sm:w-auto">
+          🔍 Tìm
+        </button>
 
-      <!-- Nút đăng ký hội viên -->
-      <a href="/members/hoivien/dangky/"
-         class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl shadow mt-4 sm:mt-0 inline-block text-center">
-        Đăng ký hội viên
-      </a>
+        <!-- Nút đăng ký hội viên -->
+        <a href="/members/hoivien/dangky/"
+           class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-xl shadow w-full sm:w-auto text-center">
+          Đăng ký hội viên
+        </a>
+      </div>
     </form>
 
     <!-- Danh sách doanh nghiệp -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
       {% for dn in doanh_nghiep %}
-        <div class="group bg-white shadow-lg hover:shadow-2xl rounded-xl overflow-hidden transition-transform hover:scale-105">
+        <div 
+          x-data="{ openModal: false }"
+          class="group bg-white shadow-lg hover:shadow-2xl rounded-xl overflow-hidden transition-transform hover:scale-105"
+        >
           <div class="h-48 overflow-hidden bg-gray-100">
             {% if dn.hinh_anh %}
               <img src="{{ dn.hinh_anh.url }}" alt="{{ dn.TEN_DN }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
             {% else %}
-              <!-- Hình ảnh mặc định khi doanh nghiệp không có hình ảnh -->
               <img src="{% static 'images/default-avatar.jpg' %}" alt="Hình đại diện doanh nghiệp" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
             {% endif %}
           </div>
           <div class="p-6">
             <h3 class="text-xl font-bold text-green-700 mb-1 truncate">{{ dn.TEN_DN }}</h3>
             <p class="text-gray-600 text-sm mb-3">{{ dn.DIA_CHI|truncatechars:50 }}</p>
-            <ul class="text-sm text-gray-500 space-y-1 mb-4">
-              <li><strong>Ngành:</strong> {{ dn.MA_NGANH }}</li>
-              <li><strong>Đại diện:</strong> {{ dn.NGUOI_DAI_DIEN }}</li>
-            </ul>
-            <a href="/members/hoivien/{{ dn.MA_DN }}/" class="inline-block w-full text-center bg-green-600 text-white py-2 rounded-full hover:bg-green-700 transition duration-300">
+
+            <!-- Nút mở Modal -->
+            <button 
+              @click="openModal = true" 
+              class="inline-block w-full text-center bg-green-600 text-white py-2 rounded-full hover:bg-green-700 transition duration-300">
               Xem chi tiết
-            </a>
+            </button>
+
+            <!-- Modal -->
+            <div 
+              x-show="openModal" 
+              class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" 
+              x-transition
+              x-cloak
+            >
+              <div class="bg-white p-6 rounded-lg relative w-[400px] max-w-full mx-2">
+                <!-- Nút đóng modal -->
+                <button 
+                  @click="openModal = false" 
+                  class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-2xl leading-none font-bold">✖️
+                </button>
+
+                <!-- Hiển thị mã QR -->
+                <h3 class="text-xl font-semibold text-green-700 mb-4 text-center">Quét Mã QR Doanh Nghiệp</h3>
+                <div class="flex justify-center mb-4">
+                  {% if dn.MA_QR %}
+                    <img src="{{ dn.MA_QR.url }}" alt="QR Code {{ dn.TEN_DN }}" class="w-40 h-40 object-contain">
+                  {% else %}
+                    <p class="text-gray-500 italic">Chưa có mã QR</p>
+                  {% endif %}
+                </div>
+
+                <!-- Nút tải xuống mã QR -->
+                {% if dn.MA_QR %}
+                  <a href="{{ dn.MA_QR.url }}" download
+                    class="block text-center bg-gradient-to-r from-green-500 to-green-400 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-green-600 transition duration-200 mb-3">
+                    Tải QR Code
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+
+            <!-- Script kiểm tra trạng thái mã QR cho từng doanh nghiệp -->
+            {% if dn.MA_DN and dn.MA_QR %}
+              <script>
+                (function checkQRStatus_{{ dn.MA_DN }}(){
+                  setInterval(async () => {
+                    try {
+                      const response = await fetch(`/api/check-qr-status/{{ dn.MA_DN }}/`);
+                      if (!response.ok) return;
+                      const data = await response.json();
+                      if (data.scanned) {
+                        // Nếu mã QR đã được quét, chuyển hướng tới trang chi tiết doanh nghiệp
+                        window.location.href = `/members/hoivien/{{ dn.MA_DN }}/`;
+                      }
+                    } catch (error) {
+                      console.error('Lỗi khi kiểm tra trạng thái QR:', error);
+                    }
+                  }, 2000);
+                })();
+              </script>
+            {% endif %}
           </div>
         </div>
       {% empty %}
         <p class="col-span-3 text-center text-gray-500">Chưa có doanh nghiệp hội viên.</p>
       {% endfor %}
     </div>
-  </div>
+
     <!-- Phân trang -->
     <div class="flex justify-center mt-8">
       <div class="flex gap-2 items-center">
@@ -77,15 +135,20 @@
           <a href="?page=1&search={{ request.GET.search }}&nganh={{ request.GET.nganh }}" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-all duration-300">Đầu</a>
           <a href="?page={{ doanh_nghiep.previous_page_number }}&search={{ request.GET.search }}&nganh={{ request.GET.nganh }}" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-all duration-300">Trước</a>
         {% endif %}
-  
+
         <span class="px-4 py-2 text-gray-700">Trang {{ doanh_nghiep.number }} / {{ doanh_nghiep.paginator.num_pages }}</span>
-  
+
         {% if doanh_nghiep.has_next %}
           <a href="?page={{ doanh_nghiep.next_page_number }}&search={{ request.GET.search }}&nganh={{ request.GET.nganh }}" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-all duration-300">Tiếp theo</a>
           <a href="?page={{ doanh_nghiep.paginator.num_pages }}&search={{ request.GET.search }}&nganh={{ request.GET.nganh }}" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-all duration-300">Cuối</a>
         {% endif %}
       </div>
     </div>
+
+  </div>
+
 </section>
+
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
 {% endblock %}

@@ -34,7 +34,7 @@ def danhsachtintuc(request):
          tin_tuc_list = tin_tuc_list.filter(LOAI_TIN_TUC=loai_tin_tuc)
  
      # Phân trang: Mỗi trang có tối đa 10 tin tức
-     paginator = Paginator(tin_tuc_list, 10)  
+     paginator = Paginator(tin_tuc_list, 11)  
      page_number = request.GET.get('page')
      page_obj = paginator.get_page(page_number)
  

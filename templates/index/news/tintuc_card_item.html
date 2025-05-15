@@ -1,17 +1,14 @@
-<div class="{% if tin.NOI_BAT %} hover:bg-yellow-100 shadow-lg hover:shadow-yellow-400{% else %} hover:bg-green-100 shadow-lg hover:shadow-green-400{% endif %}
+{% load static %}
+<div class="{% if tin.NOI_BAT %}hover:bg-yellow-100 shadow-lg hover:shadow-yellow-400{% else %}hover:bg-green-100 shadow-lg hover:shadow-green-400{% endif %}
     rounded-2xl overflow-hidden transform hover:scale-105 transition-all duration-300 flex flex-col border {% if tin.NOI_BAT %}border-yellow-200{% else %}border-green-200{% endif %}">
 
   <div class="relative w-full h-36 overflow-hidden">
-    {% if tin.URL_HINH %}
-      <img src="{{ tin.URL_HINH }}" alt="{{ tin.TIEU_DE }}" class="w-full h-full object-cover brightness-90">
-    {% else %}
-      <div class="w-full h-36 bg-green-300 flex items-center justify-center text-white text-3xl font-bold">
-        📰
-      </div>
-    {% endif %}
+    <!-- Hiển thị ký tự 📰 làm hình mặc định -->
+    <div class="w-full h-36 bg-green-400 flex items-center justify-center text-white text-4xl font-bold">
+      <img src="{% static 'images/default-tintuc.png' %}" alt="Hình ảnh tiêu đề" class="h-24 w-24 rounded-full">
+    </div>
 
-    {% if tin.TIN_NOI_BAT %}
-      <!-- Chỉ hiện badge nếu là tin nổi bật -->
+    {% if tin.NOI_BAT %}
       <span class="absolute top-2 right-2 bg-yellow-400 text-white text-xs font-semibold py-1 px-2 rounded-full">
         Nổi bật
       </span>

@@ -157,9 +157,12 @@ def tour(request):
         tours = tours.filter(Q(TEN_TOUR__icontains=timkiem_chon) | Q(MO_TA_TOUR__icontains=timkiem_chon))
 
     # Tính giá theo triệu
+      # Tính giá theo triệu và làm tròn, bỏ phần ".0" nếu là số nguyên
     for tour in tours:
         tour.gia_trieu = round(tour.GIA_TOUR / 1_000_000, 1)
-
+        # Kiểm tra nếu giá trị là số nguyên bằng cách so sánh với giá trị làm tròn
+        if tour.gia_trieu == int(tour.gia_trieu):
+            tour.gia_trieu = int(tour.gia_trieu)  # Nếu là số nguyên, bỏ phần ".0"
     # Phân trang (4 tour/trang)
     paginator = Paginator(tours, 4)
     page_number = request.GET.get('page')
@@ -185,13 +188,19 @@ def chitiettour(request, ma_tour):
     related_dd_list = DiaDiemDuLich.objects.filter(thuoctour__MA_TOUR=tour)
 
     # Lấy các thông tin liên quan trong bảng ThuocTour
-    thuoc_tour = ThuocTour.objects.filter(MA_TOUR=tour)  # Truy vấn theo MA_TOUR
-    
-    # Tính giá theo triệu để hiển thị đẹp hơn
-    if tour.GIA_TOUR > 0:  # Kiểm tra giá trị hợp lệ
-        tour.gia_trieu = round(tour.GIA_TOUR / 1_000_000, 1)
-    else:
-        tour.gia_trieu = 0  # Nếu giá không hợp lệ, đặt là 0
+    thuoc_tour = ThuocTour.objects.filter(MA_TOUR=tour).distinct()  # Tránh bị lặp
+
+    # **DEBUG: Kiểm tra xem có bản ghi nào bị lặp không**
+    print("==== Danh sách ThuocTour ====")
+    for tt in thuoc_tour:
+        print(f"ID: {tt.MA_TUOCTOUR} | Điểm đến: {tt.MA_DD.TEN_DIA_DIEM} | Thời gian: {tt.THOI_GIAN_DI} - {tt.THOI_GIAN_DEN}")
+
+    # Tính giá theo triệu và làm tròn, bỏ phần ".0" nếu là số nguyên
+    gia_trieu = round(tour.GIA_TOUR / 1_000_000, 1)
+    # Kiểm tra nếu giá trị là số nguyên bằng cách so sánh với giá trị làm tròn
+    if gia_trieu == int(gia_trieu):
+        gia_trieu = int(gia_trieu)  # Nếu là số nguyên, bỏ phần ".0"
+    tour.gia_trieu = gia_trieu
 
     # Lấy danh sách ảnh từ thư mục media/tourdulich/<MA_TOUR>/
     image_dir = os.path.join(settings.MEDIA_ROOT, 'tourdulich', str(tour.MA_TOUR))

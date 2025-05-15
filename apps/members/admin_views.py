@@ -15,6 +15,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.contrib import messages
 from .decorators import login_required_custom
+from django.db import IntegrityError
+import datetime
+
 
 # Doanh Nghiệp
 def them_sua_hiephoi(request, ma_hh=None):
@@ -146,6 +149,10 @@ def xoa_doanhnghiep(request, ma_dn):
     try:
         doanhnghiep = DoanhNghiep.objects.get(MA_DN=ma_dn)
 
+        # Xóa các bản ghi liên quan trong bảng taikhoan
+        taikhoan = TaiKhoan.objects.filter(MA_DN=doanhnghiep)
+        taikhoan.delete()  # Xóa tất cả bản ghi liên quan
+
         # Xóa file QR code nếu tồn tại
         if doanhnghiep.MA_QR:
             qr_path = doanhnghiep.MA_QR.path
@@ -161,6 +168,10 @@ def xoa_doanhnghiep(request, ma_dn):
         return redirect('admin_core:manage_business')
     except DoanhNghiep.DoesNotExist:
         raise Http404("Doanh nghiệp không tồn tại.")
+    except IntegrityError as e:
+        print(f"Lỗi IntegrityError: {e}")
+        # Bạn có thể xử lý thêm hoặc thông báo lỗi tùy ý
+        return redirect('admin_core:manage_business')
 
 def profile_doanhnghiep(request, ma_dn):
     dn = get_object_or_404(DoanhNghiep, pk=ma_dn)
@@ -288,6 +299,7 @@ def doi_mat_khau_view(request):
         return redirect('admin_members:doi_mat_khau')  # hoặc chuyển hướng sang trang khác
 
     return render(request, 'auth/ChangePassword.html', {'user': user_account})
+
 def them_sua_dangkyhoivien(request, ma_dk_hh=None):
     dangky = DangKyHoiVien.objects.filter(pk=ma_dk_hh).first() if ma_dk_hh else None
 
@@ -297,12 +309,10 @@ def them_sua_dangkyhoivien(request, ma_dk_hh=None):
         tinh_trang = request.POST.get('TINH_TRANG')
         ngay_dang_ky = request.POST.get('NGAY_DANG_KY')  # dạng 'YYYY-MM-DD'
 
-        # Debug kiểm tra đầu vào
-        print(f"MA_HH: {ma_hh}, MA_DN: {ma_dn}, TINH_TRANG: {tinh_trang}, NGAY_DANG_KY: {ngay_dang_ky}")
 
         # Kiểm tra nếu ngày đăng ký hợp lệ
         try:
-            ngay_dk = datetime.strptime(ngay_dang_ky, '%Y-%m-%d').date() if ngay_dang_ky else None
+            ngay_dk = datetime.datetime.strptime(ngay_dang_ky, '%Y-%m-%d').date() if ngay_dang_ky else None
         except ValueError as e:
             print(f"Error parsing date: {e}")
             ngay_dk = None
@@ -338,15 +348,15 @@ def them_sua_dangkyhoivien(request, ma_dk_hh=None):
             )
 
         # Sau khi xử lý, chuyển hướng về trang quản lý đăng ký
-        return redirect('admin_core:manage_members')
+        return redirect('admin_core:manage_business')
 
-    return redirect('admin_core:manage_members')
+    return redirect('admin_core:manage_business')
 
 def xoa_dangkyhiephoi(request, ma_dk_hh):
     try:
         dangkihoivien = DangKyHoiVien.objects.get(MA_DK_HH=ma_dk_hh)
         dangkihoivien.delete()
-        return redirect('admin_core:manage_members')  # hoặc redirect nếu muốn
+        return redirect('admin_core:manage_business')  # hoặc redirect nếu muốn
     except DangKyHoiVien.DoesNotExist:
         raise Http404(" hiệp hội đăng kí không tồn tại.")  
 
@@ -376,3 +386,7 @@ def toggle_tinh_trang_hiep_hoi(request, MA_DK_HH):
         except DangKyHoiVien.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Đăng ký hội viên không tồn tại'}, status=404)
     return JsonResponse({'success': False, 'error': 'Phương thức không hợp lệ'}, status=400)
+
+def thong_bao_dang_ky_moi(request):
+    thong_bao = DangKyHoiVien.objects.filter(TINH_TRANG=0).select_related('MA_DN', 'MA_HH')
+    return render(request, 'admin/members/nguoidung/thong_bao_dang_ky.html', {'thong_bao': thong_bao})

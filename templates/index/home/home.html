@@ -1,32 +1,41 @@
 {% extends "index/index_layout.html" %}
 {% load static %}
 
+{% block meta %}
+<meta name="description" content="Green Travel - Khám phá du lịch xanh bền vững tại Việt Nam với các điểm đến, tour du lịch và tài liệu hữu ích.">
+<meta name="keywords" content="du lịch xanh, du lịch bền vững, Green Travel, tour du lịch Việt Nam">
+{% endblock %}
+
 {% block title %}Trang chủ - Green Travel{% endblock %}
 
-{% block content %}
+{% block banner %}
 <!-- Hero Section -->
 <section
   class="relative bg-cover bg-center h-[24rem] sm:h-[30rem] lg:h-[36rem] hero-bg"
-  style="background-image: url('{% static 'images/pietro-de-grandi-T7K4aEPoGGk-unsplash.jpg' %}');"
+  style="background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)), url('{% static 'images/pietro-de-grandi-T7K4aEPoGGk-unsplash.jpg' %}'); background-attachment: fixed;"
 >
+  <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+  
   <div class="absolute inset-0 flex items-center justify-center">
-    <div class="text-center text-white px-6 max-w-4xl mx-auto">
-      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 drop-shadow-xl leading-tight animate__animated animate__fadeIn">
+    <div class="text-center text-white px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4 sm:mb-6 leading-tight animate__animated animate__fadeInUp text-shadow-lg" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);">
         Khám phá thế giới một cách bền vững
       </h2>
-      <p class="text-base sm:text-lg lg:text-xl mb-8 font-light tracking-wide opacity-80">
+      <p class="text-base sm:text-lg lg:text-xl mb-6 sm:mb-8 font-light tracking-wide opacity-90 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
         Cùng Green Travel du hành đến những địa điểm thân thiện với môi trường.
       </p>
-      <div class="flex justify-center gap-4">
+      <div class="flex justify-center gap-4 sm:gap-6">
         <a
           href="#destinations"
-          class="inline-block bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
+          class="inline-block bg-green-500 hover:bg-green-600 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-full text-base sm:text-lg font-semibold shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl animate__animated animate__fadeInUp"
+          style="animation-delay: 0.4s;"
         >
           Bắt đầu hành trình
         </a>
         <a
           href="#resources"
-          class="inline-block bg-transparent border-2 border-white text-white px-8 py-3 rounded-full text-lg font-semibold transition-all duration-300 hover:bg-white hover:text-green-600"
+          class="inline-block bg-transparent border-2 border-white hover:bg-white hover:text-green-600 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl animate__animated animate__fadeInUp"
+          style="animation-delay: 0.6s;"
         >
           Tài liệu
         </a>
@@ -34,27 +43,48 @@
     </div>
   </div>
 </section>
+{% endblock %}
+
+{% block content %}
+<!-- Về Green Travel -->
+<section class="py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-3xl font-semibold mb-6 text-gray-800 flex items-center justify-center gap-2 animate__animated animate__fadeInUp">
+      <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Về Green Travel
+    </h2>
+    <p class="text-gray-600 text-base sm:text-lg mb-8 max-w-3xl mx-auto">
+      Green Travel mang đến những hành trình khám phá thiên nhiên và văn hóa Việt Nam theo cách bền vững. Chúng tôi cam kết bảo vệ môi trường, hỗ trợ cộng đồng địa phương và tạo nên những trải nghiệm ý nghĩa.
+    </p>
+    <a href="/introduce" class="inline-block bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full text-base font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg">
+      Tìm hiểu thêm
+    </a>
+  </div>
+</section>
 
 <!-- Điểm đến hấp dẫn -->
-<section class="py-16 bg-gray-50 px-6" id="destinations">
-  <div class="max-w-7xl mx-auto">
-    <h2 class="text-3xl font-semibold mb-8 text-gray-800 animate__animated animate__fadeIn">Điểm đến hấp dẫn</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+<section class="py-16 bg-gray-50" id="destinations">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-semibold mb-8 text-gray-800 flex items-center justify-center gap-2 animate__animated animate__fadeInUp">
+      <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+      Điểm đến hấp dẫn
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
       {% for dia_diem_item in dia_diem %}
-        <div class="bg-white shadow-md rounded-xl overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1 relative">
+        <div class="bg-white shadow-md rounded-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 min-h-[20rem]">
           <div class="relative image-overlay">
             {% if dia_diem_item.HINH_ANH_DD %}
-              <img src="{{ dia_diem_item.HINH_ANH_DD.url }}" alt="{{ dia_diem_item.TEN_DIA_DIEM }}" class="w-full h-40 sm:h-48 lg:h-56 object-cover" loading="lazy">
+              <img src="{{ dia_diem_item.HINH_ANH_DD.url }}" alt="{{ dia_diem_item.TEN_DIA_DIEM }}" class="w-full h-40 sm:h-48 lg:h-56 object-cover transition-transform duration-300 hover:scale-105" loading="lazy">
             {% else %}
-              <img src="{% static 'images/du-lich-xanh-2.jpg' %}" alt="{{ dia_diem_item.TEN_DIA_DIEM }}" class="w-full h-40 sm:h-48 lg:h-56 object-cover" loading="lazy">
+              <img src="{% static 'images/du-lich-xanh-2.jpg' %}" alt="{{ dia_diem_item.TEN_DIA_DIEM }}" class="w-full h-40 sm:h-48 lg:h-56 object-cover transition-transform duration-300 hover:scale-105" loading="lazy">
             {% endif %}
-            <span class="absolute top-4 right-4 bg-yellow-400 text-white text-xs font-semibold py-1 px-2 rounded-full">Nổi bật</span>
+            <span class="absolute top-4 right-4 bg-yellow-400 text-white text-xs font-semibold py-1 px-2 rounded-full shadow-md">Nổi bật</span>
           </div>
-          <div class="p-4 sm:p-6">
-            <h3 class="text-xl font-semibold text-green-600 mb-2">{{ dia_diem_item.TEN_DIA_DIEM }}</h3>
-            <p class="text-gray-600 text-sm mb-2">{{ dia_diem_item.MO_TA_DD|truncatewords:20 }}</p>
-            <p class="text-gray-500 text-sm mb-4">Khu vực: {{ dia_diem_item.TINH_THANH_PHO }} - {{ dia_diem_item.QUAN_HUYEN }}</p>
-            <a href="#" class="flex items-center gap-2 text-green-500 hover:text-green-600 font-medium text-sm transition-all duration-300 hover:underline">
+          <div class="p-5 sm:p-6">
+            <h3 class="text-xl font-semibold text-green-600 mb-3">{{ dia_diem_item.TEN_DIA_DIEM }}</h3>
+            <p class="text-gray-600 text-sm mb-3 line-clamp-3">{{ dia_diem_item.MO_TA_DD|truncatewords:20 }}</p>
+            <p class="text-gray-600 text-sm mb-4">Khu vực: {{ dia_diem_item.TINH_THANH_PHO }} - {{ dia_diem_item.QUAN_HUYEN }}</p>
+            <a href="/tourism/diadiem/{{ dia_diem_item.MA_DD }}/" class="flex justify-end gap-2 text-green-500 hover:text-green-600 font-medium text-sm transition-all duration-300 hover:underline">
               Xem thêm
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -63,78 +93,162 @@
           </div>
         </div>
       {% empty %}
-        <p class="text-gray-600">Hiện tại chưa có địa điểm nào để hiển thị.</p>
+        <p class="text-gray-600 text-center">Hiện tại chưa có địa điểm nào để hiển thị.</p>
       {% endfor %}
     </div>
   </div>
 </section>
 
+<!-- Tour du lịch xanh nổi bật -->
+<section class="py-16 bg-gray-50" id="tours">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-4xl font-semibold mb-8 text-gray-800 flex items-center justify-center gap-2 animate__animated animate__fadeInUp">
+      <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553-2.276A1 1 0 0021 13.382V6.618a1 1 0 00-1.553-.894L15 8m0 9V8"/>
+      </svg>
+      Tour du lịch xanh nổi bật
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
+      {% for tour in tours %}
+        {% include "index/tourism/tour/tour_card_doc.html" with tour=tour %}
+      {% empty %}
+        <p class="text-gray-600 text-center">Hiện tại chưa có tour nào để hiển thị.</p>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-10">
+      <a href="/tours" class="inline-block bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-2xl">
+        Xem tất cả tour
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Cam kết bền vững -->
+<section class="py-16 bg-green-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-3xl font-semibold mb-6 text-gray-800 flex items-center justify-center gap-2 animate__animated animate__fadeInUp">
+      <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Cam kết bền vững
+    </h2>
+    <p class="text-gray-600 text-base sm:text-lg mb-8 max-w-3xl mx-auto">
+      Green Travel cam kết giảm thiểu tác động môi trường, sử dụng phương tiện di chuyển xanh và hỗ trợ cộng đồng địa phương thông qua các dự án bền vững.
+    </p>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+      <div class="bg-white p-6 rounded-xl shadow-md">
+        <h3 class="text-lg font-semibold text-green-600 mb-2">Giảm rác thải nhựa</h3>
+        <p class="text-gray-600 text-sm">Khuyến khích sử dụng chai nước tái chế và túi vải trong mọi hành trình.</p>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow-md">
+        <h3 class="text-lg font-semibold text-green-600 mb-2">Hỗ trợ cộng đồng</h3>
+        <p class="text-gray-600 text-sm">Hợp tác với người dân địa phương để tạo việc làm và bảo tồn văn hóa.</p>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow-md">
+        <h3 class="text-lg font-semibold text-green-600 mb-2">Bảo vệ thiên nhiên</h3>
+        <p class="text-gray-600 text-sm">Hỗ trợ các dự án bảo tồn hệ sinh thái và động vật hoang dã.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Tin tức mới nhất -->
-<section class="py-16 px-6 max-w-7xl mx-auto">
-  <h2 class="text-3xl font-semibold mb-8 text-gray-800 animate__animated animate__fadeIn">Tin tức mới nhất</h2>
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-    <div>
-      <div class="mb-4">
-        <span class="inline-block bg-blue-600 text-white text-xs font-semibold px-4 py-2 rounded-full uppercase tracking-wide shadow-md">Thông Cáo Báo Chí</span>
+<section class="py-12 sm:py-16 bg-green-50 max-w-7xl mx-auto">
+  <h2 class="text-3xl sm:text-4xl font-semibold mb-6 sm:mb-8 text-gray-800 flex items-center justify-center gap-2 animate__animated animate__fadeInUp">
+    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+    </svg>
+    Tin tức mới nhất
+  </h2>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+    <!-- Tin tức chính -->
+    <div class="lg:col-span-1">
+      <div class="mb-3 sm:mb-4">
+        <span class="inline-block bg-green-600 text-white text-xs font-semibold px-3 sm:px-4 py-1 sm:py-2 rounded-full uppercase tracking-wide shadow-md">
+          Thông Cáo Báo Chí
+        </span>
       </div>
       {% if tin_tuc %}
-        <div class="bg-white shadow-md rounded-xl overflow-hidden">
-          {% if tin_tuc.0.URL_HINH %}
-            <img src="{{ tin_tuc.0.URL_HINH }}" alt="{{ tin_tuc.0.TIEU_DE }}" class="w-full h-40 sm:h-48 lg:h-56 object-cover" loading="lazy">
-          {% else %}
-            <img src="{% static 'images/news-placeholder.jpg' %}" alt="{{ tin_tuc.0.TIEU_DE }}" class="w-full h-40 sm:h-48 lg:h-56 object-cover" loading="lazy">
-          {% endif %}
+        <div class="overflow-hidden transition-all duration-300 hover:shadow-xl">
           <div class="p-4 sm:p-6">
-            <h3 class="text-xl font-semibold text-blue-800 mb-2">{{ tin_tuc.0.TIEU_DE }}</h3>
-            <p class="text-gray-600 text-sm mb-2">{{ tin_tuc.0.NOI_DUNG_CHI_TIET|truncatewords:30 }}</p>
-            <p class="text-gray-500 text-sm">Ngày đăng: {{ tin_tuc.0.NGAY_DANG|date:"d/m/Y" }}</p>
+            {% include 'index/news/tintuc_card_item.html' with tin=tin_tuc.0 %}
           </div>
         </div>
       {% else %}
-        <p class="text-gray-600">Hiện tại chưa có tin tức nào để hiển thị.</p>
+        <p class="text-gray-600 text-center text-sm sm:text-base">Hiện tại chưa có tin tức nào để hiển thị.</p>
       {% endif %}
     </div>
 
-    <div>
-      <h3 class="text-xl font-semibold text-blue-800 mb-4">Tin Tức</h3>
-      <ul class="space-y-4">
+    <!-- Danh sách tin tức -->
+    <div class="lg:col-span-1">
+      <h3 class="text-lg sm:text-xl font-semibold text-green-800 mb-4 sm:mb-6">Tin Tức</h3>
+      <ul class="space-y-3 sm:space-y-5">
         {% for tin in tin_tuc %}
-          <li class="news-item">
-            <a href="#" class="flex items-start gap-2 text-gray-800 hover:text-blue-600 transition-colors duration-200">
-              <span class="text-red-500">➤</span>
-              <span>{{ tin.TIEU_DE }} ({{ tin.NGAY_DANG|date:"d/m/Y" }})</span>
+          <li class="news-item hover:bg-green-100 p-2 rounded-lg transition-all duration-200">
+            <a href="/news/tintucsukien/{{ tin.MA_TIN }}/" class="flex items-start gap-2 text-gray-800 hover:text-blue-700 transition-colors duration-200">
+              <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span class="text-sm sm:text-base">{{ tin.TIEU_DE }} ({{ tin.NGAY_DANG|date:"d/m/Y" }})</span>
             </a>
           </li>
         {% empty %}
-          <li class="text-gray-600">Hiện tại chưa có tin tức nào để hiển thị.</li>
+          <li class="text-gray-600 text-center text-sm sm:text-base">Hiện tại chưa có tin tức nào để hiển thị.</li>
         {% endfor %}
       </ul>
-      <div class="mt-6">
-        <a href="#" class="inline-block bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300">Xem tất cả tin tức</a>
+      <div class="mt-6 sm:mt-8 text-center">
+        <a href="/news/tintucsukien/" class="inline-block bg-green-500 hover:bg-green-600 text-white px-4 sm:px-6 py-2 rounded-full text-sm sm:text-base font-semibold transition-all duration-300 hover:scale-105 shadow-md hover:shadow-lg">
+          Xem tất cả tin tức
+        </a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Tài liệu -->
-<section class="py-16 px-6 max-w-7xl mx-auto bg-green-100" id="resources">
-  <h2 class="text-3xl font-semibold mb-8 text-gray-800 text-center fade-in">Tài liệu hữu ích</h2>
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-    {% for tai_lieu_item in tai_lieu %}
-      <div class="bg-white shadow-md rounded-xl p-6 transition-transform duration-300 hover:shadow-xl hover:-translate-y-1">
-        <div class="flex items-center gap-3 mb-2">
-          <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3"></path>
-          </svg>
-          <h3 class="text-lg font-semibold text-gray-800">{{ tai_lieu_item.TIEU_DE_TL	 }}</h3>
+<!-- Tài liệu hữu ích -->
+<section class="py-16 bg-green-100" id="resources">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-semibold mb-8 text-gray-800 flex items-center justify-center gap-2 animate__animated animate__fadeInUp">
+      <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+      </svg>
+      Tài liệu hữu ích
+    </h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
+      {% if tai_lieu %}
+        {% for tl in tai_lieu %}
+          <div class=" p-5 transition-transform duration-300 hover:shadow-2xl hover:-translate-y-2 overflow-hidden">
+            {% include "index/support/chitiettailieu_card_item.html" with tl=tl %}
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="col-span-3 text-center text-gray-600 p-5">
+          Hiện tại chưa có tài liệu nào để hiển thị.
         </div>
-        <p class="text-gray-600 text-sm mb-2">{{ tai_lieu_item.MO_TA_TL|truncatewords:20 }}</p>
-        <a href="{{ tai_lieu_item.URL_TL }}" class="text-green-500 hover:text-green-600 font-medium text-sm">Tải tài liệu</a>
-      </div>
-    {% empty %}
-      <p class="text-gray-600">Hiện tại chưa có tài liệu nào để hiển thị.</p>
-    {% endfor %}
+      {% endif %}
+    </div>
   </div>
 </section>
 
+
+<!-- Theo dõi mạng xã hội -->
+<section class="py-16 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-3xl font-semibold mb-6 text-gray-800 flex items-center justify-center gap-2 animate__animated animate__fadeInUp">
+      <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 11.316A4 4 0 0112 8m0 0a4 4 0 013.316 3.316M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Theo dõi Green Travel
+    </h2>
+    <p class="text-gray-600 text-base sm:text-lg mb-8">Khám phá hành trình xanh và cảm hứng du lịch từ chúng tôi!</p>
+    <div class="flex justify-center gap-6">
+      <a href="https://facebook.com/green-travel" class="text-green-600 hover:text-green-800">
+        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
+      </a>
+      <a href="https://instagram.com/green-travel" class="text-green-600 hover:text-green-800">
+        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.948-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </a>
+      <a href="https://x.com/green-travel" class="text-green-600 hover:text-green-800">
+        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
 {% endblock %}
